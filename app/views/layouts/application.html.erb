@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= include_gon %>
+  <title>ctgov</title>
+  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
+  <%= stylesheet_link_tag "duke", :media => "all" %>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <%= render 'layouts/header' %>
+  <% flash.each do |name, msg| %>
+    <%= content_tag :div, msg, :id => "flash_#{name}" %>
+  <% end %>
+  <div class="container">
+    <div class="row-fluid">
+        <div class="span8"><%= yield %></div>
+    </div>
+  </div>
+  <%= render 'layouts/footer' %>
+
+</body>

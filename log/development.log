@@ -1,0 +1,1420 @@
+  [1m[36m (746.5ms)[0m  [1mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (1213.9ms)[0m  CREATE UNIQUE INDEX `unique_schema_migrations`  ON `schema_migrations` (`version`) 
+  [1m[36mActiveRecord::SchemaMigration Load (87.1ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+  [1m[35mActiveRecord::SchemaMigration Load (88.3ms)[0m  SELECT `schema_migrations`.* FROM `schema_migrations`
+  [1m[36mActiveRecord::SchemaMigration Load (99.7ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+Migrating to CreateStudies (20150409002646)
+  [1m[35m (620.6ms)[0m  CREATE TABLE `studies` (`nct_id` varchar(255), `start_date` date, `first_received_date` date, `verification_date` date, `last_changed_date` date, `primary_completion_date` date, `completion_date` date, `first_received_results_date` date, `download_date` date, `start_date_str` varchar(255), `first_received_date_str` varchar(255), `verification_date_str` varchar(255), `last_changed_date_str` varchar(255), `primary_completion_date_str` varchar(255), `completion_date_str` varchar(255), `first_received_results_date_str` varchar(255), `download_date_str` varchar(255), `completion_date_type` varchar(255), `primary_completion_date_type` varchar(255), `org_study_id` varchar(255), `secondary_id` varchar(255), `brief_title` text, `official_title` text, `overall_status` varchar(255), `phase` varchar(255), `target_duration` varchar(255), `enrollment` int(11), `enrollment_type` varchar(255), `study_type` varchar(255), `number_of_arms` int(11), `number_of_groups` int(11), `source` varchar(255), `biospec_retention` varchar(255), `biospec_description` text, `study_rank` varchar(255), `limitations_and_caveats` varchar(255), `delivery_mechanism` varchar(255), `description` varchar(255), `acronym` varchar(255), `why_stopped` varchar(255), `is_section_801` tinyint(1), `is_fda_regulated` tinyint(1), `has_expanded_access` tinyint(1), `has_dmc` tinyint(1), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (967.5ms)[0m  [1mCREATE  INDEX `index_studies_on_nct_id`  ON `studies` (`nct_id`) [0m
+  [1m[35m (765.6ms)[0m  CREATE  INDEX `index_studies_on_study_type`  ON `studies` (`study_type`) 
+  [1m[36m (587.8ms)[0m  [1mCREATE TABLE `facilities` (`id` int(11) auto_increment PRIMARY KEY, `name` varchar(255), `status` varchar(255), `city` varchar(255), `state` varchar(255), `zip` varchar(255), `country` varchar(255), `contact_name` varchar(255), `contact_phone` varchar(255), `contact_email` varchar(255), `contact_backup_name` varchar(255), `contact_backup_phone` varchar(255), `contact_backup_email` varchar(255), `investigator_name` varchar(255), `investigator_role` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (1296.3ms)[0m  ALTER TABLE `facilities` ADD `nct_id` varchar(255)
+  [1m[36m (684.5ms)[0m  [1mCREATE  INDEX `index_facilities_on_nct_id`  ON `facilities` (`nct_id`) [0m
+  [1m[35m (594.6ms)[0m  CREATE TABLE `expected_groups` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `title` varchar(255), `group_type` varchar(255), `description` text, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (1308.9ms)[0m  [1mALTER TABLE `expected_groups` ADD `nct_id` varchar(255)[0m
+  [1m[35m (793.2ms)[0m  CREATE  INDEX `index_expected_groups_on_nct_id`  ON `expected_groups` (`nct_id`) 
+  [1m[36m (640.5ms)[0m  [1mCREATE TABLE `conditions` (`id` int(11) auto_increment PRIMARY KEY, `name` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (1463.2ms)[0m  ALTER TABLE `conditions` ADD `nct_id` varchar(255)
+  [1m[36m (758.1ms)[0m  [1mCREATE  INDEX `index_conditions_on_nct_id`  ON `conditions` (`nct_id`) [0m
+  [1m[35m (766.1ms)[0m  CREATE  INDEX `index_conditions_on_name`  ON `conditions` (`name`) 
+  [1m[36m (637.7ms)[0m  [1mCREATE TABLE `interventions` (`id` int(11) auto_increment PRIMARY KEY, `intervention_type` varchar(255), `name` varchar(255), `description` text, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (1340.4ms)[0m  ALTER TABLE `interventions` ADD `nct_id` varchar(255)
+  [1m[36m (687.0ms)[0m  [1mCREATE  INDEX `index_interventions_on_nct_id`  ON `interventions` (`nct_id`) [0m
+  [1m[35m (658.1ms)[0m  CREATE  INDEX `index_interventions_on_name`  ON `interventions` (`name`) 
+  [1m[36m (518.9ms)[0m  [1mCREATE TABLE `intervention_other_names` (`id` int(11) auto_increment PRIMARY KEY, `name` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (1362.3ms)[0m  ALTER TABLE `intervention_other_names` ADD `nct_id` varchar(255)
+  [1m[36m (1462.0ms)[0m  [1mALTER TABLE `intervention_other_names` ADD `intervention_id` varchar(255)[0m
+  [1m[35m (861.4ms)[0m  CREATE  INDEX `index_intervention_other_names_on_nct_id`  ON `intervention_other_names` (`nct_id`) 
+  [1m[36m (628.7ms)[0m  [1mCREATE  INDEX `index_intervention_other_names_on_name`  ON `intervention_other_names` (`name`) [0m
+  [1m[35m (687.9ms)[0m  CREATE  INDEX `index_intervention_other_names_on_intervention_id`  ON `intervention_other_names` (`intervention_id`) 
+  [1m[36m (633.7ms)[0m  [1mCREATE TABLE `intervention_arm_group_labels` (`id` int(11) auto_increment PRIMARY KEY, `label` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (1249.4ms)[0m  ALTER TABLE `intervention_arm_group_labels` ADD `nct_id` varchar(255)
+  [1m[36m (1458.1ms)[0m  [1mALTER TABLE `intervention_arm_group_labels` ADD `intervention_id` varchar(255)[0m
+  [1m[35m (664.2ms)[0m  CREATE  INDEX `index_intervention_arm_group_labels_on_nct_id`  ON `intervention_arm_group_labels` (`nct_id`) 
+  [1m[36m (753.9ms)[0m  [1mCREATE  INDEX `index_intervention_arm_group_labels_on_intervention_id`  ON `intervention_arm_group_labels` (`intervention_id`) [0m
+  [1m[35m (548.2ms)[0m  CREATE TABLE `keywords` (`id` int(11) auto_increment PRIMARY KEY, `name` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (7709.5ms)[0m  [1mALTER TABLE `keywords` ADD `nct_id` varchar(255)[0m
+  [1m[35m (693.6ms)[0m  CREATE  INDEX `index_keywords_on_nct_id`  ON `keywords` (`nct_id`) 
+  [1m[36m (619.2ms)[0m  [1mCREATE  INDEX `index_keywords_on_name`  ON `keywords` (`name`) [0m
+  [1m[35m (625.7ms)[0m  CREATE TABLE `browse_conditions` (`id` int(11) auto_increment PRIMARY KEY, `mesh_term` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (1254.3ms)[0m  [1mALTER TABLE `browse_conditions` ADD `nct_id` varchar(255)[0m
+  [1m[35m (645.1ms)[0m  CREATE  INDEX `index_browse_conditions_on_nct_id`  ON `browse_conditions` (`nct_id`) 
+  [1m[36m (633.6ms)[0m  [1mCREATE TABLE `browse_interventions` (`id` int(11) auto_increment PRIMARY KEY, `mesh_term` varchar(255), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (1355.0ms)[0m  ALTER TABLE `browse_interventions` ADD `nct_id` varchar(255)
+  [1m[36m (706.3ms)[0m  [1mCREATE  INDEX `index_browse_interventions_on_nct_id`  ON `browse_interventions` (`nct_id`) [0m
+  [1m[35m (538.6ms)[0m  CREATE TABLE `expected_outcomes` (`id` int(11) auto_increment PRIMARY KEY, `outcome_type` varchar(255), `title` varchar(255), `measure` varchar(255), `time_frame` varchar(255), `safety_issue` varchar(255), `population` varchar(255), `description` text) ENGINE=InnoDB
+  [1m[36m (2003.9ms)[0m  [1mALTER TABLE `expected_outcomes` ADD `nct_id` varchar(255)[0m
+  [1m[35m (639.2ms)[0m  CREATE  INDEX `index_expected_outcomes_on_nct_id`  ON `expected_outcomes` (`nct_id`) 
+  [1m[36m (521.3ms)[0m  [1mCREATE TABLE `study_references` (`id` int(11) auto_increment PRIMARY KEY, `citation` text, `pmid` varchar(255), `reference_type` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (1149.5ms)[0m  ALTER TABLE `study_references` ADD `nct_id` varchar(255)
+  [1m[36m (636.2ms)[0m  [1mCREATE  INDEX `index_study_references_on_nct_id`  ON `study_references` (`nct_id`) [0m
+  [1m[35m (626.6ms)[0m  CREATE TABLE `responsible_parties` (`id` int(11) auto_increment PRIMARY KEY, `responsible_party_type` varchar(255), `affiliation` varchar(255), `name` varchar(255), `title` varchar(255)) ENGINE=InnoDB
+  [1m[36m (1280.9ms)[0m  [1mALTER TABLE `responsible_parties` ADD `nct_id` varchar(255)[0m
+  [1m[35m (624.0ms)[0m  CREATE  INDEX `index_responsible_parties_on_nct_id`  ON `responsible_parties` (`nct_id`) 
+  [1m[36m (575.7ms)[0m  [1mCREATE TABLE `designs` (`id` int(11) auto_increment PRIMARY KEY, `description` text) ENGINE=InnoDB[0m
+  [1m[35m (1195.2ms)[0m  ALTER TABLE `designs` ADD `nct_id` varchar(255)
+  [1m[36m (641.7ms)[0m  [1mCREATE  INDEX `index_designs_on_nct_id`  ON `designs` (`nct_id`) [0m
+  [1m[35m (746.7ms)[0m  CREATE TABLE `location_countries` (`id` int(11) auto_increment PRIMARY KEY, `name` varchar(255), `removed` varchar(255)) ENGINE=InnoDB
+  [1m[36m (1275.2ms)[0m  [1mALTER TABLE `location_countries` ADD `nct_id` varchar(255)[0m
+  [1m[35m (829.2ms)[0m  CREATE  INDEX `index_location_countries_on_nct_id`  ON `location_countries` (`nct_id`) 
+  [1m[36m (663.1ms)[0m  [1mCREATE  INDEX `index_location_countries_on_name`  ON `location_countries` (`name`) [0m
+  [1m[35m (531.7ms)[0m  CREATE TABLE `sponsors` (`id` int(11) auto_increment PRIMARY KEY, `sponsor_type` varchar(255), `agency` varchar(255), `agency_class` varchar(255)) ENGINE=InnoDB
+  [1m[36m (1336.9ms)[0m  [1mALTER TABLE `sponsors` ADD `nct_id` varchar(255)[0m
+  [1m[35m (880.4ms)[0m  CREATE  INDEX `index_sponsors_on_nct_id`  ON `sponsors` (`nct_id`) 
+  [1m[36m (610.0ms)[0m  [1mCREATE TABLE `overall_officials` (`id` int(11) auto_increment PRIMARY KEY, `name` varchar(255), `role` varchar(255), `affiliation` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (1330.2ms)[0m  ALTER TABLE `overall_officials` ADD `nct_id` varchar(255)
+  [1m[36m (685.7ms)[0m  [1mCREATE  INDEX `index_overall_officials_on_nct_id`  ON `overall_officials` (`nct_id`) [0m
+  [1m[35m (622.6ms)[0m  CREATE TABLE `oversight_authorities` (`id` int(11) auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB
+  [1m[36m (1297.2ms)[0m  [1mALTER TABLE `oversight_authorities` ADD `nct_id` varchar(255)[0m
+  [1m[35m (713.1ms)[0m  CREATE  INDEX `index_oversight_authorities_on_nct_id`  ON `oversight_authorities` (`nct_id`) 
+  [1m[36m (630.4ms)[0m  [1mCREATE TABLE `links` (`id` int(11) auto_increment PRIMARY KEY, `url` varchar(255), `description` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (1214.9ms)[0m  ALTER TABLE `links` ADD `nct_id` varchar(255)
+  [1m[36m (875.9ms)[0m  [1mCREATE  INDEX `index_links_on_nct_id`  ON `links` (`nct_id`) [0m
+  [1m[35m (534.3ms)[0m  CREATE TABLE `secondary_ids` (`id` int(11) auto_increment PRIMARY KEY, `secondary_id` varchar(255)) ENGINE=InnoDB
+  [1m[36m (1189.5ms)[0m  [1mALTER TABLE `secondary_ids` ADD `nct_id` varchar(255)[0m
+  [1m[35m (640.5ms)[0m  CREATE  INDEX `index_secondary_ids_on_nct_id`  ON `secondary_ids` (`nct_id`) 
+  [1m[36m (677.4ms)[0m  [1mCREATE TABLE `eligibilities` (`id` int(11) auto_increment PRIMARY KEY, `sampling_method` varchar(255), `gender` varchar(255), `minimum_age` varchar(255), `maximum_age` varchar(255), `healthy_volunteers` varchar(255), `study_population` text, `criteria` text) ENGINE=InnoDB[0m
+  [1m[35m (1372.2ms)[0m  ALTER TABLE `eligibilities` ADD `nct_id` varchar(255)
+  [1m[36m (675.9ms)[0m  [1mCREATE  INDEX `index_eligibilities_on_nct_id`  ON `eligibilities` (`nct_id`) [0m
+  [1m[35m (606.8ms)[0m  CREATE TABLE `detailed_descriptions` (`id` int(11) auto_increment PRIMARY KEY, `description` text) ENGINE=InnoDB
+  [1m[36m (1462.9ms)[0m  [1mALTER TABLE `detailed_descriptions` ADD `nct_id` varchar(255)[0m
+  [1m[35m (728.6ms)[0m  CREATE  INDEX `index_detailed_descriptions_on_nct_id`  ON `detailed_descriptions` (`nct_id`) 
+  [1m[36m (558.0ms)[0m  [1mCREATE TABLE `brief_summaries` (`id` int(11) auto_increment PRIMARY KEY, `description` text) ENGINE=InnoDB[0m
+  [1m[35m (1253.0ms)[0m  ALTER TABLE `brief_summaries` ADD `nct_id` varchar(255)
+  [1m[36m (756.8ms)[0m  [1mCREATE  INDEX `index_brief_summaries_on_nct_id`  ON `brief_summaries` (`nct_id`) [0m
+  [1m[35m (87.8ms)[0m  BEGIN
+  [1m[36mSQL (86.9ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20150409002646')[0m
+  [1m[35m (129.8ms)[0m  COMMIT
+Migrating to CreateResults (20150415155251)
+  [1m[36m (566.5ms)[0m  [1mCREATE TABLE `result_contacts` (`id` int(11) auto_increment PRIMARY KEY, `name_or_title` varchar(255), `organization` varchar(255), `phone` varchar(255), `email` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (1438.7ms)[0m  ALTER TABLE `result_contacts` ADD `nct_id` varchar(255)
+  [1m[36m (626.7ms)[0m  [1mCREATE TABLE `result_agreements` (`id` int(11) auto_increment PRIMARY KEY, `pi_employee` varchar(255), `agreement` text, `agreement_type` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (1242.1ms)[0m  ALTER TABLE `result_agreements` ADD `nct_id` varchar(255)
+  [1m[36m (641.4ms)[0m  [1mCREATE TABLE `baseline_measures` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `category` varchar(255), `title` varchar(255), `description` text, `units` varchar(255), `param` varchar(255), `measure_value` varchar(255), `lower_limit` varchar(255), `upper_limit` varchar(255), `dispersion` varchar(255), `spread` varchar(255), `measure_description` text) ENGINE=InnoDB[0m
+  [1m[35m (1302.5ms)[0m  ALTER TABLE `baseline_measures` ADD `nct_id` varchar(255)
+  [1m[36m (574.0ms)[0m  [1mCREATE TABLE `result_details` (`id` int(11) auto_increment PRIMARY KEY, `recruitment_details` text, `pre_assignment_details` text) ENGINE=InnoDB[0m
+  [1m[35m (1254.6ms)[0m  ALTER TABLE `result_details` ADD `nct_id` varchar(255)
+  [1m[36m (620.3ms)[0m  [1mCREATE TABLE `periods` (`id` int(11) auto_increment PRIMARY KEY, `title` varchar(255)) ENGINE=InnoDB[0m
+  [1m[35m (1466.0ms)[0m  ALTER TABLE `periods` ADD `nct_id` varchar(255)
+  [1m[36m (629.0ms)[0m  [1mCREATE TABLE `milestones` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `title` varchar(255), `description` text, `participant_count` int(11)) ENGINE=InnoDB[0m
+  [1m[35m (1350.2ms)[0m  ALTER TABLE `milestones` ADD `nct_id` varchar(255)
+  [1m[36m (1276.1ms)[0m  [1mALTER TABLE `milestones` ADD `period_id` int(11)[0m
+  [1m[35m (712.3ms)[0m  CREATE TABLE `drop_withdrawals` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `reason` varchar(255), `participant_count` int(11)) ENGINE=InnoDB
+  [1m[36m (1460.7ms)[0m  [1mALTER TABLE `drop_withdrawals` ADD `nct_id` varchar(255)[0m
+  [1m[35m (1464.8ms)[0m  ALTER TABLE `drop_withdrawals` ADD `period_id` int(11)
+  [1m[36m (594.5ms)[0m  [1mCREATE TABLE `actual_outcomes` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `group_title` text, `group_description` text, `outcome_type` varchar(255), `title` varchar(255), `description` text, `measure` varchar(255), `time_frame` varchar(255), `safety_issue` varchar(255), `population` text, `participant_count` int(11)) ENGINE=InnoDB[0m
+  [1m[35m (1264.6ms)[0m  ALTER TABLE `actual_outcomes` ADD `nct_id` varchar(255)
+  [1m[36m (665.1ms)[0m  [1mCREATE TABLE `outcome_measures` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `category` varchar(255), `title` varchar(255), `description` text, `units` varchar(255), `param` varchar(255), `measure_value` varchar(255), `lower_limit` varchar(255), `upper_limit` varchar(255), `dispersion` varchar(255), `spread` varchar(255), `measure_description` text) ENGINE=InnoDB[0m
+  [1m[35m (1444.2ms)[0m  ALTER TABLE `outcome_measures` ADD `nct_id` varchar(255)
+  [1m[36m (1221.6ms)[0m  [1mALTER TABLE `outcome_measures` ADD `actual_outcome_id` int(11)[0m
+  [1m[35m (655.2ms)[0m  CREATE TABLE `outcome_analyses` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `title` varchar(255), `non_inferiority` varchar(255), `non_inferiority_description` text, `p_value` varchar(255), `param_type` varchar(255), `param_value` varchar(255), `ci_percent` varchar(255), `ci_n_sides` varchar(255), `ci_lower_limit` varchar(255), `ci_upper_limit` varchar(255), `method` varchar(255), `description` text, `group_description` text, `method_description` text, `estimate_description` text) ENGINE=InnoDB
+  [1m[36m (1351.7ms)[0m  [1mALTER TABLE `outcome_analyses` ADD `nct_id` varchar(255)[0m
+  [1m[35m (1185.6ms)[0m  ALTER TABLE `outcome_analyses` ADD `actual_outcome_id` int(11)
+  [1m[36m (806.2ms)[0m  [1mCREATE TABLE `reported_events` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `group_title` varchar(255), `group_description` text, `description` text, `time_frame` varchar(255), `category` varchar(255), `event_type` varchar(255), `frequency_threshold` varchar(255), `default_vocab` varchar(255), `default_assessment` varchar(255), `title` varchar(255), `subjects_affected` int(11), `subjects_at_risk` int(11), `event_count` int(11)) ENGINE=InnoDB[0m
+  [1m[35m (1249.7ms)[0m  ALTER TABLE `reported_events` ADD `nct_id` varchar(255)
+  [1m[36m (631.7ms)[0m  [1mCREATE TABLE `reported_event_overviews` (`id` int(11) auto_increment PRIMARY KEY, `time_frame` varchar(255), `description` text) ENGINE=InnoDB[0m
+  [1m[35m (1216.7ms)[0m  ALTER TABLE `reported_event_overviews` ADD `nct_id` varchar(255)
+  [1m[36m (661.8ms)[0m  [1mCREATE TABLE `actual_groups` (`id` int(11) auto_increment PRIMARY KEY, `ctgov_group_id` varchar(255), `ctgov_group_enumerator` int(11), `group_type` varchar(255), `title` varchar(255), `description` text, `participant_count` int(11)) ENGINE=InnoDB[0m
+  [1m[35m (1280.5ms)[0m  ALTER TABLE `actual_groups` ADD `nct_id` varchar(255)
+  [1m[36m (86.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (90.7ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20150415155251')
+  [1m[36m (137.7ms)[0m  [1mCOMMIT[0m
+Migrating to CreateAdminTables (20150629193710)
+  [1m[35m (697.6ms)[0m  CREATE TABLE `data_definitions` (`id` int(11) auto_increment PRIMARY KEY, `column_name` varchar(255), `table_name` varchar(255), `value_list` text, `ctgov_source` varchar(255), `nlm_required` varchar(255), `fdaaa_required` varchar(255), `nlm_definition` text, `ctti_notes` text, `data_source` varchar(255), `data_field` varchar(255)) ENGINE=InnoDB
+  [1m[36m (623.9ms)[0m  [1mCREATE TABLE `load_events` (`id` int(11) auto_increment PRIMARY KEY, `nct_id` varchar(255), `event_type` varchar(255), `status` varchar(255), `description` text, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB[0m
+  [1m[35m (661.7ms)[0m  CREATE TABLE `search_results` (`id` int(11) auto_increment PRIMARY KEY, `search_datestamp` date, `search_term` varchar(255), `nct_id` varchar(255), `order` int(11), `score` decimal(6,6), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (89.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (134.7ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20150629193710')
+  [1m[36m (134.7ms)[0m  [1mCOMMIT[0m
+  [1m[35mActiveRecord::SchemaMigration Load (91.6ms)[0m  SELECT `schema_migrations`.* FROM `schema_migrations`
+  [1m[36m (87.8ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'actual_groups'
+[0m
+  [1m[35m (88.7ms)[0m  SHOW CREATE TABLE `actual_groups`
+  [1m[36m (90.7ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'actual_outcomes'
+[0m
+  [1m[35m (90.1ms)[0m  SHOW CREATE TABLE `actual_outcomes`
+  [1m[36m (89.0ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'baseline_measures'
+[0m
+  [1m[35m (89.1ms)[0m  SHOW CREATE TABLE `baseline_measures`
+  [1m[36m (89.6ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'brief_summaries'
+[0m
+  [1m[35m (88.1ms)[0m  SHOW CREATE TABLE `brief_summaries`
+  [1m[36m (88.6ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'browse_conditions'
+[0m
+  [1m[35m (114.6ms)[0m  SHOW CREATE TABLE `browse_conditions`
+  [1m[36m (100.1ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'browse_interventions'
+[0m
+  [1m[35m (87.6ms)[0m  SHOW CREATE TABLE `browse_interventions`
+  [1m[36m (88.0ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'conditions'
+[0m
+  [1m[35m (90.5ms)[0m  SHOW CREATE TABLE `conditions`
+  [1m[36m (97.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'data_definitions'
+[0m
+  [1m[35m (87.7ms)[0m  SHOW CREATE TABLE `data_definitions`
+  [1m[36m (91.4ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'designs'
+[0m
+  [1m[35m (99.6ms)[0m  SHOW CREATE TABLE `designs`
+  [1m[36m (88.7ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'detailed_descriptions'
+[0m
+  [1m[35m (105.1ms)[0m  SHOW CREATE TABLE `detailed_descriptions`
+  [1m[36m (89.0ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'drop_withdrawals'
+[0m
+  [1m[35m (87.6ms)[0m  SHOW CREATE TABLE `drop_withdrawals`
+  [1m[36m (94.4ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'eligibilities'
+[0m
+  [1m[35m (92.2ms)[0m  SHOW CREATE TABLE `eligibilities`
+  [1m[36m (89.1ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'expected_groups'
+[0m
+  [1m[35m (87.6ms)[0m  SHOW CREATE TABLE `expected_groups`
+  [1m[36m (88.7ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'expected_outcomes'
+[0m
+  [1m[35m (98.1ms)[0m  SHOW CREATE TABLE `expected_outcomes`
+  [1m[36m (88.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'facilities'
+[0m
+  [1m[35m (87.7ms)[0m  SHOW CREATE TABLE `facilities`
+  [1m[36m (90.0ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'intervention_arm_group_labels'
+[0m
+  [1m[35m (90.6ms)[0m  SHOW CREATE TABLE `intervention_arm_group_labels`
+  [1m[36m (87.4ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'intervention_other_names'
+[0m
+  [1m[35m (90.7ms)[0m  SHOW CREATE TABLE `intervention_other_names`
+  [1m[36m (89.7ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'interventions'
+[0m
+  [1m[35m (87.1ms)[0m  SHOW CREATE TABLE `interventions`
+  [1m[36m (88.4ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'keywords'
+[0m
+  [1m[35m (93.6ms)[0m  SHOW CREATE TABLE `keywords`
+  [1m[36m (88.7ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'links'
+[0m
+  [1m[35m (87.1ms)[0m  SHOW CREATE TABLE `links`
+  [1m[36m (92.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'load_events'
+[0m
+  [1m[35m (89.4ms)[0m  SHOW CREATE TABLE `load_events`
+  [1m[36m (88.0ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'location_countries'
+[0m
+  [1m[35m (87.8ms)[0m  SHOW CREATE TABLE `location_countries`
+  [1m[36m (89.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'milestones'
+[0m
+  [1m[35m (89.9ms)[0m  SHOW CREATE TABLE `milestones`
+  [1m[36m (88.6ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'outcome_analyses'
+[0m
+  [1m[35m (150.4ms)[0m  SHOW CREATE TABLE `outcome_analyses`
+  [1m[36m (90.1ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'outcome_measures'
+[0m
+  [1m[35m (87.3ms)[0m  SHOW CREATE TABLE `outcome_measures`
+  [1m[36m (89.8ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'overall_officials'
+[0m
+  [1m[35m (92.2ms)[0m  SHOW CREATE TABLE `overall_officials`
+  [1m[36m (90.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'oversight_authorities'
+[0m
+  [1m[35m (88.2ms)[0m  SHOW CREATE TABLE `oversight_authorities`
+  [1m[36m (89.4ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'periods'
+[0m
+  [1m[35m (87.7ms)[0m  SHOW CREATE TABLE `periods`
+  [1m[36m (89.7ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'reported_event_overviews'
+[0m
+  [1m[35m (87.4ms)[0m  SHOW CREATE TABLE `reported_event_overviews`
+  [1m[36m (89.7ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'reported_events'
+[0m
+  [1m[35m (87.0ms)[0m  SHOW CREATE TABLE `reported_events`
+  [1m[36m (89.1ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'responsible_parties'
+[0m
+  [1m[35m (88.2ms)[0m  SHOW CREATE TABLE `responsible_parties`
+  [1m[36m (89.9ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'result_agreements'
+[0m
+  [1m[35m (90.0ms)[0m  SHOW CREATE TABLE `result_agreements`
+  [1m[36m (88.3ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'result_contacts'
+[0m
+  [1m[35m (96.0ms)[0m  SHOW CREATE TABLE `result_contacts`
+  [1m[36m (99.4ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'result_details'
+[0m
+  [1m[35m (87.5ms)[0m  SHOW CREATE TABLE `result_details`
+  [1m[36m (88.2ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'search_results'
+[0m
+  [1m[35m (92.2ms)[0m  SHOW CREATE TABLE `search_results`
+  [1m[36m (92.8ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'secondary_ids'
+[0m
+  [1m[35m (90.0ms)[0m  SHOW CREATE TABLE `secondary_ids`
+  [1m[36m (89.6ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'sponsors'
+[0m
+  [1m[35m (90.2ms)[0m  SHOW CREATE TABLE `sponsors`
+  [1m[36m (93.1ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'studies'
+[0m
+  [1m[35m (97.4ms)[0m  SHOW CREATE TABLE `studies`
+  [1m[36m (92.6ms)[0m  [1mSELECT fk.referenced_table_name as 'to_table'
+      ,fk.referenced_column_name as 'primary_key'
+      ,fk.column_name as 'column'
+      ,fk.constraint_name as 'name'
+FROM information_schema.key_column_usage fk
+WHERE fk.referenced_column_name is not null
+  AND fk.table_schema = 'ctgov'
+  AND fk.table_name = 'study_references'
+[0m
+  [1m[35m (87.1ms)[0m  SHOW CREATE TABLE `study_references`
+  [1m[36mStudy Load (78.7ms)[0m  [1mSELECT `studies`.* FROM `studies`[0m
+  [1m[35m (79.6ms)[0m  SELECT COUNT(*) FROM `studies` WHERE (nct_id='NCT00000102')
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.8ms)[0m  INSERT INTO `load_events` (`nct_id`, `event_type`, `status`, `created_at`, `updated_at`) VALUES ('NCT00000102', 'create', 'active', '2015-12-07 21:32:26', '2015-12-07 21:32:26')
+  [1m[36m (123.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.4ms)[0m  BEGIN
+  [1m[36mSQL (78.1ms)[0m  [1mINSERT INTO `detailed_descriptions` (`nct_id`, `description`) VALUES ('NCT00000102', '\n      This protocol is designed to assess both acute and chronic effects of the calcium channel\n      antagonist, nifedipine, on the hypothalamic-pituitary-adrenal axis in patients with\n      congenital adrenal hyperplasia. The multicenter trial is composed of two phases and will\n      involve a double-blind, placebo-controlled parallel design. The goal of Phase I is to\n      examine the ability of nifedipine vs. placebo to decrease adrenocorticotropic hormone (ACTH)\n      levels, as well as to begin to assess the dose-dependency of nifedipine effects. The goal of\n      Phase II is to evaluate the long-term effects of nifedipine; that is, can attenuation of\n      ACTH release by nifedipine permit a decrease in the dosage of glucocorticoid needed to\n      suppress the HPA axis? Such a decrease would, in turn, reduce the deleterious effects of\n      glucocorticoid treatment in CAH.\n    ')[0m
+  [1m[35m (120.6ms)[0m  COMMIT
+  [1m[36m (77.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.7ms)[0m  COMMIT
+  [1m[36m (77.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.1ms)[0m  INSERT INTO `designs` (`nct_id`, `description`) VALUES ('NCT00000102', 'Intervention Model: Parallel Assignment, Masking: Double-Blind, Primary Purpose: Treatment')
+  [1m[36m (117.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.9ms)[0m  BEGIN
+  [1m[36m (81.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.7ms)[0m  BEGIN
+  [1m[36mSQL (311.0ms)[0m  [1mINSERT INTO `brief_summaries` (`nct_id`, `description`) VALUES ('NCT00000102', '\n      This study will test the ability of extended release nifedipine (Procardia XL), a blood\n      pressure medication, to permit a decrease in the dose of glucocorticoid medication children\n      take to treat congenital adrenal hyperplasia (CAH).\n    ')[0m
+  [1m[35m (123.0ms)[0m  COMMIT
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.0ms)[0m  COMMIT
+  [1m[36m (96.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.9ms)[0m  INSERT INTO `eligibilities` (`nct_id`, `sampling_method`, `study_population`, `maximum_age`, `minimum_age`, `gender`, `healthy_volunteers`, `criteria`) VALUES ('NCT00000102', '', '', '35 Years', '14 Years', 'Both', 'No', '\n        Inclusion Criteria:\n\n          -  diagnosed with Congenital Adrenal Hyperplasia (CAH)\n\n          -  normal ECG during baseline evaluation\n\n        Exclusion Criteria:\n\n          -  history of liver disease, or elevated liver function tests\n\n          -  history of cardiovascular disease\n      ')
+  [1m[36m (122.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.8ms)[0m  BEGIN
+  [1m[36m (77.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (82.0ms)[0m  BEGIN
+  [1m[36mSQL (80.9ms)[0m  [1mINSERT INTO `result_details` (`nct_id`, `recruitment_details`, `pre_assignment_details`) VALUES ('NCT00000102', '', '')[0m
+  [1m[35m (131.9ms)[0m  COMMIT
+  [1m[36m (82.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.3ms)[0m  COMMIT
+  [1m[36m (78.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.7ms)[0m  INSERT INTO `facilities` (`nct_id`, `name`, `city`, `state`, `zip`, `country`, `status`, `contact_name`, `contact_phone`, `contact_email`, `contact_backup_name`, `contact_backup_phone`, `contact_backup_email`, `investigator_name`, `investigator_role`, `created_at`, `updated_at`) VALUES ('NCT00000102', 'Medical University of South Carolina', 'Charleston', 'South Carolina', '', 'United States', '', '', '', '', '', '', '', '', '', '2015-12-07 21:32:30', '2015-12-07 21:32:30')
+  [1m[36m (119.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.8ms)[0m  BEGIN
+  [1m[36m (77.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.7ms)[0m  BEGIN
+  [1m[36mSQL (78.9ms)[0m  [1mINSERT INTO `interventions` (`nct_id`, `intervention_type`, `name`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000102', 'Drug', 'Nifedipine', '', '2015-12-07 21:32:31', '2015-12-07 21:32:31')[0m
+  [1m[35m (128.4ms)[0m  COMMIT
+  [1m[36m (77.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (76.8ms)[0m  COMMIT
+  [1m[36m (83.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.8ms)[0m  INSERT INTO `location_countries` (`nct_id`, `name`) VALUES ('NCT00000102', 'United States')
+  [1m[36m (127.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.5ms)[0m  BEGIN
+  [1m[36m (78.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.8ms)[0m  BEGIN
+  [1m[36mSQL (77.6ms)[0m  [1mINSERT INTO `secondary_ids` (`nct_id`, `secondary_id`) VALUES ('NCT00000102', 'M01RR001070')[0m
+  [1m[35m (126.2ms)[0m  COMMIT
+  [1m[36m (77.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.4ms)[0m  COMMIT
+  [1m[36m (78.1ms)[0m  [1mBEGIN[0m
+  [1m[35mExpectedGroup Load (79.0ms)[0m  SELECT `expected_groups`.* FROM `expected_groups` WHERE `expected_groups`.`nct_id` = 'NCT00000102'
+  [1m[36mActualGroup Load (79.3ms)[0m  [1mSELECT `actual_groups`.* FROM `actual_groups` WHERE `actual_groups`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mActualOutcome Load (77.7ms)[0m  SELECT `actual_outcomes`.* FROM `actual_outcomes` WHERE `actual_outcomes`.`nct_id` = 'NCT00000102'
+  [1m[36mDetailedDescription Load (83.4ms)[0m  [1mSELECT  `detailed_descriptions`.* FROM `detailed_descriptions` WHERE `detailed_descriptions`.`nct_id` = 'NCT00000102' LIMIT 1[0m
+  [1m[35mDesign Load (77.2ms)[0m  SELECT  `designs`.* FROM `designs` WHERE `designs`.`nct_id` = 'NCT00000102' LIMIT 1
+  [1m[36mBriefSummary Load (79.1ms)[0m  [1mSELECT  `brief_summaries`.* FROM `brief_summaries` WHERE `brief_summaries`.`nct_id` = 'NCT00000102' LIMIT 1[0m
+  [1m[35mEligibility Load (78.2ms)[0m  SELECT  `eligibilities`.* FROM `eligibilities` WHERE `eligibilities`.`nct_id` = 'NCT00000102' LIMIT 1
+  [1m[36mResultDetail Load (78.3ms)[0m  [1mSELECT  `result_details`.* FROM `result_details` WHERE `result_details`.`nct_id` = 'NCT00000102' LIMIT 1[0m
+  [1m[35mBaselineMeasure Load (78.4ms)[0m  SELECT `baseline_measures`.* FROM `baseline_measures` WHERE `baseline_measures`.`nct_id` = 'NCT00000102'
+  [1m[36mBrowseCondition Load (77.9ms)[0m  [1mSELECT `browse_conditions`.* FROM `browse_conditions` WHERE `browse_conditions`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mBrowseIntervention Load (80.6ms)[0m  SELECT `browse_interventions`.* FROM `browse_interventions` WHERE `browse_interventions`.`nct_id` = 'NCT00000102'
+  [1m[36mCondition Load (80.4ms)[0m  [1mSELECT `conditions`.* FROM `conditions` WHERE `conditions`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mFacility Load (78.0ms)[0m  SELECT `facilities`.* FROM `facilities` WHERE `facilities`.`nct_id` = 'NCT00000102'
+  [1m[36mIntervention Load (77.3ms)[0m  [1mSELECT `interventions`.* FROM `interventions` WHERE `interventions`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mKeyword Load (78.1ms)[0m  SELECT `keywords`.* FROM `keywords` WHERE `keywords`.`nct_id` = 'NCT00000102'
+  [1m[36mLink Load (80.7ms)[0m  [1mSELECT `links`.* FROM `links` WHERE `links`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mLocationCountry Load (78.1ms)[0m  SELECT `location_countries`.* FROM `location_countries` WHERE `location_countries`.`nct_id` = 'NCT00000102'
+  [1m[36mOversightAuthority Load (100.4ms)[0m  [1mSELECT `oversight_authorities`.* FROM `oversight_authorities` WHERE `oversight_authorities`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mOverallOfficial Load (81.2ms)[0m  SELECT `overall_officials`.* FROM `overall_officials` WHERE `overall_officials`.`nct_id` = 'NCT00000102'
+  [1m[36mPeriod Load (80.2ms)[0m  [1mSELECT `periods`.* FROM `periods` WHERE `periods`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mExpectedOutcome Load (81.1ms)[0m  SELECT `expected_outcomes`.* FROM `expected_outcomes` WHERE `expected_outcomes`.`nct_id` = 'NCT00000102'
+  [1m[36mReportedEvent Load (78.4ms)[0m  [1mSELECT `reported_events`.* FROM `reported_events` WHERE `reported_events`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mResponsibleParty Load (77.5ms)[0m  SELECT `responsible_parties`.* FROM `responsible_parties` WHERE `responsible_parties`.`nct_id` = 'NCT00000102'
+  [1m[36mResultAgreement Load (79.1ms)[0m  [1mSELECT `result_agreements`.* FROM `result_agreements` WHERE `result_agreements`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mResultContact Load (78.2ms)[0m  SELECT `result_contacts`.* FROM `result_contacts` WHERE `result_contacts`.`nct_id` = 'NCT00000102'
+  [1m[36mSecondaryId Load (78.2ms)[0m  [1mSELECT `secondary_ids`.* FROM `secondary_ids` WHERE `secondary_ids`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mStudyReference Load (89.3ms)[0m  SELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000102'
+  [1m[36mResultReference Load (103.0ms)[0m  [1mSELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000102'[0m
+  [1m[35mSponsor Load (85.6ms)[0m  SELECT `sponsors`.* FROM `sponsors` WHERE `sponsors`.`nct_id` = 'NCT00000102'
+  [1m[36mSQL (84.3ms)[0m  [1mINSERT INTO `studies` (`first_received_date`, `verification_date`, `last_changed_date`, `download_date`, `start_date_str`, `first_received_date_str`, `verification_date_str`, `last_changed_date_str`, `primary_completion_date_str`, `completion_date_str`, `first_received_results_date_str`, `download_date_str`, `nct_id`, `org_study_id`, `acronym`, `source`, `brief_title`, `official_title`, `overall_status`, `phase`, `target_duration`, `biospec_description`, `study_type`, `biospec_retention`, `limitations_and_caveats`, `has_expanded_access`, `why_stopped`, `created_at`, `updated_at`) VALUES ('1999-11-03', '2004-01-01', '2005-06-23', '2015-12-06', '', 'November 3, 1999', 'January 2004', 'June 23, 2005', '', '', '', 'ClinicalTrials.gov processed this data on December 06, 2015', 'NCT00000102', 'NCRR-M01RR01070-0506', '', '', 'Congenital Adrenal Hyperplasia: Calcium Channels as Therapeutic Targets', '', 'Completed', 'Phase 1/Phase 2', '', '', 'Interventional', '', '', 0, '', '2015-12-07 21:32:38', '2015-12-07 21:32:38')[0m
+  [1m[35m (96.2ms)[0m  BEGIN
+  [1m[36mSQL (90.7ms)[0m  [1mINSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000102', 'Adrenal Hyperplasia, Congenital', '2015-12-07 21:32:38', '2015-12-07 21:32:38')[0m
+  [1m[35m (125.8ms)[0m  COMMIT
+  [1m[36m (76.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.9ms)[0m  INSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000102', 'Adrenocortical Hyperfunction', '2015-12-07 21:32:39', '2015-12-07 21:32:39')
+  [1m[36m (129.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.1ms)[0m  BEGIN
+  [1m[36mSQL (77.2ms)[0m  [1mINSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000102', 'Adrenogenital Syndrome', '2015-12-07 21:32:39', '2015-12-07 21:32:39')[0m
+  [1m[35m (123.0ms)[0m  COMMIT
+  [1m[36m (77.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.0ms)[0m  INSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000102', 'Hyperplasia', '2015-12-07 21:32:39', '2015-12-07 21:32:39')
+  [1m[36m (118.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.4ms)[0m  BEGIN
+  [1m[36mSQL (77.2ms)[0m  [1mINSERT INTO `conditions` (`name`, `nct_id`, `created_at`, `updated_at`) VALUES ('Congenital Adrenal Hyperplasia', 'NCT00000102', '2015-12-07 21:32:39', '2015-12-07 21:32:39')[0m
+  [1m[35m (119.0ms)[0m  COMMIT
+  [1m[36m (78.6ms)[0m  [1mBEGIN[0m
+  [1m[35m (76.8ms)[0m  COMMIT
+  [1m[36m (78.7ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.3ms)[0m  COMMIT
+  [1m[36m (79.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (76.6ms)[0m  COMMIT
+  [1m[36m (77.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (89.3ms)[0m  INSERT INTO `oversight_authorities` (`name`, `nct_id`) VALUES ('United States: Federal Government', 'NCT00000102')
+  [1m[36m (123.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.5ms)[0m  BEGIN
+  [1m[36m (77.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.9ms)[0m  BEGIN
+  [1m[36mSQL (77.2ms)[0m  [1mINSERT INTO `sponsors` (`sponsor_type`, `agency`, `agency_class`, `nct_id`) VALUES ('lead', 'National Center for Research Resources (NCRR)', 'NIH', 'NCT00000102')[0m
+  [1m[35m (129.3ms)[0m  COMMIT
+  [1m[36m (124.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.1ms)[0m  BEGIN
+  [1m[36mSQL (77.9ms)[0m  [1mUPDATE `load_events` SET `status` = 'complete', `updated_at` = '2015-12-07 21:32:41' WHERE `load_events`.`id` = 1[0m
+  [1m[35m (123.8ms)[0m  COMMIT
+  [1m[36m (78.3ms)[0m  [1mSELECT COUNT(*) FROM `studies` WHERE (nct_id='NCT00000104')[0m
+  [1m[35m (89.0ms)[0m  BEGIN
+  [1m[36mSQL (103.3ms)[0m  [1mINSERT INTO `load_events` (`nct_id`, `event_type`, `status`, `created_at`, `updated_at`) VALUES ('NCT00000104', 'create', 'active', '2015-12-07 21:32:41', '2015-12-07 21:32:41')[0m
+  [1m[35m (125.4ms)[0m  COMMIT
+  [1m[36m (77.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.8ms)[0m  INSERT INTO `detailed_descriptions` (`nct_id`, `description`) VALUES ('NCT00000104', '')
+  [1m[36m (141.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.0ms)[0m  BEGIN
+  [1m[36m (78.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.1ms)[0m  BEGIN
+  [1m[36mSQL (79.0ms)[0m  [1mINSERT INTO `designs` (`nct_id`, `description`) VALUES ('NCT00000104', 'Observational Model: Defined Population, Time Perspective: Longitudinal')[0m
+  [1m[35m (130.6ms)[0m  COMMIT
+  [1m[36m (79.0ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.5ms)[0m  COMMIT
+  [1m[36m (83.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (87.8ms)[0m  INSERT INTO `brief_summaries` (`nct_id`, `description`) VALUES ('NCT00000104', '\n      Inner city children are at an increased risk for lead overburden. This in turn affects\n      cognitive functioning. However, the underlying neuropsychological effects of lead overburden\n      and its age-specific effects have not been well delineated. This study is part of a larger\n      study on the effects of lead overburden on the development of attention and memory. The\n      larger study is using a multi-model approach to study the effects of lead overburden on\n      these effects including the event-related potential (ERP), electrophysiologic measures of\n      attention and memory are studied. Every eight months, for a total of three sessions the\n      subjects will complete ERP measures of attention and memory which require them to watch\n      various computer images while wearing scalp electrodes recording from 11 sites. It is this\n      test that we are going to be doing on CRC. There will be 30 lead overburdened children\n      recruited from the larger study for participation in the ERP studies on CRC. These 30\n      children will be matched with 30 children without lead overburden. This portion of the study\n      is important in providing an index of physiological functioning to be used along with\n      behaviorally based measures of attention and memory, and for providing information about the\n      different measures.\n    ')
+  [1m[36m (137.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (104.2ms)[0m  BEGIN
+  [1m[36m (82.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.9ms)[0m  BEGIN
+  [1m[36mSQL (77.2ms)[0m  [1mINSERT INTO `eligibilities` (`nct_id`, `sampling_method`, `study_population`, `maximum_age`, `minimum_age`, `gender`, `healthy_volunteers`, `criteria`) VALUES ('NCT00000104', '', '', 'N/A', 'N/A', 'Female', 'Accepts Healthy Volunteers', '\n        Inclusion Criteria:\n\n          -  Pregnant mothers of the Phillips neighborhood in Minneapolis, Minnesota. Subject\n             recruitment will take place in local clinics which serve pregnant women and offspring\n      ')[0m
+  [1m[35m (126.8ms)[0m  COMMIT
+  [1m[36m (78.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.1ms)[0m  COMMIT
+  [1m[36m (80.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.5ms)[0m  INSERT INTO `result_details` (`nct_id`, `recruitment_details`, `pre_assignment_details`) VALUES ('NCT00000104', '', '')
+  [1m[36m (117.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.7ms)[0m  BEGIN
+  [1m[36m (79.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (136.7ms)[0m  BEGIN
+  [1m[36mSQL (82.0ms)[0m  [1mINSERT INTO `facilities` (`nct_id`, `name`, `city`, `state`, `zip`, `country`, `status`, `contact_name`, `contact_phone`, `contact_email`, `contact_backup_name`, `contact_backup_phone`, `contact_backup_email`, `investigator_name`, `investigator_role`, `created_at`, `updated_at`) VALUES ('NCT00000104', 'Department of Neurology 420 Delaware St. SE, Box 486 Mayo', 'Minneapolis', 'Minnesota', '55455', 'United States', '', '', '', '', '', '', '', '', '', '2015-12-07 21:32:45', '2015-12-07 21:32:45')[0m
+  [1m[35m (125.9ms)[0m  COMMIT
+  [1m[36m (78.8ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.3ms)[0m  COMMIT
+  [1m[36m (78.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.9ms)[0m  INSERT INTO `interventions` (`nct_id`, `intervention_type`, `name`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000104', 'Procedure', 'ERP measures of attention and memory', '', '2015-12-07 21:32:45', '2015-12-07 21:32:45')
+  [1m[36m (130.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.0ms)[0m  BEGIN
+  [1m[36m (79.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.1ms)[0m  BEGIN
+  [1m[36mSQL (77.1ms)[0m  [1mINSERT INTO `keywords` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000104', 'lead overburden', '2015-12-07 21:32:45', '2015-12-07 21:32:45')[0m
+  [1m[35m (122.6ms)[0m  COMMIT
+  [1m[36m (78.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.5ms)[0m  COMMIT
+  [1m[36m (77.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.2ms)[0m  INSERT INTO `location_countries` (`nct_id`, `name`) VALUES ('NCT00000104', 'United States')
+  [1m[36m (148.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.9ms)[0m  BEGIN
+  [1m[36m (78.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.8ms)[0m  BEGIN
+  [1m[36mSQL (78.2ms)[0m  [1mINSERT INTO `secondary_ids` (`nct_id`, `secondary_id`) VALUES ('NCT00000104', 'M01RR000400')[0m
+  [1m[35m (125.0ms)[0m  COMMIT
+  [1m[36m (80.7ms)[0m  [1mBEGIN[0m
+  [1m[35m (85.0ms)[0m  COMMIT
+  [1m[36m (77.3ms)[0m  [1mBEGIN[0m
+  [1m[35mExpectedGroup Load (78.7ms)[0m  SELECT `expected_groups`.* FROM `expected_groups` WHERE `expected_groups`.`nct_id` = 'NCT00000104'
+  [1m[36mActualGroup Load (79.5ms)[0m  [1mSELECT `actual_groups`.* FROM `actual_groups` WHERE `actual_groups`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mActualOutcome Load (79.5ms)[0m  SELECT `actual_outcomes`.* FROM `actual_outcomes` WHERE `actual_outcomes`.`nct_id` = 'NCT00000104'
+  [1m[36mDetailedDescription Load (78.2ms)[0m  [1mSELECT  `detailed_descriptions`.* FROM `detailed_descriptions` WHERE `detailed_descriptions`.`nct_id` = 'NCT00000104' LIMIT 1[0m
+  [1m[35mDesign Load (81.7ms)[0m  SELECT  `designs`.* FROM `designs` WHERE `designs`.`nct_id` = 'NCT00000104' LIMIT 1
+  [1m[36mBriefSummary Load (89.7ms)[0m  [1mSELECT  `brief_summaries`.* FROM `brief_summaries` WHERE `brief_summaries`.`nct_id` = 'NCT00000104' LIMIT 1[0m
+  [1m[35mEligibility Load (81.2ms)[0m  SELECT  `eligibilities`.* FROM `eligibilities` WHERE `eligibilities`.`nct_id` = 'NCT00000104' LIMIT 1
+  [1m[36mResultDetail Load (80.6ms)[0m  [1mSELECT  `result_details`.* FROM `result_details` WHERE `result_details`.`nct_id` = 'NCT00000104' LIMIT 1[0m
+  [1m[35mBaselineMeasure Load (79.1ms)[0m  SELECT `baseline_measures`.* FROM `baseline_measures` WHERE `baseline_measures`.`nct_id` = 'NCT00000104'
+  [1m[36mBrowseCondition Load (78.6ms)[0m  [1mSELECT `browse_conditions`.* FROM `browse_conditions` WHERE `browse_conditions`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mBrowseIntervention Load (77.6ms)[0m  SELECT `browse_interventions`.* FROM `browse_interventions` WHERE `browse_interventions`.`nct_id` = 'NCT00000104'
+  [1m[36mCondition Load (80.3ms)[0m  [1mSELECT `conditions`.* FROM `conditions` WHERE `conditions`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mFacility Load (82.5ms)[0m  SELECT `facilities`.* FROM `facilities` WHERE `facilities`.`nct_id` = 'NCT00000104'
+  [1m[36mIntervention Load (93.8ms)[0m  [1mSELECT `interventions`.* FROM `interventions` WHERE `interventions`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mKeyword Load (77.2ms)[0m  SELECT `keywords`.* FROM `keywords` WHERE `keywords`.`nct_id` = 'NCT00000104'
+  [1m[36mLink Load (80.2ms)[0m  [1mSELECT `links`.* FROM `links` WHERE `links`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mLocationCountry Load (78.5ms)[0m  SELECT `location_countries`.* FROM `location_countries` WHERE `location_countries`.`nct_id` = 'NCT00000104'
+  [1m[36mOversightAuthority Load (79.1ms)[0m  [1mSELECT `oversight_authorities`.* FROM `oversight_authorities` WHERE `oversight_authorities`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mOverallOfficial Load (80.6ms)[0m  SELECT `overall_officials`.* FROM `overall_officials` WHERE `overall_officials`.`nct_id` = 'NCT00000104'
+  [1m[36mPeriod Load (79.7ms)[0m  [1mSELECT `periods`.* FROM `periods` WHERE `periods`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mExpectedOutcome Load (80.6ms)[0m  SELECT `expected_outcomes`.* FROM `expected_outcomes` WHERE `expected_outcomes`.`nct_id` = 'NCT00000104'
+  [1m[36mReportedEvent Load (81.2ms)[0m  [1mSELECT `reported_events`.* FROM `reported_events` WHERE `reported_events`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mResponsibleParty Load (80.3ms)[0m  SELECT `responsible_parties`.* FROM `responsible_parties` WHERE `responsible_parties`.`nct_id` = 'NCT00000104'
+  [1m[36mResultAgreement Load (79.4ms)[0m  [1mSELECT `result_agreements`.* FROM `result_agreements` WHERE `result_agreements`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mResultContact Load (81.8ms)[0m  SELECT `result_contacts`.* FROM `result_contacts` WHERE `result_contacts`.`nct_id` = 'NCT00000104'
+  [1m[36mSecondaryId Load (80.6ms)[0m  [1mSELECT `secondary_ids`.* FROM `secondary_ids` WHERE `secondary_ids`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mStudyReference Load (78.4ms)[0m  SELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000104'
+  [1m[36mResultReference Load (78.6ms)[0m  [1mSELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000104'[0m
+  [1m[35mSponsor Load (77.1ms)[0m  SELECT `sponsors`.* FROM `sponsors` WHERE `sponsors`.`nct_id` = 'NCT00000104'
+  [1m[36mSQL (78.7ms)[0m  [1mINSERT INTO `studies` (`first_received_date`, `verification_date`, `last_changed_date`, `download_date`, `start_date_str`, `first_received_date_str`, `verification_date_str`, `last_changed_date_str`, `primary_completion_date_str`, `completion_date_str`, `first_received_results_date_str`, `download_date_str`, `nct_id`, `org_study_id`, `acronym`, `source`, `brief_title`, `official_title`, `overall_status`, `phase`, `target_duration`, `biospec_description`, `study_type`, `biospec_retention`, `limitations_and_caveats`, `has_expanded_access`, `why_stopped`, `created_at`, `updated_at`) VALUES ('1999-11-03', '2003-12-01', '2005-06-23', '2015-12-06', '', 'November 3, 1999', 'December 2003', 'June 23, 2005', '', '', '', 'ClinicalTrials.gov processed this data on December 06, 2015', 'NCT00000104', 'NCRR-M01RR00400-0587', '', '', 'Does Lead Burden Alter Neuropsychological Development?', '', 'Completed', 'N/A', '', '', 'Observational', '', '', 0, '', '2015-12-07 21:32:49', '2015-12-07 21:32:49')[0m
+  [1m[35m (78.0ms)[0m  BEGIN
+  [1m[36mSQL (78.1ms)[0m  [1mINSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000104', 'Lead Poisoning', '2015-12-07 21:32:49', '2015-12-07 21:32:49')[0m
+  [1m[35m (123.4ms)[0m  COMMIT
+  [1m[36m (77.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.6ms)[0m  INSERT INTO `conditions` (`name`, `nct_id`, `created_at`, `updated_at`) VALUES ('Lead Poisoning', 'NCT00000104', '2015-12-07 21:32:50', '2015-12-07 21:32:50')
+  [1m[36m (134.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.0ms)[0m  BEGIN
+  [1m[36m (77.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.2ms)[0m  BEGIN
+  [1m[36m (77.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.5ms)[0m  BEGIN
+  [1m[36m (77.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.5ms)[0m  BEGIN
+  [1m[36m (77.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.6ms)[0m  BEGIN
+  [1m[36mSQL (79.8ms)[0m  [1mINSERT INTO `oversight_authorities` (`name`, `nct_id`) VALUES ('United States: Federal Government', 'NCT00000104')[0m
+  [1m[35m (131.7ms)[0m  COMMIT
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.0ms)[0m  COMMIT
+  [1m[36m (77.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.4ms)[0m  INSERT INTO `sponsors` (`sponsor_type`, `agency`, `agency_class`, `nct_id`) VALUES ('lead', 'National Center for Research Resources (NCRR)', 'NIH', 'NCT00000104')
+  [1m[36m (129.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (80.8ms)[0m  BEGIN
+  [1m[36mSQL (78.1ms)[0m  [1mINSERT INTO `sponsors` (`sponsor_type`, `agency`, `agency_class`, `nct_id`) VALUES ('collaborator', 'HRSA/Maternal and Child Health Bureau', 'U.S. Fed', 'NCT00000104')[0m
+  [1m[35m (120.0ms)[0m  COMMIT
+  [1m[36m (122.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.7ms)[0m  BEGIN
+  [1m[36mSQL (77.2ms)[0m  [1mUPDATE `load_events` SET `status` = 'complete', `updated_at` = '2015-12-07 21:32:52' WHERE `load_events`.`id` = 2[0m
+  [1m[35m (123.8ms)[0m  COMMIT
+  [1m[36m (79.5ms)[0m  [1mSELECT COUNT(*) FROM `studies` WHERE (nct_id='NCT00000105')[0m
+  [1m[35m (77.4ms)[0m  BEGIN
+  [1m[36mSQL (77.9ms)[0m  [1mINSERT INTO `load_events` (`nct_id`, `event_type`, `status`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'create', 'active', '2015-12-07 21:32:52', '2015-12-07 21:32:52')[0m
+  [1m[35m (130.0ms)[0m  COMMIT
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.6ms)[0m  INSERT INTO `expected_groups` (`nct_id`, `group_type`, `title`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000105', '', 'Arm A: Intracel KLH', 'Intracel KLH 1000 mcg (1 mg) without adjuvant, subcutaneous Tetanus Toxoid 0.5 ml intramuscularly (this arm closed 1/2/02).', '2015-12-07 21:32:52', '2015-12-07 21:32:52')
+  [1m[36m (130.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.1ms)[0m  BEGIN
+  [1m[36m (77.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.7ms)[0m  BEGIN
+  [1m[36mSQL (80.5ms)[0m  [1mINSERT INTO `expected_groups` (`nct_id`, `group_type`, `title`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000105', '', 'Arm B: Biosyn KLH', 'Biosyn KLH 1000 mcg (1 mg) without adjuvant, subcutaneous tetanus toxoid 0.5 ml intramuscularly (this arm closed 3/18/03).', '2015-12-07 21:32:53', '2015-12-07 21:32:53')[0m
+  [1m[35m (145.9ms)[0m  COMMIT
+  [1m[36m (78.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.4ms)[0m  COMMIT
+  [1m[36m (78.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (80.2ms)[0m  INSERT INTO `expected_groups` (`nct_id`, `group_type`, `title`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000105', '', 'Arm C: Biosyn KLH with Montanide ISA51', 'Biosyn KLH 1000 mcg (1 mg) with Montanide ISA51 (replaced with vegetable (VG) source after 8/31/06) and subcutaneous Tetanus toxoid 0.5 ml intramuscularly.', '2015-12-07 21:32:53', '2015-12-07 21:32:53')
+  [1m[36m (134.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.6ms)[0m  BEGIN
+  [1m[36m (78.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.1ms)[0m  BEGIN
+  [1m[36mSQL (88.2ms)[0m  [1mINSERT INTO `detailed_descriptions` (`nct_id`, `description`) VALUES ('NCT00000105', '\n      Patients will receive each vaccine once only consisting of:\n\n      Arm A: Intracel KLH 1000 mcg (1 mg) without adjuvant, subcutaneous Tetanus Toxoid 0.5 ml\n      intramuscularly (this arm closed 1/2/02).\n\n      Arm B: Biosyn KLH 1000 mcg (1 mg) without adjuvant, subcutaneous tetanus toxoid 0.5 ml\n      intramuscularly (this arm closed 3/18/03).\n\n      Arm C: Biosyn KLH 1000 mcg (1 mg) with Montanide ISA51 (now replaced with vegetable (VG)\n      source after 8/31/06 to increase product safety) subcutaneous Tetanus toxoid 0.5 ml\n      intramuscularly (this arm open 3/18/03).\n\n      Subjects ineligible for tetanus may still receive KLH on this protocol. This is especially\n      true given the national shortage of tetanus vaccines. Subjects will be eligible for tetanus\n      when it becomes available if there has been no significant change in treatment interventions\n      or overall health status and it is within 3 months of the KLH vaccine.\n    ')[0m
+  [1m[35m (121.4ms)[0m  COMMIT
+  [1m[36m (77.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (84.7ms)[0m  COMMIT
+  [1m[36m (78.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.9ms)[0m  INSERT INTO `designs` (`nct_id`, `description`) VALUES ('NCT00000105', 'Observational Model: Case Control, Time Perspective: Prospective')
+  [1m[36m (119.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.2ms)[0m  BEGIN
+  [1m[36m (77.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.1ms)[0m  BEGIN
+  [1m[36mSQL (82.4ms)[0m  [1mINSERT INTO `brief_summaries` (`nct_id`, `description`) VALUES ('NCT00000105', '\n      The purpose of this study is to learn how the immune system works in response to vaccines.\n      We will give the vaccines to subjects who have cancer but have not had treatment, and to\n      patients who have had chemotherapy or stem cell transplant. Some patients will get vaccines\n      while they are on treatments which boost the immune system (like the immune stimulating drug\n      interleukin-2 or IL-2). Although we have safely treated many patients with immune boosting\n      drugs, we do not yet know if they improve the body\'s immune system to respond better to a\n      vaccine. Some healthy volunteers will also be given the vaccines in order to serve as\n      control subjects to get a good measure of the normal immune response. We will compare the\n      patients and the healthy volunteers to study how their immune systems respond to the\n      vaccines.\n\n      There are several different types of white cells in the blood. We are interested in immune\n      cells in the blood called T-cells. These T-cells detect foreign substances in the body (like\n      viruses and cancer cells). We are trying to learn more about how the body fights these\n      foreign substances. Our goal is to develop cancer vaccines which would teach T-cells to\n      detect and kill cancer cells better. We know that in healthy people the immune system\n      effectively protects against recurrent virus infection. For example, that is why people only\n      get \"mono\" (mononucleosis) once under normal circumstances. When the body is infected with\n      the \"mono\" virus, the immune system remembers and prevents further infection. We are trying\n      to use the immune system to prevent cancer relapse. To test this, we will give two vaccines\n      which have been used to measure these immune responses. Blood samples will be studied from\n      cancer patients and will be compared to similar samples from normal subjects.\n    ')[0m
+  [1m[35m (121.2ms)[0m  COMMIT
+  [1m[36m (79.0ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.2ms)[0m  COMMIT
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.6ms)[0m  INSERT INTO `eligibilities` (`nct_id`, `sampling_method`, `study_population`, `maximum_age`, `minimum_age`, `gender`, `healthy_volunteers`, `criteria`) VALUES ('NCT00000105', 'Probability Sample', '\n        -  Normal volunteers\n\n          -  Patients with Cancer (breast, melanoma, hematologic)\n\n          -  Transplant patients (umbilical cord blood transplant, autologous transplant)\n\n          -  Patients receiving other cancer vaccines\n      ', 'N/A', '18 Years', 'Both', 'Accepts Healthy Volunteers', '\n        Inclusion Criteria:\n\n          -  Patients must have a diagnosis of cancer of any histologic type.\n\n          -  Patients must have a Karnofsky performance status great or equal to 70%.\n\n          -  Patients must have an expected survival for at least four months.\n\n          -  Normal healthy volunteers to serve as control for this study.\n\n          -  All patients must sign informed consent approved by the Committee on the Use of Human\n             Subjects at the University of Minnesota\n\n        Exclusion Criteria:\n\n          -  Pregnant or lactating women. Females of child-bearing potential will be asked to take\n             a pregnancy test before receiving vaccines.\n\n          -  Serious intercurrent medical illnesses which would interfere with the ability of the\n             patient to carry out the follow-up monitoring program.\n\n          -  Immunization should not be administered during the course of any febrile illness or\n             acute infection.\n\n          -  Hypersensitivity to any component of the vaccine, including Thimerosal, a mercury\n             derivative.\n\n          -  The occurrence of any type of neurologic symptoms to tetanus vaccine in th past.\n\n          -  Patients with a history of seafood allergy are excluded from receiving KLH.\n\n          -  Subjects who have had tetanus toxoid within the last 7 years are not eligible for\n             tetanus vaccine component of this protocol.\n      ')
+  [1m[36m (119.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.0ms)[0m  BEGIN
+  [1m[36m (76.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.8ms)[0m  BEGIN
+  [1m[36mSQL (77.5ms)[0m  [1mINSERT INTO `result_details` (`nct_id`, `recruitment_details`, `pre_assignment_details`) VALUES ('NCT00000105', '', '')[0m
+  [1m[35m (138.3ms)[0m  COMMIT
+  [1m[36m (77.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.1ms)[0m  COMMIT
+  [1m[36m (77.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.2ms)[0m  INSERT INTO `facilities` (`nct_id`, `name`, `city`, `state`, `zip`, `country`, `status`, `contact_name`, `contact_phone`, `contact_email`, `contact_backup_name`, `contact_backup_phone`, `contact_backup_email`, `investigator_name`, `investigator_role`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Division of Hematology, Oncology, and Transplantation 420 Delaware St., SE, Box 806 Mayo', 'Minneapolis', 'Minnesota', '55455', 'United States', '', '', '', '', '', '', '', '', '', '2015-12-07 21:32:56', '2015-12-07 21:32:56')
+  [1m[36m (126.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (87.6ms)[0m  BEGIN
+  [1m[36m (84.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (84.0ms)[0m  BEGIN
+  [1m[36mSQL (78.1ms)[0m  [1mINSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm A: Intracel KLH', '2015-12-07 21:32:57', '2015-12-07 21:32:57')[0m
+  [1m[35m (119.1ms)[0m  COMMIT
+  [1m[36m (77.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.7ms)[0m  COMMIT
+  [1m[36m (77.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.2ms)[0m  INSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'KLH BCI-ImmuneActivator(TM)', '2015-12-07 21:32:57', '2015-12-07 21:32:57')
+  [1m[36m (119.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.0ms)[0m  BEGIN
+  [1m[36m (77.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.9ms)[0m  BEGIN
+  [1m[36mSQL (91.4ms)[0m  [1mINSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'IntraCel', '2015-12-07 21:32:57', '2015-12-07 21:32:57')[0m
+  [1m[35m (125.5ms)[0m  COMMIT
+  [1m[36m (78.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.9ms)[0m  COMMIT
+  [1m[36m (79.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (84.2ms)[0m  INSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm A: Intracel KLH', '2015-12-07 21:32:58', '2015-12-07 21:32:58')
+  [1m[36m (155.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.4ms)[0m  BEGIN
+  [1m[36m (77.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.5ms)[0m  BEGIN
+  [1m[36mSQL (77.3ms)[0m  [1mINSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'KLH BCI-ImmuneActivator(TM)', '2015-12-07 21:32:58', '2015-12-07 21:32:58')[0m
+  [1m[35m (119.6ms)[0m  COMMIT
+  [1m[36m (78.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (76.6ms)[0m  COMMIT
+  [1m[36m (79.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.5ms)[0m  INSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'IntraCel', '2015-12-07 21:32:59', '2015-12-07 21:32:59')
+  [1m[36m (124.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.1ms)[0m  BEGIN
+  [1m[36m (79.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.2ms)[0m  BEGIN
+  [1m[36mSQL (90.7ms)[0m  [1mINSERT INTO `interventions` (`nct_id`, `intervention_type`, `name`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Biological', 'Intracel KLH Vaccine', 'Intracel KLH 1000 mcg (1 mg) without adjuvant, subcutaneous Tetanus Toxoid 0.5 ml intramuscularly.', '2015-12-07 21:32:59', '2015-12-07 21:32:59')[0m
+  [1m[35mSQL (90.3ms)[0m  UPDATE `intervention_arm_group_labels` SET `intervention_id` = '3', `updated_at` = '2015-12-07 21:32:59' WHERE `intervention_arm_group_labels`.`id` = 2
+  [1m[36mSQL (85.3ms)[0m  [1mUPDATE `intervention_other_names` SET `intervention_id` = '3', `updated_at` = '2015-12-07 21:32:59' WHERE `intervention_other_names`.`id` = 3[0m
+  [1m[35mSQL (80.1ms)[0m  UPDATE `intervention_other_names` SET `intervention_id` = '3', `updated_at` = '2015-12-07 21:33:00' WHERE `intervention_other_names`.`id` = 4
+  [1m[36m (151.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.4ms)[0m  BEGIN
+  [1m[36m (77.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.9ms)[0m  BEGIN
+  [1m[36mSQL (86.8ms)[0m  [1mINSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm B: Biosyn KLH', '2015-12-07 21:33:00', '2015-12-07 21:33:00')[0m
+  [1m[35m (119.9ms)[0m  COMMIT
+  [1m[36m (77.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.5ms)[0m  COMMIT
+  [1m[36m (77.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.6ms)[0m  INSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm C: Biosyn KLH with Montanide ISA51', '2015-12-07 21:33:00', '2015-12-07 21:33:00')
+  [1m[36m (120.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (82.7ms)[0m  BEGIN
+  [1m[36m (78.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.9ms)[0m  BEGIN
+  [1m[36mSQL (101.3ms)[0m  [1mINSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Immunocyanin', '2015-12-07 21:33:01', '2015-12-07 21:33:01')[0m
+  [1m[35m (120.9ms)[0m  COMMIT
+  [1m[36m (87.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.7ms)[0m  COMMIT
+  [1m[36m (87.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (82.2ms)[0m  INSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'IMMUCOTHEL®', '2015-12-07 21:33:01', '2015-12-07 21:33:01')
+  [1m[36m (118.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.0ms)[0m  BEGIN
+  [1m[36m (77.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (81.0ms)[0m  BEGIN
+  [1m[36mSQL (80.5ms)[0m  [1mINSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'VACMUNE®', '2015-12-07 21:33:02', '2015-12-07 21:33:02')[0m
+  [1m[35m (130.5ms)[0m  COMMIT
+  [1m[36m (78.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.5ms)[0m  COMMIT
+  [1m[36m (78.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (79.9ms)[0m  INSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm B: Biosyn KLH', '2015-12-07 21:33:02', '2015-12-07 21:33:02')
+  [1m[36m (122.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (80.5ms)[0m  BEGIN
+  [1m[36m (111.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.7ms)[0m  BEGIN
+  [1m[36mSQL (76.8ms)[0m  [1mINSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm C: Biosyn KLH with Montanide ISA51', '2015-12-07 21:33:03', '2015-12-07 21:33:03')[0m
+  [1m[35m (123.8ms)[0m  COMMIT
+  [1m[36m (82.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.1ms)[0m  COMMIT
+  [1m[36m (80.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.4ms)[0m  INSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Immunocyanin', '2015-12-07 21:33:03', '2015-12-07 21:33:03')
+  [1m[36m (122.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.7ms)[0m  BEGIN
+  [1m[36m (77.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (80.3ms)[0m  BEGIN
+  [1m[36mSQL (78.8ms)[0m  [1mINSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'IMMUCOTHEL®', '2015-12-07 21:33:04', '2015-12-07 21:33:04')[0m
+  [1m[35m (126.0ms)[0m  COMMIT
+  [1m[36m (76.7ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.2ms)[0m  COMMIT
+  [1m[36m (78.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (81.9ms)[0m  INSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'VACMUNE®', '2015-12-07 21:33:04', '2015-12-07 21:33:04')
+  [1m[36m (124.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.3ms)[0m  BEGIN
+  [1m[36m (77.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.5ms)[0m  BEGIN
+  [1m[36mSQL (83.5ms)[0m  [1mINSERT INTO `interventions` (`nct_id`, `intervention_type`, `name`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Biological', 'Biosyn KLH', 'Biosyn KLH 1000 mcg (1 mg) without adjuvant, subcutaneous tetanus toxoid 0.5 ml intramuscularly.', '2015-12-07 21:33:04', '2015-12-07 21:33:04')[0m
+  [1m[35mSQL (77.6ms)[0m  UPDATE `intervention_arm_group_labels` SET `intervention_id` = '4', `updated_at` = '2015-12-07 21:33:05' WHERE `intervention_arm_group_labels`.`id` = 5
+  [1m[36mSQL (79.3ms)[0m  [1mUPDATE `intervention_arm_group_labels` SET `intervention_id` = '4', `updated_at` = '2015-12-07 21:33:05' WHERE `intervention_arm_group_labels`.`id` = 6[0m
+  [1m[35mSQL (77.1ms)[0m  UPDATE `intervention_other_names` SET `intervention_id` = '4', `updated_at` = '2015-12-07 21:33:05' WHERE `intervention_other_names`.`id` = 8
+  [1m[36mSQL (77.6ms)[0m  [1mUPDATE `intervention_other_names` SET `intervention_id` = '4', `updated_at` = '2015-12-07 21:33:05' WHERE `intervention_other_names`.`id` = 9[0m
+  [1m[35mSQL (86.2ms)[0m  UPDATE `intervention_other_names` SET `intervention_id` = '4', `updated_at` = '2015-12-07 21:33:05' WHERE `intervention_other_names`.`id` = 10
+  [1m[36m (125.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (92.0ms)[0m  BEGIN
+  [1m[36m (77.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.0ms)[0m  BEGIN
+  [1m[36mSQL (76.9ms)[0m  [1mINSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm C: Biosyn KLH with Montanide ISA51', '2015-12-07 21:33:05', '2015-12-07 21:33:05')[0m
+  [1m[35m (121.4ms)[0m  COMMIT
+  [1m[36m (78.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (76.9ms)[0m  COMMIT
+  [1m[36m (77.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.4ms)[0m  INSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Montanide ISA 51 VG', '2015-12-07 21:33:06', '2015-12-07 21:33:06')
+  [1m[36m (119.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.2ms)[0m  BEGIN
+  [1m[36m (77.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.7ms)[0m  BEGIN
+  [1m[36mSQL (78.5ms)[0m  [1mINSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm C: Biosyn KLH with Montanide ISA51', '2015-12-07 21:33:06', '2015-12-07 21:33:06')[0m
+  [1m[35m (122.3ms)[0m  COMMIT
+  [1m[36m (77.0ms)[0m  [1mBEGIN[0m
+  [1m[35m (76.8ms)[0m  COMMIT
+  [1m[36m (76.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (76.9ms)[0m  INSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Montanide ISA 51 VG', '2015-12-07 21:33:07', '2015-12-07 21:33:07')
+  [1m[36m (168.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.3ms)[0m  BEGIN
+  [1m[36m (77.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (84.5ms)[0m  BEGIN
+  [1m[36mSQL (78.6ms)[0m  [1mINSERT INTO `interventions` (`nct_id`, `intervention_type`, `name`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Drug', 'Montanide ISA51', 'Emulsify the KLH with Montanide ISA-51. The KLH 1 mg vial will be reconstituted in 0.5 mL sterile water. Once solubilized, add 0.6 mL of Montanide ISA to the vial and administered contents subcutaneously.', '2015-12-07 21:33:07', '2015-12-07 21:33:07')[0m
+  [1m[35mSQL (78.5ms)[0m  UPDATE `intervention_arm_group_labels` SET `intervention_id` = '5', `updated_at` = '2015-12-07 21:33:07' WHERE `intervention_arm_group_labels`.`id` = 8
+  [1m[36mSQL (77.2ms)[0m  [1mUPDATE `intervention_other_names` SET `intervention_id` = '5', `updated_at` = '2015-12-07 21:33:07' WHERE `intervention_other_names`.`id` = 12[0m
+  [1m[35m (140.5ms)[0m  COMMIT
+  [1m[36m (78.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.9ms)[0m  COMMIT
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.2ms)[0m  INSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm A: Intracel KLH', '2015-12-07 21:33:08', '2015-12-07 21:33:08')
+  [1m[36m (118.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.7ms)[0m  BEGIN
+  [1m[36m (77.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.1ms)[0m  BEGIN
+  [1m[36mSQL (80.2ms)[0m  [1mINSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm B: Biosyn KLH', '2015-12-07 21:33:08', '2015-12-07 21:33:08')[0m
+  [1m[35m (127.3ms)[0m  COMMIT
+  [1m[36m (79.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.6ms)[0m  COMMIT
+  [1m[36m (78.6ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (79.1ms)[0m  INSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm C: Biosyn KLH with Montanide ISA51', '2015-12-07 21:33:09', '2015-12-07 21:33:09')
+  [1m[36m (130.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.7ms)[0m  BEGIN
+  [1m[36m (77.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.2ms)[0m  BEGIN
+  [1m[36mSQL (82.5ms)[0m  [1mINSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'PUROGENATED®', '2015-12-07 21:33:09', '2015-12-07 21:33:09')[0m
+  [1m[35m (123.5ms)[0m  COMMIT
+  [1m[36m (77.0ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.3ms)[0m  COMMIT
+  [1m[36m (77.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (99.3ms)[0m  INSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm A: Intracel KLH', '2015-12-07 21:33:10', '2015-12-07 21:33:10')
+  [1m[36m (122.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.9ms)[0m  BEGIN
+  [1m[36m (77.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.3ms)[0m  BEGIN
+  [1m[36mSQL (78.4ms)[0m  [1mINSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm B: Biosyn KLH', '2015-12-07 21:33:10', '2015-12-07 21:33:10')[0m
+  [1m[35m (118.5ms)[0m  COMMIT
+  [1m[36m (78.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.1ms)[0m  COMMIT
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.5ms)[0m  INSERT INTO `intervention_arm_group_labels` (`nct_id`, `label`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Arm C: Biosyn KLH with Montanide ISA51', '2015-12-07 21:33:10', '2015-12-07 21:33:10')
+  [1m[36m (122.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.4ms)[0m  BEGIN
+  [1m[36m (77.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.7ms)[0m  BEGIN
+  [1m[36mSQL (94.6ms)[0m  [1mINSERT INTO `intervention_other_names` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'PUROGENATED®', '2015-12-07 21:33:11', '2015-12-07 21:33:11')[0m
+  [1m[35m (119.5ms)[0m  COMMIT
+  [1m[36m (78.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.9ms)[0m  COMMIT
+  [1m[36m (77.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.4ms)[0m  INSERT INTO `interventions` (`nct_id`, `intervention_type`, `name`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Biological', 'Tetanus toxoid', 'Tetanus Toxoid Adsorbed, Aluminum Phosphate Adsorbed, PUROGENATED® (TT), is a sterile preparation of refined tetanus toxoid for intramuscular use only.', '2015-12-07 21:33:11', '2015-12-07 21:33:11')
+  [1m[36mSQL (80.2ms)[0m  [1mUPDATE `intervention_arm_group_labels` SET `intervention_id` = '6', `updated_at` = '2015-12-07 21:33:11' WHERE `intervention_arm_group_labels`.`id` = 12[0m
+  [1m[35mSQL (77.9ms)[0m  UPDATE `intervention_arm_group_labels` SET `intervention_id` = '6', `updated_at` = '2015-12-07 21:33:11' WHERE `intervention_arm_group_labels`.`id` = 13
+  [1m[36mSQL (77.8ms)[0m  [1mUPDATE `intervention_arm_group_labels` SET `intervention_id` = '6', `updated_at` = '2015-12-07 21:33:12' WHERE `intervention_arm_group_labels`.`id` = 14[0m
+  [1m[35mSQL (81.1ms)[0m  UPDATE `intervention_other_names` SET `intervention_id` = '6', `updated_at` = '2015-12-07 21:33:12' WHERE `intervention_other_names`.`id` = 14
+  [1m[36m (131.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.2ms)[0m  BEGIN
+  [1m[36m (76.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.9ms)[0m  BEGIN
+  [1m[36mSQL (79.0ms)[0m  [1mINSERT INTO `location_countries` (`nct_id`, `name`) VALUES ('NCT00000105', 'United States')[0m
+  [1m[35m (123.7ms)[0m  COMMIT
+  [1m[36m (77.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (76.9ms)[0m  COMMIT
+  [1m[36m (78.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.0ms)[0m  INSERT INTO `overall_officials` (`nct_id`, `name`, `role`, `affiliation`) VALUES ('NCT00000105', 'Jeffrey Miller, MD', 'Principal Investigator', 'Masonic Cancer Center, University of Minnesota')
+  [1m[36m (118.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.6ms)[0m  BEGIN
+  [1m[36m (86.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.4ms)[0m  BEGIN
+  [1m[36mSQL (81.9ms)[0m  [1mINSERT INTO `expected_outcomes` (`outcome_type`, `nct_id`, `measure`, `title`, `time_frame`, `safety_issue`, `description`, `population`) VALUES ('primary', 'NCT00000105', 'To assess whether patients can mediate an appropriate immune response KLH', 'To assess whether patients can mediate an appropriate immune response KLH', 'Week 4 post vaccination', 'No', '', '')[0m
+  [1m[35m (133.5ms)[0m  COMMIT
+  [1m[36m (78.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.5ms)[0m  COMMIT
+  [1m[36m (77.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (99.4ms)[0m  INSERT INTO `expected_outcomes` (`outcome_type`, `nct_id`, `measure`, `title`, `time_frame`, `safety_issue`, `description`, `population`) VALUES ('secondary', 'NCT00000105', 'Tetanus Response', 'Tetanus Response', 'Throughout study', 'No', '', '')
+  [1m[36m (158.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.9ms)[0m  BEGIN
+  [1m[36m (77.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (81.0ms)[0m  BEGIN
+  [1m[36mSQL (77.4ms)[0m  [1mINSERT INTO `responsible_parties` (`nct_id`, `responsible_party_type`, `affiliation`, `name`, `title`) VALUES ('NCT00000105', 'Sponsor', '', '', '')[0m
+  [1m[35m (127.9ms)[0m  COMMIT
+  [1m[36m (80.7ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.0ms)[0m  COMMIT
+  [1m[36m (76.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.5ms)[0m  INSERT INTO `secondary_ids` (`nct_id`, `secondary_id`) VALUES ('NCT00000105', 'MT1999-06')
+  [1m[36m (120.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.2ms)[0m  BEGIN
+  [1m[36m (76.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (80.9ms)[0m  BEGIN
+  [1m[36mExpectedGroup Load (78.3ms)[0m  [1mSELECT `expected_groups`.* FROM `expected_groups` WHERE `expected_groups`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mActualGroup Load (77.3ms)[0m  SELECT `actual_groups`.* FROM `actual_groups` WHERE `actual_groups`.`nct_id` = 'NCT00000105'
+  [1m[36mActualOutcome Load (79.0ms)[0m  [1mSELECT `actual_outcomes`.* FROM `actual_outcomes` WHERE `actual_outcomes`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mDetailedDescription Load (80.0ms)[0m  SELECT  `detailed_descriptions`.* FROM `detailed_descriptions` WHERE `detailed_descriptions`.`nct_id` = 'NCT00000105' LIMIT 1
+  [1m[36mDesign Load (96.6ms)[0m  [1mSELECT  `designs`.* FROM `designs` WHERE `designs`.`nct_id` = 'NCT00000105' LIMIT 1[0m
+  [1m[35mBriefSummary Load (80.4ms)[0m  SELECT  `brief_summaries`.* FROM `brief_summaries` WHERE `brief_summaries`.`nct_id` = 'NCT00000105' LIMIT 1
+  [1m[36mEligibility Load (80.5ms)[0m  [1mSELECT  `eligibilities`.* FROM `eligibilities` WHERE `eligibilities`.`nct_id` = 'NCT00000105' LIMIT 1[0m
+  [1m[35mResultDetail Load (80.3ms)[0m  SELECT  `result_details`.* FROM `result_details` WHERE `result_details`.`nct_id` = 'NCT00000105' LIMIT 1
+  [1m[36mBaselineMeasure Load (77.7ms)[0m  [1mSELECT `baseline_measures`.* FROM `baseline_measures` WHERE `baseline_measures`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mBrowseCondition Load (77.7ms)[0m  SELECT `browse_conditions`.* FROM `browse_conditions` WHERE `browse_conditions`.`nct_id` = 'NCT00000105'
+  [1m[36mBrowseIntervention Load (77.4ms)[0m  [1mSELECT `browse_interventions`.* FROM `browse_interventions` WHERE `browse_interventions`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mCondition Load (78.4ms)[0m  SELECT `conditions`.* FROM `conditions` WHERE `conditions`.`nct_id` = 'NCT00000105'
+  [1m[36mFacility Load (77.9ms)[0m  [1mSELECT `facilities`.* FROM `facilities` WHERE `facilities`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mIntervention Load (77.8ms)[0m  SELECT `interventions`.* FROM `interventions` WHERE `interventions`.`nct_id` = 'NCT00000105'
+  [1m[36mKeyword Load (86.1ms)[0m  [1mSELECT `keywords`.* FROM `keywords` WHERE `keywords`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mLink Load (78.7ms)[0m  SELECT `links`.* FROM `links` WHERE `links`.`nct_id` = 'NCT00000105'
+  [1m[36mLocationCountry Load (80.7ms)[0m  [1mSELECT `location_countries`.* FROM `location_countries` WHERE `location_countries`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mOversightAuthority Load (80.5ms)[0m  SELECT `oversight_authorities`.* FROM `oversight_authorities` WHERE `oversight_authorities`.`nct_id` = 'NCT00000105'
+  [1m[36mOverallOfficial Load (77.5ms)[0m  [1mSELECT `overall_officials`.* FROM `overall_officials` WHERE `overall_officials`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mPeriod Load (86.5ms)[0m  SELECT `periods`.* FROM `periods` WHERE `periods`.`nct_id` = 'NCT00000105'
+  [1m[36mExpectedOutcome Load (80.0ms)[0m  [1mSELECT `expected_outcomes`.* FROM `expected_outcomes` WHERE `expected_outcomes`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mReportedEvent Load (78.3ms)[0m  SELECT `reported_events`.* FROM `reported_events` WHERE `reported_events`.`nct_id` = 'NCT00000105'
+  [1m[36mResponsibleParty Load (87.0ms)[0m  [1mSELECT `responsible_parties`.* FROM `responsible_parties` WHERE `responsible_parties`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mResultAgreement Load (82.5ms)[0m  SELECT `result_agreements`.* FROM `result_agreements` WHERE `result_agreements`.`nct_id` = 'NCT00000105'
+  [1m[36mResultContact Load (81.8ms)[0m  [1mSELECT `result_contacts`.* FROM `result_contacts` WHERE `result_contacts`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mSecondaryId Load (78.3ms)[0m  SELECT `secondary_ids`.* FROM `secondary_ids` WHERE `secondary_ids`.`nct_id` = 'NCT00000105'
+  [1m[36mStudyReference Load (78.9ms)[0m  [1mSELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mResultReference Load (78.4ms)[0m  SELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000105'
+  [1m[36mSponsor Load (78.1ms)[0m  [1mSELECT `sponsors`.* FROM `sponsors` WHERE `sponsors`.`nct_id` = 'NCT00000105'[0m
+  [1m[35mSQL (79.3ms)[0m  INSERT INTO `studies` (`start_date`, `first_received_date`, `verification_date`, `last_changed_date`, `primary_completion_date`, `completion_date`, `download_date`, `start_date_str`, `first_received_date_str`, `verification_date_str`, `last_changed_date_str`, `primary_completion_date_str`, `completion_date_str`, `first_received_results_date_str`, `download_date_str`, `nct_id`, `org_study_id`, `acronym`, `number_of_groups`, `source`, `brief_title`, `official_title`, `overall_status`, `phase`, `target_duration`, `enrollment`, `biospec_description`, `primary_completion_date_type`, `completion_date_type`, `enrollment_type`, `study_type`, `biospec_retention`, `limitations_and_caveats`, `is_section_801`, `is_fda_regulated`, `has_expanded_access`, `has_dmc`, `why_stopped`, `created_at`, `updated_at`) VALUES ('2002-07-01', '1999-11-03', '2012-11-01', '2012-11-06', '2012-03-01', '2012-03-01', '2015-12-06', 'July 2002', 'November 3, 1999', 'November 2012', 'November 6, 2012', 'March 2012', 'March 2012', '', 'ClinicalTrials.gov processed this data on December 06, 2015', 'NCT00000105', '2002LS032', '', 3, '', 'Vaccination With Tetanus and KLH to Assess Immune Responses.', 'Vaccination With Tetanus Toxoid and Keyhole Limpet Hemocyanin (KLH) to Assess Antigen-Specific Immune Responses', 'Terminated', 'N/A', '', 112, 'analysis of blood samples before and 4 weeks postvaccination', 'Actual', 'Actual', 'Actual', 'Observational', 'Samples With DNA', '', 1, 1, 0, 1, 'Replaced by another study.', '2015-12-07 21:33:17', '2015-12-07 21:33:17')
+  [1m[36m (79.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.1ms)[0m  COMMIT
+  [1m[36m (90.6ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.0ms)[0m  COMMIT
+  [1m[36m (80.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.1ms)[0m  COMMIT
+  [1m[36m (77.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.2ms)[0m  COMMIT
+  [1m[36m (77.7ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.1ms)[0m  COMMIT
+  [1m[36m (77.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (92.9ms)[0m  INSERT INTO `browse_interventions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Freund\'s Adjuvant', '2015-12-07 21:33:18', '2015-12-07 21:33:18')
+  [1m[36m (117.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.9ms)[0m  BEGIN
+  [1m[36mSQL (77.3ms)[0m  [1mINSERT INTO `browse_interventions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000105', 'Keyhole-limpet hemocyanin', '2015-12-07 21:33:18', '2015-12-07 21:33:18')[0m
+  [1m[35m (144.0ms)[0m  COMMIT
+  [1m[36m (77.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (80.0ms)[0m  INSERT INTO `conditions` (`name`, `nct_id`, `created_at`, `updated_at`) VALUES ('Cancer', 'NCT00000105', '2015-12-07 21:33:19', '2015-12-07 21:33:19')
+  [1m[36m (132.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.8ms)[0m  BEGIN
+  [1m[36m (78.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.9ms)[0m  BEGIN
+  [1m[36m (76.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.1ms)[0m  BEGIN
+  [1m[36m (77.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.7ms)[0m  BEGIN
+  [1m[36m (79.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.2ms)[0m  BEGIN
+  [1m[36m (76.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.2ms)[0m  BEGIN
+  [1m[36m (77.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.7ms)[0m  BEGIN
+  [1m[36m (77.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.6ms)[0m  BEGIN
+  [1m[36mSQL (77.8ms)[0m  [1mINSERT INTO `oversight_authorities` (`name`, `nct_id`) VALUES ('United States: Food and Drug Administration', 'NCT00000105')[0m
+  [1m[35m (140.5ms)[0m  COMMIT
+  [1m[36m (77.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.4ms)[0m  COMMIT
+  [1m[36m (83.7ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.7ms)[0m  COMMIT
+  [1m[36m (79.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.2ms)[0m  INSERT INTO `sponsors` (`sponsor_type`, `agency`, `agency_class`, `nct_id`) VALUES ('lead', 'Masonic Cancer Center, University of Minnesota', 'Other', 'NCT00000105')
+  [1m[36m (122.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (125.5ms)[0m  COMMIT
+  [1m[36m (77.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.6ms)[0m  UPDATE `load_events` SET `status` = 'complete', `updated_at` = '2015-12-07 21:33:21' WHERE `load_events`.`id` = 3
+  [1m[36m (128.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.8ms)[0m  SELECT COUNT(*) FROM `studies` WHERE (nct_id='NCT00000106')
+  [1m[36m (77.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.7ms)[0m  INSERT INTO `load_events` (`nct_id`, `event_type`, `status`, `created_at`, `updated_at`) VALUES ('NCT00000106', 'create', 'active', '2015-12-07 21:33:21', '2015-12-07 21:33:21')
+  [1m[36m (139.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (93.4ms)[0m  BEGIN
+  [1m[36mSQL (77.7ms)[0m  [1mINSERT INTO `detailed_descriptions` (`nct_id`, `description`) VALUES ('NCT00000106', '')[0m
+  [1m[35m (193.2ms)[0m  COMMIT
+  [1m[36m (77.9ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.8ms)[0m  COMMIT
+  [1m[36m (77.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.1ms)[0m  INSERT INTO `designs` (`nct_id`, `description`) VALUES ('NCT00000106', 'Allocation: Randomized, Intervention Model: Parallel Assignment, Primary Purpose: Treatment')
+  [1m[36m (231.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.5ms)[0m  BEGIN
+  [1m[36m (80.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.4ms)[0m  BEGIN
+  [1m[36mSQL (78.0ms)[0m  [1mINSERT INTO `brief_summaries` (`nct_id`, `description`) VALUES ('NCT00000106', '\n      Recently a non-toxic system for whole body hyperthermia (WBH) used at the University of\n      Wisconsin has been shown to induce soluble tumor necrosis factor-receptor (sTNF-R) I and II\n      when patients are heated systemically to 41.8C for 60 minutes. This observation might\n      provide a biological basis for the therapeutic application of WBH to rheumatoid diseases,\n      for which there is a positive anecdotal clinical experience. Inherent in the hypothesis\n      which is the basis for this protocol is the concept that the induction of TNF receptors by\n      WBH may induce a remission in patients with active rheumatoid arthritis. Beyond clinical\n      response the biological endpoint for this investigation includes cytokine levels, TNF\n      levels, sTNF-R levels and changes in cellular TNF receptors.\n    ')[0m
+  [1m[35m (195.6ms)[0m  COMMIT
+  [1m[36m (78.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.7ms)[0m  COMMIT
+  [1m[36m (77.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (79.3ms)[0m  INSERT INTO `eligibilities` (`nct_id`, `sampling_method`, `study_population`, `maximum_age`, `minimum_age`, `gender`, `healthy_volunteers`, `criteria`) VALUES ('NCT00000106', '', '', '65 Years', '18 Years', 'Both', 'No', '\n        Inclusion Criteria:\n\n          -  Patients are required to meet the criteria of the American College of Rheumatology\n             (ACR)for rheumatoid arthritis.\n\n          -  Patients should be in functional class II, or III according to the criteria of the\n             ACR.\n\n          -  All candidates must be unsuccessfully treated (lack of efficacy) with at least two of\n             the following disease-modifying antirheumatic drugs: hydroxychloroquinine, oral or\n             injectable gold, methotrexate, azathioprine, penicillamine, and sulfasalazine.\n\n          -  Patients receiving nonsteroidal antiinflammatory drugs (NSAIDs), corticosteroids (&lt;=\n             10 mg per day), or both are eligible if the dosage has been stable for at least four\n             weeks before treatment and remained so throughout the study and follow-up period (the\n             use of narcotics for pain flares is allowed).\n\n          -  The necessary degree of disease activity at enrollment should be confirmed by a\n             finding of 10 or more swollen joints, 12 or more tender joints, and one of the\n             following two criteria: a Westergren erythrocyte sedimentation rate of at least 28 mm\n             per hour or a serum C-reactive protein level of more than 2.0 mg per deciliter; or\n             morning stiffness for at least 60 minutes.\n\n          -  Patients must have adequate bone marrow function, adequate liver function, adequate\n             renal function, calcium and electrolytes.\n\n          -  Patients must have a dobutamine stress ECHO, or exercise cardiac MUGA, or exercise\n             ECHO scan prior to entry and must fulfill certain criteria to be eligible. The spirit\n             of the criteria are to rule out organic heart disease.\n\n          -  Respiratory status: Patients who have FEV1 of &gt;= 60% of predicted, as well as a\n             maximum voluntary volume (MVV) of &gt;= 60% of predicted, and blood gases with a PO2 of\n             &gt;= 60 or oxygen saturation of &gt;= 90% are eligible.\n      ')
+  [1m[36m (144.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.2ms)[0m  BEGIN
+  [1m[36m (77.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.7ms)[0m  BEGIN
+  [1m[36mSQL (81.5ms)[0m  [1mINSERT INTO `result_details` (`nct_id`, `recruitment_details`, `pre_assignment_details`) VALUES ('NCT00000106', '', '')[0m
+  [1m[35m (177.4ms)[0m  COMMIT
+  [1m[36m (90.0ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.2ms)[0m  COMMIT
+  [1m[36m (100.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (76.9ms)[0m  INSERT INTO `facilities` (`nct_id`, `name`, `city`, `state`, `zip`, `country`, `status`, `contact_name`, `contact_phone`, `contact_email`, `contact_backup_name`, `contact_backup_phone`, `contact_backup_email`, `investigator_name`, `investigator_role`, `created_at`, `updated_at`) VALUES ('NCT00000106', 'K4/666 CSC 600 Highland Av', 'Madison', 'Wisconsin', '53792', 'United States', '', '', '', '', '', '', '', '', '', '2015-12-07 21:33:24', '2015-12-07 21:33:24')
+  [1m[36m (182.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.0ms)[0m  BEGIN
+  [1m[36m (76.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.2ms)[0m  BEGIN
+  [1m[36mSQL (79.1ms)[0m  [1mINSERT INTO `interventions` (`nct_id`, `intervention_type`, `name`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000106', 'Device', 'Whole body hyperthermia unit', '', '2015-12-07 21:33:25', '2015-12-07 21:33:25')[0m
+  [1m[35m (121.6ms)[0m  COMMIT
+  [1m[36m (79.8ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.5ms)[0m  COMMIT
+  [1m[36m (77.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.7ms)[0m  INSERT INTO `keywords` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000106', 'Rheumatoid Diseases', '2015-12-07 21:33:25', '2015-12-07 21:33:25')
+  [1m[36m (133.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.4ms)[0m  BEGIN
+  [1m[36m (76.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.9ms)[0m  BEGIN
+  [1m[36mSQL (77.5ms)[0m  [1mINSERT INTO `location_countries` (`nct_id`, `name`) VALUES ('NCT00000106', 'United States')[0m
+  [1m[35m (174.9ms)[0m  COMMIT
+  [1m[36m (77.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.1ms)[0m  COMMIT
+  [1m[36m (77.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (76.9ms)[0m  INSERT INTO `secondary_ids` (`nct_id`, `secondary_id`) VALUES ('NCT00000106', 'M01RR003186')
+  [1m[36m (140.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.6ms)[0m  BEGIN
+  [1m[36m (77.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.5ms)[0m  BEGIN
+  [1m[36mExpectedGroup Load (77.7ms)[0m  [1mSELECT `expected_groups`.* FROM `expected_groups` WHERE `expected_groups`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mActualGroup Load (78.2ms)[0m  SELECT `actual_groups`.* FROM `actual_groups` WHERE `actual_groups`.`nct_id` = 'NCT00000106'
+  [1m[36mActualOutcome Load (79.3ms)[0m  [1mSELECT `actual_outcomes`.* FROM `actual_outcomes` WHERE `actual_outcomes`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mDetailedDescription Load (77.8ms)[0m  SELECT  `detailed_descriptions`.* FROM `detailed_descriptions` WHERE `detailed_descriptions`.`nct_id` = 'NCT00000106' LIMIT 1
+  [1m[36mDesign Load (77.3ms)[0m  [1mSELECT  `designs`.* FROM `designs` WHERE `designs`.`nct_id` = 'NCT00000106' LIMIT 1[0m
+  [1m[35mBriefSummary Load (77.7ms)[0m  SELECT  `brief_summaries`.* FROM `brief_summaries` WHERE `brief_summaries`.`nct_id` = 'NCT00000106' LIMIT 1
+  [1m[36mEligibility Load (79.2ms)[0m  [1mSELECT  `eligibilities`.* FROM `eligibilities` WHERE `eligibilities`.`nct_id` = 'NCT00000106' LIMIT 1[0m
+  [1m[35mResultDetail Load (78.0ms)[0m  SELECT  `result_details`.* FROM `result_details` WHERE `result_details`.`nct_id` = 'NCT00000106' LIMIT 1
+  [1m[36mBaselineMeasure Load (77.9ms)[0m  [1mSELECT `baseline_measures`.* FROM `baseline_measures` WHERE `baseline_measures`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mBrowseCondition Load (78.0ms)[0m  SELECT `browse_conditions`.* FROM `browse_conditions` WHERE `browse_conditions`.`nct_id` = 'NCT00000106'
+  [1m[36mBrowseIntervention Load (86.8ms)[0m  [1mSELECT `browse_interventions`.* FROM `browse_interventions` WHERE `browse_interventions`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mCondition Load (77.4ms)[0m  SELECT `conditions`.* FROM `conditions` WHERE `conditions`.`nct_id` = 'NCT00000106'
+  [1m[36mFacility Load (80.8ms)[0m  [1mSELECT `facilities`.* FROM `facilities` WHERE `facilities`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mIntervention Load (77.8ms)[0m  SELECT `interventions`.* FROM `interventions` WHERE `interventions`.`nct_id` = 'NCT00000106'
+  [1m[36mKeyword Load (79.1ms)[0m  [1mSELECT `keywords`.* FROM `keywords` WHERE `keywords`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mLink Load (79.6ms)[0m  SELECT `links`.* FROM `links` WHERE `links`.`nct_id` = 'NCT00000106'
+  [1m[36mLocationCountry Load (78.4ms)[0m  [1mSELECT `location_countries`.* FROM `location_countries` WHERE `location_countries`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mOversightAuthority Load (77.3ms)[0m  SELECT `oversight_authorities`.* FROM `oversight_authorities` WHERE `oversight_authorities`.`nct_id` = 'NCT00000106'
+  [1m[36mOverallOfficial Load (84.8ms)[0m  [1mSELECT `overall_officials`.* FROM `overall_officials` WHERE `overall_officials`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mPeriod Load (78.5ms)[0m  SELECT `periods`.* FROM `periods` WHERE `periods`.`nct_id` = 'NCT00000106'
+  [1m[36mExpectedOutcome Load (78.9ms)[0m  [1mSELECT `expected_outcomes`.* FROM `expected_outcomes` WHERE `expected_outcomes`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mReportedEvent Load (80.2ms)[0m  SELECT `reported_events`.* FROM `reported_events` WHERE `reported_events`.`nct_id` = 'NCT00000106'
+  [1m[36mResponsibleParty Load (77.7ms)[0m  [1mSELECT `responsible_parties`.* FROM `responsible_parties` WHERE `responsible_parties`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mResultAgreement Load (77.9ms)[0m  SELECT `result_agreements`.* FROM `result_agreements` WHERE `result_agreements`.`nct_id` = 'NCT00000106'
+  [1m[36mResultContact Load (78.6ms)[0m  [1mSELECT `result_contacts`.* FROM `result_contacts` WHERE `result_contacts`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mSecondaryId Load (79.2ms)[0m  SELECT `secondary_ids`.* FROM `secondary_ids` WHERE `secondary_ids`.`nct_id` = 'NCT00000106'
+  [1m[36mStudyReference Load (82.1ms)[0m  [1mSELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mResultReference Load (79.4ms)[0m  SELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000106'
+  [1m[36mSponsor Load (77.9ms)[0m  [1mSELECT `sponsors`.* FROM `sponsors` WHERE `sponsors`.`nct_id` = 'NCT00000106'[0m
+  [1m[35mSQL (79.2ms)[0m  INSERT INTO `studies` (`first_received_date`, `verification_date`, `last_changed_date`, `download_date`, `start_date_str`, `first_received_date_str`, `verification_date_str`, `last_changed_date_str`, `primary_completion_date_str`, `completion_date_str`, `first_received_results_date_str`, `download_date_str`, `nct_id`, `org_study_id`, `acronym`, `source`, `brief_title`, `official_title`, `overall_status`, `phase`, `target_duration`, `biospec_description`, `study_type`, `biospec_retention`, `limitations_and_caveats`, `has_expanded_access`, `why_stopped`, `created_at`, `updated_at`) VALUES ('2000-01-18', '2000-11-01', '2005-06-23', '2015-12-06', '', 'January 18, 2000', 'November 2000', 'June 23, 2005', '', '', '', 'ClinicalTrials.gov processed this data on December 06, 2015', 'NCT00000106', 'NCRR-M01RR03186-9943', '', '', '41.8 Degree Centigrade Whole Body Hyperthermia for the Treatment of Rheumatoid Diseases', '', 'Active, not recruiting', 'N/A', '', '', 'Interventional', '', '', 0, '', '2015-12-07 21:33:29', '2015-12-07 21:33:29')
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.0ms)[0m  INSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000106', 'Rheumatic Diseases', '2015-12-07 21:33:29', '2015-12-07 21:33:29')
+  [1m[36m (121.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.2ms)[0m  BEGIN
+  [1m[36mSQL (77.0ms)[0m  [1mINSERT INTO `conditions` (`name`, `nct_id`, `created_at`, `updated_at`) VALUES ('Rheumatic Diseases', 'NCT00000106', '2015-12-07 21:33:29', '2015-12-07 21:33:29')[0m
+  [1m[35m (136.0ms)[0m  COMMIT
+  [1m[36m (77.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.8ms)[0m  COMMIT
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.1ms)[0m  COMMIT
+  [1m[36m (76.8ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.3ms)[0m  COMMIT
+  [1m[36m (78.7ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.3ms)[0m  COMMIT
+  [1m[36m (78.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.4ms)[0m  INSERT INTO `oversight_authorities` (`name`, `nct_id`) VALUES ('United States: Federal Government', 'NCT00000106')
+  [1m[36m (132.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.0ms)[0m  BEGIN
+  [1m[36m (79.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.2ms)[0m  BEGIN
+  [1m[36mSQL (79.5ms)[0m  [1mINSERT INTO `sponsors` (`sponsor_type`, `agency`, `agency_class`, `nct_id`) VALUES ('lead', 'National Center for Research Resources (NCRR)', 'NIH', 'NCT00000106')[0m
+  [1m[35m (131.0ms)[0m  COMMIT
+  [1m[36m (123.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.4ms)[0m  BEGIN
+  [1m[36mSQL (82.0ms)[0m  [1mUPDATE `load_events` SET `status` = 'complete', `updated_at` = '2015-12-07 21:33:31' WHERE `load_events`.`id` = 4[0m
+  [1m[35m (138.7ms)[0m  COMMIT
+  [1m[36m (78.2ms)[0m  [1mSELECT COUNT(*) FROM `studies` WHERE (nct_id='NCT00000107')[0m
+  [1m[35m (77.9ms)[0m  BEGIN
+  [1m[36mSQL (83.4ms)[0m  [1mINSERT INTO `load_events` (`nct_id`, `event_type`, `status`, `created_at`, `updated_at`) VALUES ('NCT00000107', 'create', 'active', '2015-12-07 21:33:32', '2015-12-07 21:33:32')[0m
+  [1m[35m (123.5ms)[0m  COMMIT
+  [1m[36m (78.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (91.5ms)[0m  INSERT INTO `detailed_descriptions` (`nct_id`, `description`) VALUES ('NCT00000107', '')
+  [1m[36m (127.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (82.1ms)[0m  BEGIN
+  [1m[36m (78.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.7ms)[0m  BEGIN
+  [1m[36mSQL (78.8ms)[0m  [1mINSERT INTO `designs` (`nct_id`, `description`) VALUES ('NCT00000107', 'Observational Model: Case Control')[0m
+  [1m[35m (121.0ms)[0m  COMMIT
+  [1m[36m (82.9ms)[0m  [1mBEGIN[0m
+  [1m[35m (81.4ms)[0m  COMMIT
+  [1m[36m (77.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (80.5ms)[0m  INSERT INTO `brief_summaries` (`nct_id`, `description`) VALUES ('NCT00000107', '\n      Adults with cyanotic congenital heart disease have elevated levels of plasma proatrial\n      natruretic peptide (proANP) which most likely results in chronic dehydration, leading to\n      reduced oxygen transport to tissues and shortness of breath with activity. The purpose of\n      this study is to characterize adults with cyanotic congenital heart defects with respect to\n      their body composition (water and fat-free mass) and resting metabolic rates. The study\n      consists of several measures of how much body water, fat and lean tissue a subject has, and\n      measures the number of calories the subject\'s body uses at rest. Adult subjects with\n      cyanotic congenital heart disease will be recruited along with healthy noncyanotic control\n      subjects matched for age, gender, and body weight.\n    ')
+  [1m[36m (119.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (81.0ms)[0m  BEGIN
+  [1m[36m (77.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.4ms)[0m  BEGIN
+  [1m[36mSQL (78.6ms)[0m  [1mINSERT INTO `eligibilities` (`nct_id`, `sampling_method`, `study_population`, `maximum_age`, `minimum_age`, `gender`, `healthy_volunteers`, `criteria`) VALUES ('NCT00000107', '', '', '60 Years', '17 Years', 'Both', 'Accepts Healthy Volunteers', '\n        Inclusion Criteria:\n\n          -  Resting blood pressure below 140/90\n      ')[0m
+  [1m[35m (127.8ms)[0m  COMMIT
+  [1m[36m (77.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.6ms)[0m  COMMIT
+  [1m[36m (78.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.1ms)[0m  INSERT INTO `result_details` (`nct_id`, `recruitment_details`, `pre_assignment_details`) VALUES ('NCT00000107', '', '')
+  [1m[36m (161.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (80.3ms)[0m  BEGIN
+  [1m[36m (80.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (76.8ms)[0m  BEGIN
+  [1m[36mSQL (77.3ms)[0m  [1mINSERT INTO `facilities` (`nct_id`, `name`, `city`, `state`, `zip`, `country`, `status`, `contact_name`, `contact_phone`, `contact_email`, `contact_backup_name`, `contact_backup_phone`, `contact_backup_email`, `investigator_name`, `investigator_role`, `created_at`, `updated_at`) VALUES ('NCT00000107', 'University of Vermont', 'Burlington', 'Vermont', '05401', 'United States', '', '', '', '', '', '', '', '', '', '2015-12-07 21:33:34', '2015-12-07 21:33:34')[0m
+  [1m[35m (120.0ms)[0m  COMMIT
+  [1m[36m (77.4ms)[0m  [1mBEGIN[0m
+  [1m[35m (80.3ms)[0m  COMMIT
+  [1m[36m (77.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.9ms)[0m  INSERT INTO `keywords` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000107', 'Cyanotic Congenital Heart Disease', '2015-12-07 21:33:35', '2015-12-07 21:33:35')
+  [1m[36m (120.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.7ms)[0m  BEGIN
+  [1m[36m (77.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.6ms)[0m  BEGIN
+  [1m[36mSQL (81.4ms)[0m  [1mINSERT INTO `location_countries` (`nct_id`, `name`) VALUES ('NCT00000107', 'United States')[0m
+  [1m[35m (128.3ms)[0m  COMMIT
+  [1m[36m (81.6ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.2ms)[0m  COMMIT
+  [1m[36m (77.5ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (83.3ms)[0m  INSERT INTO `secondary_ids` (`nct_id`, `secondary_id`) VALUES ('NCT00000107', 'M01RR000109')
+  [1m[36m (120.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (80.0ms)[0m  BEGIN
+  [1m[36m (90.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.0ms)[0m  BEGIN
+  [1m[36mExpectedGroup Load (78.9ms)[0m  [1mSELECT `expected_groups`.* FROM `expected_groups` WHERE `expected_groups`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mActualGroup Load (78.1ms)[0m  SELECT `actual_groups`.* FROM `actual_groups` WHERE `actual_groups`.`nct_id` = 'NCT00000107'
+  [1m[36mActualOutcome Load (78.8ms)[0m  [1mSELECT `actual_outcomes`.* FROM `actual_outcomes` WHERE `actual_outcomes`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mDetailedDescription Load (79.1ms)[0m  SELECT  `detailed_descriptions`.* FROM `detailed_descriptions` WHERE `detailed_descriptions`.`nct_id` = 'NCT00000107' LIMIT 1
+  [1m[36mDesign Load (81.1ms)[0m  [1mSELECT  `designs`.* FROM `designs` WHERE `designs`.`nct_id` = 'NCT00000107' LIMIT 1[0m
+  [1m[35mBriefSummary Load (79.6ms)[0m  SELECT  `brief_summaries`.* FROM `brief_summaries` WHERE `brief_summaries`.`nct_id` = 'NCT00000107' LIMIT 1
+  [1m[36mEligibility Load (78.8ms)[0m  [1mSELECT  `eligibilities`.* FROM `eligibilities` WHERE `eligibilities`.`nct_id` = 'NCT00000107' LIMIT 1[0m
+  [1m[35mResultDetail Load (77.7ms)[0m  SELECT  `result_details`.* FROM `result_details` WHERE `result_details`.`nct_id` = 'NCT00000107' LIMIT 1
+  [1m[36mBaselineMeasure Load (77.5ms)[0m  [1mSELECT `baseline_measures`.* FROM `baseline_measures` WHERE `baseline_measures`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mBrowseCondition Load (77.3ms)[0m  SELECT `browse_conditions`.* FROM `browse_conditions` WHERE `browse_conditions`.`nct_id` = 'NCT00000107'
+  [1m[36mBrowseIntervention Load (86.8ms)[0m  [1mSELECT `browse_interventions`.* FROM `browse_interventions` WHERE `browse_interventions`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mCondition Load (77.3ms)[0m  SELECT `conditions`.* FROM `conditions` WHERE `conditions`.`nct_id` = 'NCT00000107'
+  [1m[36mFacility Load (82.3ms)[0m  [1mSELECT `facilities`.* FROM `facilities` WHERE `facilities`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mIntervention Load (77.9ms)[0m  SELECT `interventions`.* FROM `interventions` WHERE `interventions`.`nct_id` = 'NCT00000107'
+  [1m[36mKeyword Load (77.3ms)[0m  [1mSELECT `keywords`.* FROM `keywords` WHERE `keywords`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mLink Load (77.3ms)[0m  SELECT `links`.* FROM `links` WHERE `links`.`nct_id` = 'NCT00000107'
+  [1m[36mLocationCountry Load (78.0ms)[0m  [1mSELECT `location_countries`.* FROM `location_countries` WHERE `location_countries`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mOversightAuthority Load (78.5ms)[0m  SELECT `oversight_authorities`.* FROM `oversight_authorities` WHERE `oversight_authorities`.`nct_id` = 'NCT00000107'
+  [1m[36mOverallOfficial Load (78.1ms)[0m  [1mSELECT `overall_officials`.* FROM `overall_officials` WHERE `overall_officials`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mPeriod Load (77.2ms)[0m  SELECT `periods`.* FROM `periods` WHERE `periods`.`nct_id` = 'NCT00000107'
+  [1m[36mExpectedOutcome Load (78.7ms)[0m  [1mSELECT `expected_outcomes`.* FROM `expected_outcomes` WHERE `expected_outcomes`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mReportedEvent Load (77.7ms)[0m  SELECT `reported_events`.* FROM `reported_events` WHERE `reported_events`.`nct_id` = 'NCT00000107'
+  [1m[36mResponsibleParty Load (77.6ms)[0m  [1mSELECT `responsible_parties`.* FROM `responsible_parties` WHERE `responsible_parties`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mResultAgreement Load (77.6ms)[0m  SELECT `result_agreements`.* FROM `result_agreements` WHERE `result_agreements`.`nct_id` = 'NCT00000107'
+  [1m[36mResultContact Load (77.1ms)[0m  [1mSELECT `result_contacts`.* FROM `result_contacts` WHERE `result_contacts`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mSecondaryId Load (82.4ms)[0m  SELECT `secondary_ids`.* FROM `secondary_ids` WHERE `secondary_ids`.`nct_id` = 'NCT00000107'
+  [1m[36mStudyReference Load (81.1ms)[0m  [1mSELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mResultReference Load (78.3ms)[0m  SELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000107'
+  [1m[36mSponsor Load (77.6ms)[0m  [1mSELECT `sponsors`.* FROM `sponsors` WHERE `sponsors`.`nct_id` = 'NCT00000107'[0m
+  [1m[35mSQL (79.0ms)[0m  INSERT INTO `studies` (`first_received_date`, `verification_date`, `last_changed_date`, `download_date`, `start_date_str`, `first_received_date_str`, `verification_date_str`, `last_changed_date_str`, `primary_completion_date_str`, `completion_date_str`, `first_received_results_date_str`, `download_date_str`, `nct_id`, `org_study_id`, `acronym`, `source`, `brief_title`, `official_title`, `overall_status`, `phase`, `target_duration`, `biospec_description`, `study_type`, `biospec_retention`, `limitations_and_caveats`, `has_expanded_access`, `why_stopped`, `created_at`, `updated_at`) VALUES ('2000-01-18', '2003-12-01', '2005-06-23', '2015-12-06', '', 'January 18, 2000', 'December 2003', 'June 23, 2005', '', '', '', 'ClinicalTrials.gov processed this data on December 06, 2015', 'NCT00000107', 'NCRR-M01RR00109-0737', '', '', 'Body Water Content in Cyanotic Congenital Heart Disease', '', 'Completed', 'N/A', '', '', 'Observational', '', '', 0, '', '2015-12-07 21:33:38', '2015-12-07 21:33:38')
+  [1m[36m (78.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.3ms)[0m  INSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000107', 'Congenital Abnormalities', '2015-12-07 21:33:38', '2015-12-07 21:33:38')
+  [1m[36m (130.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.4ms)[0m  BEGIN
+  [1m[36mSQL (78.7ms)[0m  [1mINSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000107', 'Heart Defects, Congenital', '2015-12-07 21:33:39', '2015-12-07 21:33:39')[0m
+  [1m[35m (145.6ms)[0m  COMMIT
+  [1m[36m (77.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (85.6ms)[0m  INSERT INTO `conditions` (`name`, `nct_id`, `created_at`, `updated_at`) VALUES ('Heart Defects, Congenital', 'NCT00000107', '2015-12-07 21:33:39', '2015-12-07 21:33:39')
+  [1m[36m (124.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (80.0ms)[0m  BEGIN
+  [1m[36m (77.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.0ms)[0m  BEGIN
+  [1m[36m (76.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (81.1ms)[0m  BEGIN
+  [1m[36m (77.5ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.2ms)[0m  BEGIN
+  [1m[36mSQL (79.0ms)[0m  [1mINSERT INTO `oversight_authorities` (`name`, `nct_id`) VALUES ('United States: Federal Government', 'NCT00000107')[0m
+  [1m[35m (124.5ms)[0m  COMMIT
+  [1m[36m (77.8ms)[0m  [1mBEGIN[0m
+  [1m[35m (80.3ms)[0m  COMMIT
+  [1m[36m (78.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.0ms)[0m  INSERT INTO `sponsors` (`sponsor_type`, `agency`, `agency_class`, `nct_id`) VALUES ('lead', 'National Center for Research Resources (NCRR)', 'NIH', 'NCT00000107')
+  [1m[36m (164.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (134.7ms)[0m  COMMIT
+  [1m[36m (78.9ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.2ms)[0m  UPDATE `load_events` SET `status` = 'complete', `updated_at` = '2015-12-07 21:33:41' WHERE `load_events`.`id` = 5
+  [1m[36m (123.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (85.2ms)[0m  SELECT COUNT(*) FROM `studies` WHERE (nct_id='NCT00000108')
+  [1m[36m (77.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (79.5ms)[0m  INSERT INTO `load_events` (`nct_id`, `event_type`, `status`, `created_at`, `updated_at`) VALUES ('NCT00000108', 'create', 'active', '2015-12-07 21:33:41', '2015-12-07 21:33:41')
+  [1m[36m (153.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (87.3ms)[0m  BEGIN
+  [1m[36mSQL (76.8ms)[0m  [1mINSERT INTO `detailed_descriptions` (`nct_id`, `description`) VALUES ('NCT00000108', '')[0m
+  [1m[35m (134.6ms)[0m  COMMIT
+  [1m[36m (78.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.5ms)[0m  COMMIT
+  [1m[36m (77.6ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.0ms)[0m  INSERT INTO `designs` (`nct_id`, `description`) VALUES ('NCT00000108', 'Allocation: Randomized, Intervention Model: Parallel Assignment, Primary Purpose: Prevention')
+  [1m[36m (137.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.6ms)[0m  BEGIN
+  [1m[36m (94.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.7ms)[0m  BEGIN
+  [1m[36mSQL (83.2ms)[0m  [1mINSERT INTO `brief_summaries` (`nct_id`, `description`) VALUES ('NCT00000108', '\n      The purpose of this research is to find out whether training at different exercise\n      intensities reduces the risk of developing cardiovascular disease (CVD) to a different\n      extent. Heart attacks and stroke are the leading cause of death in older women. Reduced\n      variability of the heart rate and increased dips and swings in blood pressure are risks\n      factors that predict the chance of developing CVD as are increased levels of clotting\n      protein fibrinogen and plasminogen activator inhibitor 1, and high levels of LDL-cholesterol\n      (&gt;160mg/dl). We will be measuring all of these risk factors and any changes in your body fat\n      level before you start training and after 15 and 30 weeks of training in the form of\n      walking. At the present time the effects of exercise intensity on these factors are not well\n      understood. This study will add to the basic understanding of these issues and allow us to\n      recommend to postmenopausal women optimal exercise intensities to lose body fat and reduce\n      the risk of developing CVD.\n    ')[0m
+  [1m[35m (135.1ms)[0m  COMMIT
+  [1m[36m (79.1ms)[0m  [1mBEGIN[0m
+  [1m[35m (79.4ms)[0m  COMMIT
+  [1m[36m (77.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (99.4ms)[0m  INSERT INTO `eligibilities` (`nct_id`, `sampling_method`, `study_population`, `maximum_age`, `minimum_age`, `gender`, `healthy_volunteers`, `criteria`) VALUES ('NCT00000108', '', '', '65 Years', '50 Years', 'Female', 'Accepts Healthy Volunteers', '\n        Inclusion Criteria:\n\n          -  Postmenopausal and preferably on hormone replacement therapy\n\n          -  In good general health\n\n          -  Have a body mass index (BMI, weight in kg/height in m2) of between 25 and 40\n\n          -  Exercise less than 20 min/day two days a week\n      ')
+  [1m[36m (127.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.9ms)[0m  BEGIN
+  [1m[36m (78.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.1ms)[0m  BEGIN
+  [1m[36mSQL (80.5ms)[0m  [1mINSERT INTO `result_details` (`nct_id`, `recruitment_details`, `pre_assignment_details`) VALUES ('NCT00000108', '', '')[0m
+  [1m[35m (129.5ms)[0m  COMMIT
+  [1m[36m (76.9ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.4ms)[0m  COMMIT
+  [1m[36m (77.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (79.8ms)[0m  INSERT INTO `facilities` (`nct_id`, `name`, `city`, `state`, `zip`, `country`, `status`, `contact_name`, `contact_phone`, `contact_email`, `contact_backup_name`, `contact_backup_phone`, `contact_backup_email`, `investigator_name`, `investigator_role`, `created_at`, `updated_at`) VALUES ('NCT00000108', '3060G Central Campus Recreation Bldg 401 Washtenaw Ave.', 'Ann Arbor', 'Michigan', '48109-2214', 'United States', '', '', '', '', '', '', '', '', '', '2015-12-07 21:33:44', '2015-12-07 21:33:44')
+  [1m[36m (122.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.3ms)[0m  BEGIN
+  [1m[36m (80.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (100.3ms)[0m  BEGIN
+  [1m[36mSQL (80.1ms)[0m  [1mINSERT INTO `interventions` (`nct_id`, `intervention_type`, `name`, `description`, `created_at`, `updated_at`) VALUES ('NCT00000108', 'Behavioral', 'Exercise', '', '2015-12-07 21:33:44', '2015-12-07 21:33:44')[0m
+  [1m[35m (126.8ms)[0m  COMMIT
+  [1m[36m (80.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.2ms)[0m  COMMIT
+  [1m[36m (87.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (79.3ms)[0m  INSERT INTO `keywords` (`nct_id`, `name`, `created_at`, `updated_at`) VALUES ('NCT00000108', 'exercise', '2015-12-07 21:33:45', '2015-12-07 21:33:45')
+  [1m[36m (143.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (90.3ms)[0m  BEGIN
+  [1m[36m (77.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.4ms)[0m  BEGIN
+  [1m[36mSQL (78.4ms)[0m  [1mINSERT INTO `location_countries` (`nct_id`, `name`) VALUES ('NCT00000108', 'United States')[0m
+  [1m[35m (181.7ms)[0m  COMMIT
+  [1m[36m (114.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (78.1ms)[0m  COMMIT
+  [1m[36m (78.4ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (76.8ms)[0m  INSERT INTO `secondary_ids` (`nct_id`, `secondary_id`) VALUES ('NCT00000108', 'M01RR000042')
+  [1m[36m (143.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.3ms)[0m  BEGIN
+  [1m[36m (77.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.2ms)[0m  BEGIN
+  [1m[36mExpectedGroup Load (78.6ms)[0m  [1mSELECT `expected_groups`.* FROM `expected_groups` WHERE `expected_groups`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mActualGroup Load (79.7ms)[0m  SELECT `actual_groups`.* FROM `actual_groups` WHERE `actual_groups`.`nct_id` = 'NCT00000108'
+  [1m[36mActualOutcome Load (79.2ms)[0m  [1mSELECT `actual_outcomes`.* FROM `actual_outcomes` WHERE `actual_outcomes`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mDetailedDescription Load (92.5ms)[0m  SELECT  `detailed_descriptions`.* FROM `detailed_descriptions` WHERE `detailed_descriptions`.`nct_id` = 'NCT00000108' LIMIT 1
+  [1m[36mDesign Load (86.6ms)[0m  [1mSELECT  `designs`.* FROM `designs` WHERE `designs`.`nct_id` = 'NCT00000108' LIMIT 1[0m
+  [1m[35mBriefSummary Load (77.8ms)[0m  SELECT  `brief_summaries`.* FROM `brief_summaries` WHERE `brief_summaries`.`nct_id` = 'NCT00000108' LIMIT 1
+  [1m[36mEligibility Load (78.0ms)[0m  [1mSELECT  `eligibilities`.* FROM `eligibilities` WHERE `eligibilities`.`nct_id` = 'NCT00000108' LIMIT 1[0m
+  [1m[35mResultDetail Load (79.0ms)[0m  SELECT  `result_details`.* FROM `result_details` WHERE `result_details`.`nct_id` = 'NCT00000108' LIMIT 1
+  [1m[36mBaselineMeasure Load (83.6ms)[0m  [1mSELECT `baseline_measures`.* FROM `baseline_measures` WHERE `baseline_measures`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mBrowseCondition Load (78.5ms)[0m  SELECT `browse_conditions`.* FROM `browse_conditions` WHERE `browse_conditions`.`nct_id` = 'NCT00000108'
+  [1m[36mBrowseIntervention Load (77.2ms)[0m  [1mSELECT `browse_interventions`.* FROM `browse_interventions` WHERE `browse_interventions`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mCondition Load (78.6ms)[0m  SELECT `conditions`.* FROM `conditions` WHERE `conditions`.`nct_id` = 'NCT00000108'
+  [1m[36mFacility Load (79.7ms)[0m  [1mSELECT `facilities`.* FROM `facilities` WHERE `facilities`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mIntervention Load (81.8ms)[0m  SELECT `interventions`.* FROM `interventions` WHERE `interventions`.`nct_id` = 'NCT00000108'
+  [1m[36mKeyword Load (77.4ms)[0m  [1mSELECT `keywords`.* FROM `keywords` WHERE `keywords`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mLink Load (77.0ms)[0m  SELECT `links`.* FROM `links` WHERE `links`.`nct_id` = 'NCT00000108'
+  [1m[36mLocationCountry Load (78.5ms)[0m  [1mSELECT `location_countries`.* FROM `location_countries` WHERE `location_countries`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mOversightAuthority Load (80.6ms)[0m  SELECT `oversight_authorities`.* FROM `oversight_authorities` WHERE `oversight_authorities`.`nct_id` = 'NCT00000108'
+  [1m[36mOverallOfficial Load (77.7ms)[0m  [1mSELECT `overall_officials`.* FROM `overall_officials` WHERE `overall_officials`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mPeriod Load (77.1ms)[0m  SELECT `periods`.* FROM `periods` WHERE `periods`.`nct_id` = 'NCT00000108'
+  [1m[36mExpectedOutcome Load (77.8ms)[0m  [1mSELECT `expected_outcomes`.* FROM `expected_outcomes` WHERE `expected_outcomes`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mReportedEvent Load (80.9ms)[0m  SELECT `reported_events`.* FROM `reported_events` WHERE `reported_events`.`nct_id` = 'NCT00000108'
+  [1m[36mResponsibleParty Load (91.4ms)[0m  [1mSELECT `responsible_parties`.* FROM `responsible_parties` WHERE `responsible_parties`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mResultAgreement Load (78.3ms)[0m  SELECT `result_agreements`.* FROM `result_agreements` WHERE `result_agreements`.`nct_id` = 'NCT00000108'
+  [1m[36mResultContact Load (77.4ms)[0m  [1mSELECT `result_contacts`.* FROM `result_contacts` WHERE `result_contacts`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mSecondaryId Load (77.0ms)[0m  SELECT `secondary_ids`.* FROM `secondary_ids` WHERE `secondary_ids`.`nct_id` = 'NCT00000108'
+  [1m[36mStudyReference Load (78.3ms)[0m  [1mSELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mResultReference Load (77.2ms)[0m  SELECT `study_references`.* FROM `study_references` WHERE `study_references`.`nct_id` = 'NCT00000108'
+  [1m[36mSponsor Load (85.6ms)[0m  [1mSELECT `sponsors`.* FROM `sponsors` WHERE `sponsors`.`nct_id` = 'NCT00000108'[0m
+  [1m[35mSQL (79.4ms)[0m  INSERT INTO `studies` (`first_received_date`, `verification_date`, `last_changed_date`, `download_date`, `start_date_str`, `first_received_date_str`, `verification_date_str`, `last_changed_date_str`, `primary_completion_date_str`, `completion_date_str`, `first_received_results_date_str`, `download_date_str`, `nct_id`, `org_study_id`, `acronym`, `source`, `brief_title`, `official_title`, `overall_status`, `phase`, `target_duration`, `biospec_description`, `study_type`, `biospec_retention`, `limitations_and_caveats`, `has_expanded_access`, `why_stopped`, `created_at`, `updated_at`) VALUES ('2000-01-18', '2003-12-01', '2005-06-23', '2015-12-06', '', 'January 18, 2000', 'December 2003', 'June 23, 2005', '', '', '', 'ClinicalTrials.gov processed this data on December 06, 2015', 'NCT00000108', 'NCRR-M01RR00042-1647', '', '', 'Effects of Training Intensity on the CHD Risk Factors in Postmenopausal Women', '', 'Completed', 'N/A', '', '', 'Interventional', '', '', 0, '', '2015-12-07 21:33:48', '2015-12-07 21:33:48')
+  [1m[36m (77.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.4ms)[0m  INSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000108', 'Cardiovascular Diseases', '2015-12-07 21:33:49', '2015-12-07 21:33:49')
+  [1m[36m (137.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.3ms)[0m  BEGIN
+  [1m[36mSQL (79.5ms)[0m  [1mINSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000108', 'Coronary Artery Disease', '2015-12-07 21:33:49', '2015-12-07 21:33:49')[0m
+  [1m[35m (120.9ms)[0m  COMMIT
+  [1m[36m (77.7ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.8ms)[0m  INSERT INTO `browse_conditions` (`nct_id`, `mesh_term`, `created_at`, `updated_at`) VALUES ('NCT00000108', 'Coronary Disease', '2015-12-07 21:33:49', '2015-12-07 21:33:49')
+  [1m[36m (190.6ms)[0m  [1mCOMMIT[0m
+  [1m[35m (82.2ms)[0m  BEGIN
+  [1m[36mSQL (79.1ms)[0m  [1mINSERT INTO `conditions` (`name`, `nct_id`, `created_at`, `updated_at`) VALUES ('Cardiovascular Diseases', 'NCT00000108', '2015-12-07 21:33:50', '2015-12-07 21:33:50')[0m
+  [1m[35m (120.8ms)[0m  COMMIT
+  [1m[36m (78.8ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.6ms)[0m  INSERT INTO `conditions` (`name`, `nct_id`, `created_at`, `updated_at`) VALUES ('Coronary Disease', 'NCT00000108', '2015-12-07 21:33:50', '2015-12-07 21:33:50')
+  [1m[36m (160.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.1ms)[0m  BEGIN
+  [1m[36m (82.9ms)[0m  [1mCOMMIT[0m
+  [1m[35m (79.6ms)[0m  BEGIN
+  [1m[36m (78.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (81.8ms)[0m  BEGIN
+  [1m[36m (82.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.6ms)[0m  BEGIN
+  [1m[36m (78.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (78.4ms)[0m  BEGIN
+  [1m[36mSQL (81.3ms)[0m  [1mINSERT INTO `oversight_authorities` (`name`, `nct_id`) VALUES ('United States: Federal Government', 'NCT00000108')[0m
+  [1m[35m (120.3ms)[0m  COMMIT
+  [1m[36m (77.8ms)[0m  [1mBEGIN[0m
+  [1m[35m (77.1ms)[0m  COMMIT
+  [1m[36m (83.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (77.8ms)[0m  INSERT INTO `sponsors` (`sponsor_type`, `agency`, `agency_class`, `nct_id`) VALUES ('lead', 'National Center for Research Resources (NCRR)', 'NIH', 'NCT00000108')
+  [1m[36m (128.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (139.9ms)[0m  COMMIT
+  [1m[36m (86.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.6ms)[0m  UPDATE `load_events` SET `status` = 'complete', `updated_at` = '2015-12-07 21:33:52' WHERE `load_events`.`id` = 6
+  [1m[36m (178.0ms)[0m  [1mCOMMIT[0m
+  [1m[35m (77.5ms)[0m  SELECT COUNT(*) FROM `studies` WHERE (nct_id='NCT00000110')
+  [1m[36m (86.0ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (78.5ms)[0m  INSERT INTO `load_events` (`nct_id`, `event_type`, `status`, `created_at`, `updated_at`) VALUES ('NCT00000110', 'create', 'active', '2015-12-07 21:33:52', '2015-12-07 21:33:52')
+  [1m[36m (328.3ms)[0m  [1mCOMMIT[0m

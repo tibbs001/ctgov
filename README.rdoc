@@ -1,0 +1,15 @@
+== README
+
+* Ruby version: ruby 2.0.0p481
+* Currently saves data to postgres.  (change database.yml to switch to different platform)
+
+Setup/Launch Application:
+change into the ctgov directory you created when git clone... was run.
+Install ruby/rails gems that ctgov expects:  bundle install
+Create ctgov tables in the postgres database:  rake db:migrate
+Launch the rails console:  rails c
+Load ct.gov data:  Asker.create_all_studies
+
+>>>>  Asker.create_all_studies to launch process that retrieves all studies from clinicaltrials.gov & saves them to relational db
+
+<tt>rake doc:app</tt>.
