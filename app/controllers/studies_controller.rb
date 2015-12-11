@@ -7,9 +7,9 @@ class StudiesController < ApplicationController
     #sample_ids.each {|x| @studies << Study.find_by_nct_id(x)}
     #@studies
     #@studies=Study.completed_since(Date.today-100.days)
-    #@studies=Study.sponsored_by('Duke')
+    @studies=Study.sponsored_by('Duke')
     @definitions=DataDefinition.all
-    @studies=[Study.find_by_nct_id('NCT01132846')]
+    #@studies=[Study.find_by_nct_id('NCT01132846')]
     #@studies=Study.all
   end
 

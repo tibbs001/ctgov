@@ -28,43 +28,43 @@ $(document).ready(function(){
   </h2>
 
   <div class='well'>
-    <button type="button" 
-	    class="btn btn-link has-popover" 
-	    data-toggle="popover" 
+    <button type="button"
+	    class="btn btn-link has-popover"
+	    data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('sponsor_type') %>">Lead Sponsor: </button>
     <%= @study.lead_sponsor.agency %>
     <% if !@study.org_study_id.blank? %>
-      <button type="button" 
-	    class="btn btn-link has-popover" 
-	    data-toggle="popover" 
+      <button type="button"
+	    class="btn btn-link has-popover"
+	    data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('org_study_id') %>">
 	    (<%= @study.org_study_id %>)</button>
      <% end %>
     <div>
-      <button type="button" 
-	    class="btn btn-link has-popover" 
-	    data-toggle="popover" 
+      <button type="button"
+	    class="btn btn-link has-popover"
+	    data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('study_design') %>">
 	    <%= @study.study_type %></button>
 
-      <button type="button" 
-	    class="btn btn-link has-popover" 
-	    data-toggle="popover" 
+      <button type="button"
+	    class="btn btn-link has-popover"
+	    data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('phase') %>">
             <%= @study.phase %></button>
 
-      <button type="button" 
-	    class="btn btn-link has-popover" 
-	    data-toggle="popover" 
+      <button type="button"
+	    class="btn btn-link has-popover"
+	    data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('overall_status') %>">
             <%= @study.overall_status %></button>
 
     </div>
     <% if !@study.start_date.blank? %>
       <div>
-      <button type="button" 
-	    class="btn btn-link has-popover" 
-	    data-toggle="popover" 
+      <button type="button"
+	    class="btn btn-link has-popover"
+	    data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('start_date') %>">
 	    Started: </button>
       </button>
@@ -73,9 +73,9 @@ $(document).ready(function(){
     <% end %>
     <% if !@study.first_received_date.blank? %>
       <div>
-        <button type="button" 
-	    class="btn btn-link has-popover" 
-	    data-toggle="popover" 
+        <button type="button"
+	    class="btn btn-link has-popover"
+	    data-toggle="popover"
             data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
 	    First Received: </button>
         <%= @study.first_received_date %>
@@ -98,7 +98,7 @@ $(document).ready(function(){
     <h2>Keywords</h2>
     <div class='well'>
       <% @study.keywords.each do |k| %>
-          <p class='keyword'><%= k.keyword %></td>
+          <p class='keyword'><%= k.name %></td>
       <% end %>
     </div>
   <% end %>
@@ -146,7 +146,7 @@ $(document).ready(function(){
       </table>
     </div>
    <% end %>
-   
+
   <% if @study.reported_events.size > 0 %>
     <h2>Reported Events</h2>
       <div class='table-responsive well'>
