@@ -43,13 +43,8 @@ class CreateResults < ActiveRecord::Migration
     end
     add_column :result_details, :nct_id, :string, references: :studies
 
-    create_table :periods do |t|
-      t.string :title
-      t.timestamps null: false
-    end
-    add_column :periods, :nct_id, :string, references: :studies
-
     create_table :milestones do |t|
+      t.string  :period_title
       t.string  :ctgov_group_id
       t.integer :ctgov_group_enumerator
       t.string  :title
@@ -58,9 +53,10 @@ class CreateResults < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_column :milestones, :nct_id, :string, references: :studies
-    add_column :milestones, :period_id, :integer, references: :periods
+    add_column :milestones, :group_id, :integer, references: :groups
 
     create_table :drop_withdrawals do |t|
+      t.string  :period_title
       t.string  :ctgov_group_id
       t.integer :ctgov_group_enumerator
       t.string  :reason
@@ -68,7 +64,7 @@ class CreateResults < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_column :drop_withdrawals, :nct_id, :string, references: :studies
-    add_column :drop_withdrawals, :period_id, :integer, references: :periods
+    add_column :drop_withdrawals, :group_id, :integer, references: :groups
 
     create_table :outcomes do |t|
       t.string  :outcome_type

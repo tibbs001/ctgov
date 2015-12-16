@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "detailed_descriptions", ["nct_id"], name: "index_detailed_descriptions_on_nct_id", using: :btree
 
   create_table "drop_withdrawals", force: :cascade do |t|
+    t.string   "period_title",           limit: 255
     t.string   "ctgov_group_id",         limit: 255
     t.integer  "ctgov_group_enumerator", limit: 4
     t.string   "reason",                 limit: 255
@@ -102,7 +103,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
     t.string   "nct_id",                 limit: 255
-    t.integer  "period_id",              limit: 4
+    t.integer  "group_id",               limit: 4
   end
 
   create_table "eligibilities", force: :cascade do |t|
@@ -250,6 +251,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "location_countries", ["nct_id"], name: "index_location_countries_on_nct_id", using: :btree
 
   create_table "milestones", force: :cascade do |t|
+    t.string   "period_title",           limit: 255
     t.string   "ctgov_group_id",         limit: 255
     t.integer  "ctgov_group_enumerator", limit: 4
     t.string   "title",                  limit: 255
@@ -258,7 +260,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.string   "nct_id",                 limit: 255
-    t.integer  "period_id",              limit: 4
+    t.integer  "group_id",               limit: 4
   end
 
   create_table "outcome_analyses", force: :cascade do |t|
@@ -339,13 +341,6 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   end
 
   add_index "oversight_authorities", ["nct_id"], name: "index_oversight_authorities_on_nct_id", using: :btree
-
-  create_table "periods", force: :cascade do |t|
-    t.string   "title",      limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.string   "nct_id",     limit: 255
-  end
 
   create_table "reported_event_overviews", force: :cascade do |t|
     t.string   "time_frame",  limit: 255

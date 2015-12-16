@@ -1,5 +1,5 @@
 class DropWithdrawal < StudyRelationship
-  belongs_to :period
+  belongs_to :group
 
   def self.create_all_from(opts)
     self.nested_pop_create(opts.merge(:name=>'drop_withdraw_reason'))
@@ -7,29 +7,37 @@ class DropWithdrawal < StudyRelationship
 
   def self.nested_pop_create(opts)
     name=opts[:name]
-    all=opts[:xml].xpath("#{name}_list").xpath(name)
+    all=opts[:xml].xpath("//#{name}_list").xpath(name)
     col=[]
     xml=all.pop
     while xml
-      opts[:xml]=xml
       opts[:reason]=xml.xpath('title').inner_html
-      col << pop_create(opts.merge(:name=>'participants'))
+		  opts[:period_title]=xml.parent.parent.xpath('title').inner_html
+      groups=xml.xpath("participants_list").xpath('participants')
+      group=groups.pop
+			while group
+        col << create_from(opts.merge(:xml=>group))
+        group=groups.pop
+			end
       xml=all.pop
     end
     col.flatten
   end
 
-  def attribs
-    {
-     :ctgov_group_id => get_attribute('group_id'),
-     :ctgov_group_enumerator => integer_in(get_attribute('group_id')),
-     :participant_count => get_attribute('count').to_i,
-    }
-  end
-
   def create_from(opts)
+		@xml=opts[:xml]
+		gid=get_attribute('group_id')
+    self.nct_id=opts[:nct_id]
     self.reason=opts[:reason]
-    super
+    self.period_title=opts[:period_title]
+    self.participant_count=get_attribute('count').to_i
+		self.ctgov_group_id=gid
+		self.ctgov_group_enumerator=integer_in(gid)
+		opts[:groups].each{|g|
+		  self.group=g if g.ctgov_group_enumerator==self.ctgov_group_enumerator
+		}
+		self.save!
+		self
   end
 
   def self.extract_summary
@@ -38,10 +46,10 @@ class DropWithdrawal < StudyRelationship
     CSV.open("#{self.name}_Summary.csv", "wb", :write_headers=> true, :headers => column_headers) {|csv|
       all.each{|x|
         csv << [x.nct_id,
-		x.period.title,
-		x.group.title,
-		x.participant_count,
-		x.reason]
+		    x.period_title,
+		    x.group.title,
+		    x.participant_count,
+		    x.reason]
       }
     }
   end
