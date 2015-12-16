@@ -1,10 +1,11 @@
-	class ActualOutcome < StudyRelationship
+	class Outcome < StudyRelationship
 		attr_accessor :milestones, :drop_withdrawals, :outer_xml
 
+		belongs_to :group
 		has_many :outcome_measures
 		has_many :outcome_analyses
 
-		def self.create_all_from(opts={})
+		def self.create_all_from(opts)
 			all=opts[:xml].xpath('//clinical_results').xpath("outcome_list").xpath('outcome')
 			col=[]
 			xml=all.pop
@@ -48,12 +49,10 @@
 			}
 		end
 
-		def create_from(opts={})
-
+		def create_from(opts)
 			@outer_xml=opts[:outer_xml]
 			gid=opts[:xml].attribute('group_id').try(:value)
-			self.ctgov_group_id = gid
-			self.ctgov_group_enumerator = integer_in(gid)
+			opts[:groups].each{|g| self.group=g if g.ctgov_group_enumerator==integer_in(gid)}
 			self.outcome_type = opts[:type]
 			self.title        = opts[:title]
 			self.time_frame   = opts[:time_frame]
@@ -61,8 +60,8 @@
 			self.population   = opts[:population]
 			self.description  = opts[:description]
 			super
-			self.outcome_measures=OutcomeMeasure.create_all_from(opts.merge(:xml=>outer_xml,:group_id_of_interest=>gid))
-			self.outcome_analyses=OutcomeAnalysis.create_all_from(opts.merge(:xml=>outer_xml,:group_id_of_interest=>gid))
+			self.outcome_measures=OutcomeMeasure.create_all_from(opts.merge(:outcome=>self,:xml=>outer_xml,:group_id_of_interest=>gid))
+			self.outcome_analyses=OutcomeAnalysis.create_all_from(opts.merge(:outcome=>self,:xml=>outer_xml,:group_id_of_interest=>gid))
 			self
 		end
 

@@ -1,9 +1,17 @@
-	class ActualGroup < StudyRelationship
+	class Group < StudyRelationship
 		attr_accessor :milestones, :drop_withdrawals, :baseline_measures
+
+		has_many :outcomes, dependent: :destroy
+		has_many :outcome_measures, dependent: :destroy
+		has_many :outcome_analyses, dependent: :destroy
 
 		def self.create_all_from(opts)
 			opts[:xml]=opts[:xml].xpath('//participant_flow')
-			pop_create(opts.merge(:name=>'group'))
+			groups=pop_create(opts.merge(:name=>'group'))
+			opts[:groups]=groups
+			Outcome.create_all_from(opts)
+			groups
+
 		end
 
 		def attribs

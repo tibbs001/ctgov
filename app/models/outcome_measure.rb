@@ -1,8 +1,9 @@
 class OutcomeMeasure < StudyRelationship
-  belongs_to :actual_outcome
+  belongs_to :outcome
+  belongs_to :group
   attr_accessor :category_xml
 
-  def self.create_all_from(opts={})
+  def self.create_all_from(opts)
     all=opts[:xml].xpath("measure_list").xpath('measure')
     col=[]
     xml=all.pop
@@ -16,18 +17,18 @@ class OutcomeMeasure < StudyRelationship
         opts[:dispersion]=xml.xpath('dispersion').inner_html
         opts[:description]=xml.xpath('description').inner_html
         categories=xml.xpath("category_list").xpath('category')
-	category=categories.pop
-	if category.blank?
+	      category=categories.pop
+	      if category.blank?
           col << create_from(opts)
-	else
-	  while category
+	      else
+	        while category
             opts[:category]=category.xpath('sub_title').inner_html
             groups=category.xpath("measurement_list").xpath('measurement')
-	    group=groups.pop
-	    if group.blank?
+	          group=groups.pop
+	          if group.blank?
               col << create_from(opts)
-	    else
-	      while group
+	          else
+	            while group
                 opts[:group_id]=group.attribute('group_id').try(:value)
                 opts[:value]=group.attribute('value').try(:value)
                 opts[:spread]=group.attribute('spread').try(:value)
@@ -36,8 +37,8 @@ class OutcomeMeasure < StudyRelationship
               end
             end
             category=categories.pop
-	  end
-	end
+	        end
+	      end
         xml=all.pop
       end
     end
@@ -51,8 +52,10 @@ class OutcomeMeasure < StudyRelationship
     }
   end
 
-  def create_from(opts={})
+  def create_from(opts)
     return nil if opts[:group_id] != opts[:group_id_of_interest]
+    self.outcome=opts[:outcome]
+		self.group=self.outcome.group
     self.title=opts[:title]
     self.units=opts[:units]
     self.param=opts[:param]

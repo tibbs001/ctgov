@@ -13,47 +13,23 @@
 
 ActiveRecord::Schema.define(version: 20150629193710) do
 
-  create_table "actual_groups", force: :cascade do |t|
-    t.string  "ctgov_group_id",         limit: 255
-    t.integer "ctgov_group_enumerator", limit: 4
-    t.string  "group_type",             limit: 255
-    t.string  "title",                  limit: 255
-    t.text    "description",            limit: 65535
-    t.integer "participant_count",      limit: 4
-    t.string  "nct_id",                 limit: 255
-  end
-
-  create_table "actual_outcomes", force: :cascade do |t|
-    t.string  "ctgov_group_id",         limit: 255
-    t.integer "ctgov_group_enumerator", limit: 4
-    t.text    "group_title",            limit: 65535
-    t.text    "group_description",      limit: 65535
-    t.string  "outcome_type",           limit: 255
-    t.string  "title",                  limit: 255
-    t.text    "description",            limit: 65535
-    t.string  "measure",                limit: 255
-    t.string  "time_frame",             limit: 255
-    t.string  "safety_issue",           limit: 255
-    t.text    "population",             limit: 65535
-    t.integer "participant_count",      limit: 4
-    t.string  "nct_id",                 limit: 255
-  end
-
   create_table "baseline_measures", force: :cascade do |t|
-    t.string  "ctgov_group_id",         limit: 255
-    t.integer "ctgov_group_enumerator", limit: 4
-    t.string  "category",               limit: 255
-    t.string  "title",                  limit: 255
-    t.text    "description",            limit: 65535
-    t.string  "units",                  limit: 255
-    t.string  "param",                  limit: 255
-    t.string  "measure_value",          limit: 255
-    t.string  "lower_limit",            limit: 255
-    t.string  "upper_limit",            limit: 255
-    t.string  "dispersion",             limit: 255
-    t.string  "spread",                 limit: 255
-    t.text    "measure_description",    limit: 65535
-    t.string  "nct_id",                 limit: 255
+    t.string   "ctgov_group_id",         limit: 255
+    t.integer  "ctgov_group_enumerator", limit: 4
+    t.string   "category",               limit: 255
+    t.string   "title",                  limit: 255
+    t.text     "description",            limit: 65535
+    t.string   "units",                  limit: 255
+    t.string   "param",                  limit: 255
+    t.string   "measure_value",          limit: 255
+    t.string   "lower_limit",            limit: 255
+    t.string   "upper_limit",            limit: 255
+    t.string   "dispersion",             limit: 255
+    t.string   "spread",                 limit: 255
+    t.text     "measure_description",    limit: 65535
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "nct_id",                 limit: 255
   end
 
   create_table "brief_summaries", force: :cascade do |t|
@@ -119,12 +95,14 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "detailed_descriptions", ["nct_id"], name: "index_detailed_descriptions_on_nct_id", using: :btree
 
   create_table "drop_withdrawals", force: :cascade do |t|
-    t.string  "ctgov_group_id",         limit: 255
-    t.integer "ctgov_group_enumerator", limit: 4
-    t.string  "reason",                 limit: 255
-    t.integer "participant_count",      limit: 4
-    t.string  "nct_id",                 limit: 255
-    t.integer "period_id",              limit: 4
+    t.string   "ctgov_group_id",         limit: 255
+    t.integer  "ctgov_group_enumerator", limit: 4
+    t.string   "reason",                 limit: 255
+    t.integer  "participant_count",      limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "nct_id",                 limit: 255
+    t.integer  "period_id",              limit: 4
   end
 
   create_table "eligibilities", force: :cascade do |t|
@@ -187,6 +165,18 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   end
 
   add_index "facilities", ["nct_id"], name: "index_facilities_on_nct_id", using: :btree
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "ctgov_group_id",         limit: 255
+    t.integer  "ctgov_group_enumerator", limit: 4
+    t.string   "group_type",             limit: 255
+    t.string   "title",                  limit: 255
+    t.text     "description",            limit: 65535
+    t.integer  "participant_count",      limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "nct_id",                 limit: 255
+  end
 
   create_table "intervention_arm_group_labels", force: :cascade do |t|
     t.string   "label",           limit: 255
@@ -260,53 +250,78 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "location_countries", ["nct_id"], name: "index_location_countries_on_nct_id", using: :btree
 
   create_table "milestones", force: :cascade do |t|
-    t.string  "ctgov_group_id",         limit: 255
-    t.integer "ctgov_group_enumerator", limit: 4
-    t.string  "title",                  limit: 255
-    t.text    "description",            limit: 65535
-    t.integer "participant_count",      limit: 4
-    t.string  "nct_id",                 limit: 255
-    t.integer "period_id",              limit: 4
+    t.string   "ctgov_group_id",         limit: 255
+    t.integer  "ctgov_group_enumerator", limit: 4
+    t.string   "title",                  limit: 255
+    t.text     "description",            limit: 65535
+    t.integer  "participant_count",      limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "nct_id",                 limit: 255
+    t.integer  "period_id",              limit: 4
   end
 
   create_table "outcome_analyses", force: :cascade do |t|
-    t.string  "ctgov_group_id",              limit: 255
-    t.integer "ctgov_group_enumerator",      limit: 4
-    t.string  "title",                       limit: 255
-    t.string  "non_inferiority",             limit: 255
-    t.text    "non_inferiority_description", limit: 65535
-    t.string  "p_value",                     limit: 255
-    t.string  "param_type",                  limit: 255
-    t.string  "param_value",                 limit: 255
-    t.string  "ci_percent",                  limit: 255
-    t.string  "ci_n_sides",                  limit: 255
-    t.string  "ci_lower_limit",              limit: 255
-    t.string  "ci_upper_limit",              limit: 255
-    t.string  "method",                      limit: 255
-    t.text    "description",                 limit: 65535
-    t.text    "group_description",           limit: 65535
-    t.text    "method_description",          limit: 65535
-    t.text    "estimate_description",        limit: 65535
-    t.string  "nct_id",                      limit: 255
-    t.integer "actual_outcome_id",           limit: 4
+    t.string   "ctgov_group_id",              limit: 255
+    t.integer  "ctgov_group_enumerator",      limit: 4
+    t.string   "title",                       limit: 255
+    t.string   "non_inferiority",             limit: 255
+    t.text     "non_inferiority_description", limit: 65535
+    t.string   "p_value",                     limit: 255
+    t.string   "param_type",                  limit: 255
+    t.string   "param_value",                 limit: 255
+    t.string   "ci_percent",                  limit: 255
+    t.string   "ci_n_sides",                  limit: 255
+    t.string   "ci_lower_limit",              limit: 255
+    t.string   "ci_upper_limit",              limit: 255
+    t.string   "method",                      limit: 255
+    t.text     "description",                 limit: 65535
+    t.text     "group_description",           limit: 65535
+    t.text     "method_description",          limit: 65535
+    t.text     "estimate_description",        limit: 65535
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.string   "nct_id",                      limit: 255
+    t.integer  "outcome_id",                  limit: 4
+    t.integer  "group_id",                    limit: 4
   end
 
   create_table "outcome_measures", force: :cascade do |t|
-    t.string  "ctgov_group_id",         limit: 255
-    t.integer "ctgov_group_enumerator", limit: 4
-    t.string  "category",               limit: 255
-    t.string  "title",                  limit: 255
-    t.text    "description",            limit: 65535
-    t.string  "units",                  limit: 255
-    t.string  "param",                  limit: 255
-    t.string  "measure_value",          limit: 255
-    t.string  "lower_limit",            limit: 255
-    t.string  "upper_limit",            limit: 255
-    t.string  "dispersion",             limit: 255
-    t.string  "spread",                 limit: 255
-    t.text    "measure_description",    limit: 65535
-    t.string  "nct_id",                 limit: 255
-    t.integer "actual_outcome_id",      limit: 4
+    t.string   "ctgov_group_id",         limit: 255
+    t.integer  "ctgov_group_enumerator", limit: 4
+    t.string   "category",               limit: 255
+    t.string   "title",                  limit: 255
+    t.text     "description",            limit: 65535
+    t.string   "units",                  limit: 255
+    t.string   "param",                  limit: 255
+    t.string   "measure_value",          limit: 255
+    t.string   "lower_limit",            limit: 255
+    t.string   "upper_limit",            limit: 255
+    t.string   "dispersion",             limit: 255
+    t.string   "spread",                 limit: 255
+    t.text     "measure_description",    limit: 65535
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "nct_id",                 limit: 255
+    t.integer  "outcome_id",             limit: 4
+    t.integer  "group_id",               limit: 4
+  end
+
+  create_table "outcomes", force: :cascade do |t|
+    t.string   "outcome_type",      limit: 255
+    t.text     "group_title",       limit: 65535
+    t.text     "group_description", limit: 65535
+    t.string   "title",             limit: 255
+    t.text     "description",       limit: 65535
+    t.string   "measure",           limit: 255
+    t.string   "time_frame",        limit: 255
+    t.string   "safety_issue",      limit: 255
+    t.text     "population",        limit: 65535
+    t.integer  "participant_count", limit: 4
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "nct_id",            limit: 255
+    t.integer  "group_id",          limit: 4
   end
 
   create_table "overall_officials", force: :cascade do |t|
@@ -326,33 +341,39 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "oversight_authorities", ["nct_id"], name: "index_oversight_authorities_on_nct_id", using: :btree
 
   create_table "periods", force: :cascade do |t|
-    t.string "title",  limit: 255
-    t.string "nct_id", limit: 255
+    t.string   "title",      limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "nct_id",     limit: 255
   end
 
   create_table "reported_event_overviews", force: :cascade do |t|
-    t.string "time_frame",  limit: 255
-    t.text   "description", limit: 65535
-    t.string "nct_id",      limit: 255
+    t.string   "time_frame",  limit: 255
+    t.text     "description", limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "nct_id",      limit: 255
   end
 
   create_table "reported_events", force: :cascade do |t|
-    t.string  "ctgov_group_id",         limit: 255
-    t.integer "ctgov_group_enumerator", limit: 4
-    t.string  "group_title",            limit: 255
-    t.text    "group_description",      limit: 65535
-    t.text    "description",            limit: 65535
-    t.string  "time_frame",             limit: 255
-    t.string  "category",               limit: 255
-    t.string  "event_type",             limit: 255
-    t.string  "frequency_threshold",    limit: 255
-    t.string  "default_vocab",          limit: 255
-    t.string  "default_assessment",     limit: 255
-    t.string  "title",                  limit: 255
-    t.integer "subjects_affected",      limit: 4
-    t.integer "subjects_at_risk",       limit: 4
-    t.integer "event_count",            limit: 4
-    t.string  "nct_id",                 limit: 255
+    t.string   "ctgov_group_id",         limit: 255
+    t.integer  "ctgov_group_enumerator", limit: 4
+    t.string   "group_title",            limit: 255
+    t.text     "group_description",      limit: 65535
+    t.text     "description",            limit: 65535
+    t.string   "time_frame",             limit: 255
+    t.string   "category",               limit: 255
+    t.string   "event_type",             limit: 255
+    t.string   "frequency_threshold",    limit: 255
+    t.string   "default_vocab",          limit: 255
+    t.string   "default_assessment",     limit: 255
+    t.string   "title",                  limit: 255
+    t.integer  "subjects_affected",      limit: 4
+    t.integer  "subjects_at_risk",       limit: 4
+    t.integer  "event_count",            limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "nct_id",                 limit: 255
   end
 
   create_table "responsible_parties", force: :cascade do |t|
@@ -366,24 +387,30 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "responsible_parties", ["nct_id"], name: "index_responsible_parties_on_nct_id", using: :btree
 
   create_table "result_agreements", force: :cascade do |t|
-    t.string "pi_employee",    limit: 255
-    t.text   "agreement",      limit: 65535
-    t.string "agreement_type", limit: 255
-    t.string "nct_id",         limit: 255
+    t.string   "pi_employee",    limit: 255
+    t.text     "agreement",      limit: 65535
+    t.string   "agreement_type", limit: 255
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "nct_id",         limit: 255
   end
 
   create_table "result_contacts", force: :cascade do |t|
-    t.string "name_or_title", limit: 255
-    t.string "organization",  limit: 255
-    t.string "phone",         limit: 255
-    t.string "email",         limit: 255
-    t.string "nct_id",        limit: 255
+    t.string   "name_or_title", limit: 255
+    t.string   "organization",  limit: 255
+    t.string   "phone",         limit: 255
+    t.string   "email",         limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "nct_id",        limit: 255
   end
 
   create_table "result_details", force: :cascade do |t|
-    t.text   "recruitment_details",    limit: 65535
-    t.text   "pre_assignment_details", limit: 65535
-    t.string "nct_id",                 limit: 255
+    t.text     "recruitment_details",    limit: 65535
+    t.text     "pre_assignment_details", limit: 65535
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "nct_id",                 limit: 255
   end
 
   create_table "search_results", force: :cascade do |t|

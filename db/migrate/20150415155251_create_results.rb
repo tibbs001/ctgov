@@ -6,6 +6,7 @@ class CreateResults < ActiveRecord::Migration
       t.string :organization
       t.string :phone
       t.string :email
+      t.timestamps null: false
     end
     add_column :result_contacts, :nct_id, :string, references: :studies
 
@@ -13,6 +14,7 @@ class CreateResults < ActiveRecord::Migration
       t.string :pi_employee
       t.text   :agreement
       t.string :agreement_type
+      t.timestamps null: false
     end
     add_column :result_agreements, :nct_id, :string, references: :studies
 
@@ -30,17 +32,20 @@ class CreateResults < ActiveRecord::Migration
       t.string  :dispersion
       t.string  :spread
       t.text    :measure_description
+      t.timestamps null: false
     end
     add_column :baseline_measures, :nct_id, :string, references: :studies
 
     create_table :result_details do |t|
       t.text :recruitment_details
       t.text :pre_assignment_details
+      t.timestamps null: false
     end
     add_column :result_details, :nct_id, :string, references: :studies
 
     create_table :periods do |t|
       t.string :title
+      t.timestamps null: false
     end
     add_column :periods, :nct_id, :string, references: :studies
 
@@ -50,6 +55,7 @@ class CreateResults < ActiveRecord::Migration
       t.string  :title
       t.text    :description
       t.integer :participant_count
+      t.timestamps null: false
     end
     add_column :milestones, :nct_id, :string, references: :studies
     add_column :milestones, :period_id, :integer, references: :periods
@@ -59,16 +65,15 @@ class CreateResults < ActiveRecord::Migration
       t.integer :ctgov_group_enumerator
       t.string  :reason
       t.integer :participant_count
+      t.timestamps null: false
     end
     add_column :drop_withdrawals, :nct_id, :string, references: :studies
     add_column :drop_withdrawals, :period_id, :integer, references: :periods
 
-    create_table :actual_outcomes do |t|
-      t.string  :ctgov_group_id
-      t.integer :ctgov_group_enumerator
+    create_table :outcomes do |t|
+      t.string  :outcome_type
       t.text    :group_title
       t.text    :group_description
-      t.string  :outcome_type
       t.string  :title
       t.text    :description
       t.string  :measure
@@ -76,8 +81,10 @@ class CreateResults < ActiveRecord::Migration
       t.string  :safety_issue
       t.text    :population
       t.integer :participant_count
+      t.timestamps null: false
     end
-    add_column :actual_outcomes, :nct_id, :string, references: :studies
+    add_column :outcomes, :nct_id, :string, references: :studies
+    add_column :outcomes, :group_id, :integer, references: :groups
 
     create_table :outcome_measures do |t|
       t.string  :ctgov_group_id
@@ -93,9 +100,11 @@ class CreateResults < ActiveRecord::Migration
       t.string  :dispersion
       t.string  :spread
       t.text    :measure_description
+      t.timestamps null: false
    end
     add_column :outcome_measures, :nct_id, :string, references: :studies
-    add_column :outcome_measures, :actual_outcome_id, :integer, references: :actual_outcomes
+    add_column :outcome_measures, :outcome_id, :integer, references: :outcomes
+    add_column :outcome_measures, :group_id, :integer, references: :groups
 
     create_table :outcome_analyses do |t|
       t.string  :ctgov_group_id
@@ -115,9 +124,11 @@ class CreateResults < ActiveRecord::Migration
       t.text    :group_description
       t.text    :method_description
       t.text    :estimate_description
+      t.timestamps null: false
     end
     add_column :outcome_analyses, :nct_id, :string, references: :studies
-    add_column :outcome_analyses, :actual_outcome_id, :integer, references: :actual_outcomes
+    add_column :outcome_analyses, :outcome_id, :integer, references: :outcomes
+    add_column :outcome_analyses, :group_id, :integer, references: :groups
 
     create_table :reported_events do |t|
       t.string   :ctgov_group_id
@@ -135,24 +146,27 @@ class CreateResults < ActiveRecord::Migration
       t.integer  :subjects_affected
       t.integer  :subjects_at_risk
       t.integer  :event_count
+      t.timestamps null: false
     end
     add_column :reported_events, :nct_id, :string, references: :studies
 
     create_table :reported_event_overviews do |t|
       t.string :time_frame
       t.text   :description
+      t.timestamps null: false
     end
     add_column :reported_event_overviews, :nct_id, :string, references: :studies
 
-    create_table :actual_groups do |t|
+    create_table :groups do |t|
       t.string  :ctgov_group_id
       t.integer :ctgov_group_enumerator
       t.string  :group_type
       t.string  :title
       t.text    :description
       t.integer :participant_count
+      t.timestamps null: false
     end
-    add_column :actual_groups, :nct_id, :string, references: :studies
+    add_column :groups, :nct_id, :string, references: :studies
 
   end
 end

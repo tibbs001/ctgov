@@ -11,8 +11,8 @@ require 'csv'
 
 		has_many :expected_groups,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :expected_outcomes,     :foreign_key => 'nct_id', dependent: :destroy
-		has_many :actual_groups,         :foreign_key => 'nct_id', dependent: :destroy
-		has_many :actual_outcomes,       :foreign_key => 'nct_id', dependent: :destroy
+		has_many :groups,                :foreign_key => 'nct_id', dependent: :destroy
+		has_many :outcomes,              :foreign_key => 'nct_id', dependent: :destroy
 		has_many :baseline_measures,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :browse_conditions,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :browse_interventions,  :foreign_key => 'nct_id', dependent: :destroy
@@ -72,11 +72,11 @@ require 'csv'
 			brief_summary.description
 		end
 
-		def outcomes(exp_act='actual',prim_sec='primary')
+		def all_outcomes(exp_act='actual',prim_sec='primary')
 			if exp_act=='expected'
 				expected_outcomes.select {|o| o.outcome_type==prim_sec}
 			else
-				actual_outcomes.select {|o| o.outcome_type==prim_sec}
+				outcomes.select{|o|o.outcome_type==prim_sec}
 			end
 		end
 
@@ -140,11 +140,6 @@ require 'csv'
 			facilities.size
 		end
 
-		def groups
-			# short-hand name
-			actual_groups
-		end
-
 		def ctms_study
 			CtmsStudy.where('nct_id=?',nct_id).first
 		end
@@ -172,7 +167,7 @@ require 'csv'
 		end
 
 		def product_actual
-			actual_groups.collect{|c|c.title}.join(",")
+			groups.collect{|c|c.title}.join(",")
 		end
 
 		def self.create_all
