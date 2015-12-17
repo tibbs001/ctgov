@@ -1,9 +1,10 @@
 	require 'active_support/all'
 	class StudyTemplate
-		attr_accessor :xml
+		attr_accessor :xml, :study_xml
 
 		def initialize(opts)
 			@xml=opts[:xml]
+			@study_xml=opts[:study_xml]
 		end
 
 		def nct_id
@@ -59,15 +60,12 @@
 				#:delivery_mechanism =>delivery_mechanism,
 
 				:expected_groups =>       ExpectedGroup.create_all_from(opts),
-				:actual_groups =>         ActualGroup.create_all_from(opts),
-
-				:actual_outcomes =>       ActualOutcome.create_all_from(opts),
+				:groups =>                Group.create_all_from(opts.merge(:study_xml=>xml)),
 				:detailed_description =>  DetailedDescription.create_from(opts),
 				:design =>                Design.create_from(opts),
 				:brief_summary        =>  BriefSummary.create_from(opts),
 				:eligibility =>           Eligibility.create_from(opts),
 				:result_detail =>         ResultDetail.create_from(opts),
-
 				:baseline_measures =>     BaselineMeasure.create_all_from(opts),
 				:browse_conditions =>     BrowseCondition.create_all_from(opts),
 				:browse_interventions =>  BrowseIntervention.create_all_from(opts),
@@ -79,7 +77,6 @@
 				:location_countries =>    LocationCountry.create_all_from(opts),
 				:oversight_authorities => OversightAuthority.create_all_from(opts),
 				:overall_officials =>     OverallOfficial.create_all_from(opts),
-				:periods =>               Period.create_all_from(opts),
 				:expected_outcomes =>     ExpectedOutcome.create_all_from(opts),
 				:reported_events =>       ReportedEvent.create_all_from(opts),
 				:responsible_parties =>   ResponsibleParty.create_all_from(opts),

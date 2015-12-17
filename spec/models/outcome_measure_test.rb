@@ -28,14 +28,14 @@
     it "should save outcome measures" do
       nct_id='NCT00001151'
       study=Asker.new.create_study(nct_id)
-      expect(study.actual_outcomes.size).to eq(1)
-      outcome=study.actual_outcomes.first
+      expect(study.outcomes.size).to eq(1)
+      outcome=study.outcomes.first
       expect(outcome.outcome_type).to eq('Primary')
       expect(outcome.title).to eq('Number of Participants With Normal Serum Calcium Concentrations')
       expect(outcome.description).to eq('Normal calcium concentration 8.2-10.6 mg/dL')
       expect(outcome.outcome_measures.size).to eq(2)
-      outcome_measure1=study.actual_outcomes.first.outcome_measures.select{|x|x.title='Number of Participants'}.first
-      outcome_measure2=study.actual_outcomes.first.outcome_measures.select{|x|x.title='Number of Participants With Normal Serum Calcium Concentrations'}.first
+      outcome_measure1=study.outcomes.first.outcome_measures.select{|x|x.title='Number of Participants'}.first
+      outcome_measure2=study.outcomes.first.outcome_measures.select{|x|x.title='Number of Participants With Normal Serum Calcium Concentrations'}.first
       expect(outcome_measure1.units).to eq('participants')
       expect(outcome_measure1.param).to eq('Number')
       expect(outcome_measure2.description).to eq('Normal calcium concentration 8.2-10.6 mg/dL')

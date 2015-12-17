@@ -2,7 +2,7 @@
 		it "should link milestones and drop_withdrawals to the group" do
 			nct_id='NCT00006409'
 			xml=Nokogiri::XML(Faraday.get("http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true").body)
-			opts={:xml => xml,:nct_id=>nct_id,:study_xml=>xml}
+			opts={:xml=>xml,:nct_id=>nct_id,:study_xml=>xml}
 			groups=Group.create_all_from(opts)
 			g1_array=groups.select{|g|g.ctgov_group_enumerator==1}
 			expect(g1_array.size).to eq(1)
