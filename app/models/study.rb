@@ -3,11 +3,12 @@ require 'csv'
 		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
 
 		self.primary_key = 'nct_id'
-		has_one  :brief_summary,        :foreign_key => 'nct_id', dependent: :destroy
-		has_one  :design,               :foreign_key => 'nct_id', dependent: :destroy
-		has_one  :detailed_description, :foreign_key => 'nct_id', dependent: :destroy
-		has_one  :eligibility,          :foreign_key => 'nct_id', dependent: :destroy
-		has_one  :result_detail,        :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :brief_summary,         :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :design,                :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :detailed_description,  :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :eligibility,           :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :participant_flow,      :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :result_detail,         :foreign_key => 'nct_id', dependent: :destroy
 
 		has_many :expected_groups,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :expected_outcomes,     :foreign_key => 'nct_id', dependent: :destroy

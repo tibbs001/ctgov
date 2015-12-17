@@ -166,5 +166,12 @@ class CreateResults < ActiveRecord::Migration
     end
     add_column :groups, :nct_id, :string, references: :studies
 
+    create_table :participant_flows do |t|
+      t.text    :recruitment_details
+      t.text    :pre_assignment_details
+      t.timestamps null: false
+    end
+    add_column :participant_flows, :nct_id, :string, references: :studies
+
   end
 end

@@ -344,6 +344,14 @@ ActiveRecord::Schema.define(version: 20150629193710) do
 
   add_index "oversight_authorities", ["nct_id"], name: "index_oversight_authorities_on_nct_id", using: :btree
 
+  create_table "participant_flows", force: :cascade do |t|
+    t.text     "recruitment_details",    limit: 65535
+    t.text     "pre_assignment_details", limit: 65535
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "nct_id",                 limit: 255
+  end
+
   create_table "reported_event_overviews", force: :cascade do |t|
     t.string   "time_frame",  limit: 255
     t.text     "description", limit: 65535

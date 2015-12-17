@@ -64,6 +64,7 @@
 				:design =>                Design.create_from(opts),
 				:brief_summary        =>  BriefSummary.create_from(opts),
 				:eligibility =>           Eligibility.create_from(opts),
+				:participant_flow     =>  ParticipantFlow.create_from(opts),
 				:result_detail =>         ResultDetail.create_from(opts),
 				:baseline_measures =>     BaselineMeasure.create_all_from(opts),
 				:browse_conditions =>     BrowseCondition.create_all_from(opts),
