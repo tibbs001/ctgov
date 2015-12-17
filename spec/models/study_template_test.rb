@@ -5,15 +5,12 @@
       study=Asker.new.create_study(nct_id)
       expect(study.nct_id).to eq(nct_id)
       expect(study.limitations_and_caveats).to eq('This study was originally designed to escalate 3DRT via increasing doses per fraction. However, due to excessive toxicity at dose level 1 (75.25 Gy, 2.15 Gy/fraction), the protocol was amended in January 2003 to de-escalate 3DRT dose.')
-      expect(study.actual_outcomes.size).to eq(6)
+      expect(study.outcomes.size).to eq(6)
       expect(study.groups.size).to eq(4)
-      g1=study.actual_outcomes.select{|x|x.ctgov_group_id=='O1'}.first
-      g2=study.actual_outcomes.select{|x|x.ctgov_group_id=='O2'}.first
+      g1=study.groups.select{|g|g.ctgov_group_enumerator==1}.first
+      g2=study.groups.select{|g|g.ctgov_group_enumerator==2}.first
       expect(g1.milestones.size).to eq(3)
       expect(g2.milestones.size).to eq(3)
-      period=study.periods.first
-      expect(period.title).to eq('Overall Study')
-      expect(period.milestones.size).to eq(12)
       milestones=Milestone.where('nct_id =?',nct_id)
       expect(milestones.size).to eq(12)
       p4=milestones.select{|x|x.ctgov_group_enumerator==4}
@@ -24,15 +21,9 @@
       expect(p4_started.participant_count).to eq(46)
       expect(p4_completed.participant_count).to eq(44)
       expect(p4_not_completed.participant_count).to eq(2)
-      expect(period.milestones.size).to eq(12)
-      expect(period.drop_withdrawals.size).to eq(8)
       expect(study.drop_withdrawals.size).to eq(8)
       dw=DropWithdrawal.where('nct_id = ?',nct_id)
       expect(dw.size).to eq(8)
-      p4entries=period.drop_withdrawals.select{|x|x.ctgov_group_id=='P4'}
-      expect(p4entries.size).to eq(2)
-      p4=p4entries.select{|x|x.reason=='Ineligible / no protocol treatment'}.first
-      expect(p4.participant_count).to eq(1)
     end
   end
 
@@ -78,9 +69,9 @@
       expect(b1_male_baselines.size).to eq(1)
       expect(b1_male_baselines.first.measure_value).to eq('298')
 
-      study=Asker.new.create_study(nct_id)
       expect(study.expected_groups.size).to eq(9)
       expect(study.overall_officials.size).to eq(10)
+      expect(study.outcomes.size).to eq(162)
       expect(study.facilities.size).to eq(4)
       expect(study.references.size).to eq(2)
       expect(study.result_contacts.size).to eq(1)
@@ -97,7 +88,7 @@
       expect(study.biospec_retention).to eq('Samples With DNA')
       expect(study.biospec_description).to eq('analysis of blood samples before and 4 weeks postvaccination')
       expect(study.has_expanded_access).to eq(false)
-      study.summary.should include("The purpose of this study is to learn how the immune system works in response to vaccines")
+			expect(study.summary).to include("The purpose of this study is to learn how the immune system works in response to vaccines")
     end
   end
 
@@ -174,35 +165,15 @@
       expect(b8_baseline_zscore.upper_limit).to eq(nil)
       expect(b8_baseline_zscore.description).to eq('Weight-for-age Z-score at trial enrollment (antiretroviral therapy initiation).')
       expect(b8_baseline_zscore.measure_description).to eq('Different randomized comparison')
-
-      expect(study.periods.first.nct_id).to eq(nct_id)
-      expect(study.periods.size).to eq(4)
-      expect(study.periods.map(&:title)).to include('Initial Enrolment: CDM vs LCM')
-      period=(study.periods.select{|p| p.title=='Initial Enrolment: CDM vs LCM'}).first
-      expect(period.milestones.size).to eq(27)
-      started=(period.milestones.select{|p| p.title=='STARTED'})
-      expect(started.size).to eq(9)
-
-      p1_started=(started.select{|p|p.ctgov_group_id=='P1'}).first
       p1_col=(study.milestones.select{|g|g.ctgov_group_id=='P1'})
-      p1=(p1_col.select{|g|g.title=='STARTED' && g.period.try(:title)=='Initial Enrolment: CDM vs LCM'}).first
-      p1_period_col=p1_col.select{|x|x.period.title=='Subsequent Cotrimoxazole Randomization'}
-
-      expect(p1_started.participant_count).to eq(606)
       expect(p1_col.size).to eq(12)
-      expect(p1_period_col.size).to eq(3)
-      expect(p1_period_col.collect{|x|x.title}.include? 'STARTED').to eq(true)
-      expect(p1_period_col.collect{|x|x.title}.include? 'NOT COMPLETED').to eq(true)
-      expect(p1_period_col.collect{|x|x.title}.include? 'COMPLETED').to eq(true)
-      expect(p1.description).to eq('Factorial randomization at enrolment: Number of eligible children randomized to this group in ARROW')
-      expect(p1.participant_count).to eq(606)
-      expect(study.actual_outcomes.size).to eq(162)
-      outcomes=(study.actual_outcomes.select{|g|g.title=="LCM vs CDM: Disease Progression to a New WHO Stage 4 Event or Death"})
+      expect(study.outcomes.size).to eq(162)
+      outcomes=(study.outcomes.select{|g|g.title=="LCM vs CDM: Disease Progression to a New WHO Stage 4 Event or Death"})
       expect(outcomes.size).to eq(2)
-      outcome=outcomes.select{|x|x.ctgov_group_id=='O1'}.first
+      outcome=outcomes.select{|x|x.group_title=='Clinically Driven Monitoring (CDM)'}.first
       expect(outcome.outcome_type).to eq('Primary')
       expect(outcome.safety_issue).to eq('No')
-      expect(outcome.group_title).to eq('Clinically Driven Monitoring (CDM)')
+      expect(outcome.group.ctgov_group_id).to eq('P1')
       expect(outcome.population).to eq('All randomized participants (time-to-event)')
       expect(outcome.description).to eq('Number of participants with disease progression to a new WHO stage 4 event or death, to be analysed using time-to-event methods')
       expect(outcome.group_description).to eq('Participants were examined by a doctor and had routine full blood count with white cell differential, lymphocyte subsets (CD4, CD8), biochemistry tests (bilirubin, urea, creatinine, aspartate aminotransferase, alanine aminotransferase) at screening, randomisation (lymphocytes only), weeks 4, 8, and 12, then every 12 weeks. Screening results were used to assess eligibility. All subsequent results at and after randomisation were only returned if requested for clinical management (authorised by centre project leaders); haemoglobin results at week 8 were automatically returned on the basis of early anaemia in a previous adult trial as were grade 4 laboratory toxicities (protocol safety criteria). Total lymphocytes and CD4 tests were never returned for CDM participants, but for all children other investigations (including tests from the routine panels) could be requested and concomitant drugs prescribed, as clinically indicated at extra patient-initiated or scheduled visits.')
@@ -296,18 +267,17 @@
       expect(study.expected_outcomes.size).to eq(5)
       expect(study.expected_outcomes.first.nct_id).to eq(nct_id)
 
-      o=study.outcomes('expected','secondary').first
-      expect(o.nct_id).to eq(nct_id)
       expect(study.secondary_ids.size).to eq(1)
       expect(study.secondary_ids.map(&:secondary_id)).to include('00-CH-0134')
-      expected_primary_outcome=study.outcomes('expected','primary').first
+      study.outcomes.each{|o|puts o.inspect if o.type=='Primary'}
+      expected_primary_outcome=study.outcomes.select{|o|o.type=='Primary' && o.group_title='Placebo Plus Weight Reduction Counseling'}.first
       expect(expected_primary_outcome.nct_id).to eq(nct_id)
       expect(expected_primary_outcome.time_frame).to eq('6 months')
       expect(expected_primary_outcome.safety_issue).to eq('No')
-      expect(expected_primary_outcome.measure).to eq('Changes in Body Weight as Determined by Body Mass Index-standard Deviation Score (BMI-SDS).')
+      expect(expected_primary_outcome.title).to eq('Changes in Body Weight as Determined by Body Mass Index-standard Deviation Score (BMI-SDS).')
       expect(study.eligibility.criteria.length).to eq(2337)
-      expect(study.links.first.nct_id).to eq(nct_id)
       expect(study.links.size).to eq(1)
+      expect(study.links.first.nct_id).to eq(nct_id)
       expect(study.links.map(&:url)).to include('http://clinicalstudies.info.nih.gov/detail/B_2000-CH-0134.html')
       expect(study.links.map(&:description)).to include('NIH Clinical Center Detailed Web Page')
       expect(study.references.first.nct_id).to eq(nct_id)

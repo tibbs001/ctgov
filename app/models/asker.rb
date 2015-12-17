@@ -8,7 +8,7 @@ require 'zip'
 		attr_accessor :existing_nct_ids, :should_refresh
 
 		def existing_nct_ids
-			@existing_nct_ids ||= Study.all.collect{|s|s.nct_id}
+			@existing_nct_ids ||= Study.all_nctids
 		end
 
 		def self.create_all_studies(opts={})
@@ -29,11 +29,8 @@ require 'zip'
 			end
 			nct_ids=[]
 			search_datestamp=Time.now
-			zf="search_results/#{term}.zip"
-			query_url="https://clinicaltrials.gov/search?term=#{term}&studyxml=true"
-			results=Faraday.get(query_url)
-			File.open(zf,'wb') {|file|file.write(results.body)}
-			Zip::ZipFile.open(zf){|zip_file|
+			file_name=pull_data_from_ctgov(opts)
+			Zip::ZipFile.open(file_name){|zip_file|
 				zip_file.each {|f|
 					nct_id=f.name.split('.').first
 					create_study(nct_id)
@@ -99,7 +96,7 @@ require 'zip'
 
 		def get_study(nct_id)
 			xml=Nokogiri::XML(Faraday.get("http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true").body)
-			StudyTemplate.new({:xml => xml,:nct_id=>nct_id})
+			StudyTemplate.new({:xml=>xml,:nct_id=>nct_id})
 		end
 
 		def create_search_result(opts)
@@ -118,8 +115,11 @@ require 'zip'
 			  @should_refresh=opts[:should_refresh]
 			end
 			if Study.where('nct_id=?',nct_id).size > 0
-			  return if !should_refresh
-			  remove_study({:nct_id=>nct_id,:msg=>'remove existing pre-creation'})
+			  if !should_refresh
+					"Exists and should not refresh.  Do nothing"
+				else
+			    remove_study({:nct_id=>nct_id,:msg=>'remove existing pre-creation'})
+				end
 			end
 
 			begin

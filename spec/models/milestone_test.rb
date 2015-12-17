@@ -1,57 +1,38 @@
   RSpec.describe Milestone do
-    it "should save milestones with correct period info" do
-      nct_id='NCT00006409'
-      study=Asker.new.create_study(nct_id)
-      milestones=study.milestones
-      expect(milestones.select{|m|m.period.title=='Baseline'}.size).to eq(18)
-      expect(milestones.select{|m|m.period.title=='Post-2 Year Intervention'}.size).to eq(18)
-      expect(milestones.select{|m|m.period.title=='Post-3 Year Intervention'}.size).to eq(18)
-    end
+		it "should link milestones and drop_withdrawals to the group" do
+			nct_id='NCT00006409'
+			xml=Nokogiri::XML(Faraday.get("http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true").body)
+			opts={:xml=>xml,:nct_id=>nct_id,:study_xml=>xml}
+			groups=Group.create_all_from(opts)
+			g1_array=groups.select{|g|g.ctgov_group_enumerator==1}
+			expect(g1_array.size).to eq(1)
+			g1=g1_array.first
+			expect(g1.milestones.size).to eq(9)
+			expect(g1.drop_withdrawals.size).to eq(3)
+			baseline=g1.milestones.select{|g|g.period_title=='Baseline'}
+			expect(baseline.size).to eq(3)
+			started=g1.milestones.select{|m|m.period_title=='Baseline' && m.title=='STARTED'}
+			completed=g1.milestones.select{|m|m.period_title=='Baseline' && m.title=='COMPLETED'}
+			not_completed=g1.milestones.select{|m|m.period_title=='Baseline' && m.title=='NOT COMPLETED'}
+			expect(started.size).to eq(1)
+			expect(completed.size).to eq(1)
+			expect(not_completed.size).to eq(1)
+			expect(started.first.participant_count).to eq(865)
+			expect(completed.first.participant_count).to eq(817)
+			expect(not_completed.first.participant_count).to eq(48)
 
-    it "should save milestones with correct participant count info" do
-      nct_id='NCT02028676'
-      study=Asker.new.create_study(nct_id)
-      milestones=study.milestones.select{|m|m.period.title=='Initial Enrolment: Induction ART'}
-      expect(milestones.size).to eq(27)
-      started_milestones=milestones.select{|m|m.title=='STARTED'}
-      completed_milestones=milestones.select{|m|m.title=='COMPLETED'}
-      expect(started_milestones.size).to eq(9)
-      p5_started_milestone=started_milestones.select{|m|m.ctgov_group_enumerator==5}.first
-      p9_started_milestone=started_milestones.select{|m|m.ctgov_group_enumerator==9}.first
-      expect(p5_started_milestone.participant_count).to eq(405)
-      expect(p9_started_milestone.participant_count).to eq(0)
-      p5_completed_milestone=completed_milestones.select{|m|m.ctgov_group_enumerator==5}.first
-      p9_completed_milestone=completed_milestones.select{|m|m.ctgov_group_enumerator==9}.first
-      expect(p5_completed_milestone.participant_count).to eq(405)
-      expect(p9_completed_milestone.participant_count).to eq(0)
-
-      milestones=study.milestones.select{|m|m.period.title=='Subsequent Once vs Twice Daily ABC+3TC'}
-      expect(milestones.size).to eq(27)
-      started_milestones=milestones.select{|m|m.title=='STARTED'}
-      completed_milestones=milestones.select{|m|m.title=='COMPLETED'}
-      expect(started_milestones.size).to eq(9)
-      p5_started_milestone=started_milestones.select{|m|m.ctgov_group_enumerator==5}.first
-      p9_started_milestone=started_milestones.select{|m|m.ctgov_group_enumerator==9}.first
-      expect(p5_started_milestone.participant_count).to eq(0)
-      expect(p9_started_milestone.participant_count).to eq(0)
-      p5_completed_milestone=completed_milestones.select{|m|m.ctgov_group_enumerator==5}.first
-      p9_completed_milestone=completed_milestones.select{|m|m.ctgov_group_enumerator==9}.first
-      expect(p5_completed_milestone.participant_count).to eq(0)
-      expect(p9_completed_milestone.participant_count).to eq(0)
-
-      milestones=study.milestones.select{|m|m.period.title=='Subsequent Cotrimoxazole Randomization'}
-      expect(milestones.size).to eq(27)
-      started_milestones=milestones.select{|m|m.title=='STARTED'}
-      completed_milestones=milestones.select{|m|m.title=='COMPLETED'}
-      expect(started_milestones.size).to eq(9)
-      p5_started_milestone=started_milestones.select{|m|m.ctgov_group_enumerator==5}.first
-      p9_started_milestone=started_milestones.select{|m|m.ctgov_group_enumerator==9}.first
-      expect(p5_started_milestone.participant_count).to eq(0)
-      expect(p9_started_milestone.participant_count).to eq(382)
-      p5_completed_milestone=completed_milestones.select{|m|m.ctgov_group_enumerator==5}.first
-      p9_completed_milestone=completed_milestones.select{|m|m.ctgov_group_enumerator==9}.first
-      expect(p5_completed_milestone.participant_count).to eq(0)
-      expect(p9_completed_milestone.participant_count).to eq(382)
-
-    end
+			baseline=g1.drop_withdrawals.select{|g|g.period_title=='Baseline'}
+      expect(baseline.size).to eq(1)
+			violations=g1.drop_withdrawals.select{|g|g.reason=='Protocol Violation'}
+      expect(violations.size).to eq(3)
+			dw=DropWithdrawal.where('nct_id=? and ctgov_group_id=? and reason=?',nct_id,'P6','Protocol Violation').first
+			expect(dw.participant_count).to eq(62)
+			dw=DropWithdrawal.where('nct_id=? and ctgov_group_id=? and reason=?',nct_id,'P5','Protocol Violation').first
+			expect(dw.participant_count).to eq(62)
+			dw=DropWithdrawal.where('nct_id=? and ctgov_group_id=? and reason=?',nct_id,'P4','Protocol Violation').first
+			expect(dw.participant_count).to eq(0)
+			dw=DropWithdrawal.where('nct_id=? and ctgov_group_id=? and period_title=?',nct_id,'P1','Baseline').first
+			expect(dw.participant_count).to eq(48)
+			expect(dw.group.ctgov_group_id).to eq(dw.ctgov_group_id)
+		end
   end

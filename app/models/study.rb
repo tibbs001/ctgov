@@ -3,16 +3,17 @@ require 'csv'
 		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
 
 		self.primary_key = 'nct_id'
-		has_one  :brief_summary,        :foreign_key => 'nct_id', dependent: :destroy
-		has_one  :design,               :foreign_key => 'nct_id', dependent: :destroy
-		has_one  :detailed_description, :foreign_key => 'nct_id', dependent: :destroy
-		has_one  :eligibility,          :foreign_key => 'nct_id', dependent: :destroy
-		has_one  :result_detail,        :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :brief_summary,         :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :design,                :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :detailed_description,  :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :eligibility,           :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :participant_flow,      :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :result_detail,         :foreign_key => 'nct_id', dependent: :destroy
 
 		has_many :expected_groups,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :expected_outcomes,     :foreign_key => 'nct_id', dependent: :destroy
-		has_many :actual_groups,         :foreign_key => 'nct_id', dependent: :destroy
-		has_many :actual_outcomes,       :foreign_key => 'nct_id', dependent: :destroy
+		has_many :groups,                :foreign_key => 'nct_id', dependent: :destroy
+		has_many :outcomes,              :foreign_key => 'nct_id', dependent: :destroy
 		has_many :baseline_measures,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :browse_conditions,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :browse_interventions,  :foreign_key => 'nct_id', dependent: :destroy
@@ -42,12 +43,8 @@ require 'csv'
 		scope :completed_since, lambda {|cdate| where("completion_date >= ?", cdate )}
 		scope :sponsored_by,    lambda {|agency| joins(:sponsors).where("sponsors.agency LIKE ?", "#{agency}%")}
 
-		def self.sample
-			find_by_nct_id("NCT00023673")
-		end
-
-		def id
-			nct_id
+		def self.all_nctids
+		  all.collect{|s|s.nct_id}
 		end
 
 		def create_from(hash)
@@ -72,11 +69,11 @@ require 'csv'
 			brief_summary.description
 		end
 
-		def outcomes(exp_act='actual',prim_sec='primary')
+		def all_outcomes(exp_act='actual',prim_sec='primary')
 			if exp_act=='expected'
 				expected_outcomes.select {|o| o.outcome_type==prim_sec}
 			else
-				actual_outcomes.select {|o| o.outcome_type==prim_sec}
+				outcomes.select{|o|o.outcome_type==prim_sec}
 			end
 		end
 
@@ -140,11 +137,6 @@ require 'csv'
 			facilities.size
 		end
 
-		def groups
-			# short-hand name
-			actual_groups
-		end
-
 		def ctms_study
 			CtmsStudy.where('nct_id=?',nct_id).first
 		end
@@ -172,7 +164,7 @@ require 'csv'
 		end
 
 		def product_actual
-			actual_groups.collect{|c|c.title}.join(",")
+			groups.collect{|c|c.title}.join(",")
 		end
 
 		def self.create_all

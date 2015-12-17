@@ -101,8 +101,4 @@ require 'active_support/all'
 			str.tr("\n\t ", "")
 		end
 
-		def group
-			ActualGroup.where("nct_id=? and ctgov_group_enumerator=?",nct_id,ctgov_group_enumerator).try(:first)
-		end
-
 	end
