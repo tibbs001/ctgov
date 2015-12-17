@@ -310,20 +310,22 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   end
 
   create_table "outcomes", force: :cascade do |t|
-    t.string   "outcome_type",      limit: 255
-    t.text     "group_title",       limit: 65535
-    t.text     "group_description", limit: 65535
-    t.string   "title",             limit: 255
-    t.text     "description",       limit: 65535
-    t.string   "measure",           limit: 255
-    t.string   "time_frame",        limit: 255
-    t.string   "safety_issue",      limit: 255
-    t.text     "population",        limit: 65535
-    t.integer  "participant_count", limit: 4
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.string   "nct_id",            limit: 255
-    t.integer  "group_id",          limit: 4
+    t.string   "outcome_type",           limit: 255
+    t.string   "ctgov_group_id",         limit: 255
+    t.integer  "ctgov_group_enumerator", limit: 4
+    t.text     "group_title",            limit: 65535
+    t.text     "group_description",      limit: 65535
+    t.string   "title",                  limit: 255
+    t.text     "description",            limit: 65535
+    t.string   "measure",                limit: 255
+    t.string   "time_frame",             limit: 255
+    t.string   "safety_issue",           limit: 255
+    t.text     "population",             limit: 65535
+    t.integer  "participant_count",      limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.string   "nct_id",                 limit: 255
+    t.integer  "group_id",               limit: 4
   end
 
   create_table "overall_officials", force: :cascade do |t|

@@ -1,10 +1,9 @@
 	require 'active_support/all'
 	class StudyTemplate
-		attr_accessor :xml, :study_xml
+		attr_accessor :xml
 
 		def initialize(opts)
 			@xml=opts[:xml]
-			@study_xml=opts[:study_xml]
 		end
 
 		def nct_id

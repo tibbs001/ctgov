@@ -68,6 +68,8 @@ class CreateResults < ActiveRecord::Migration
 
     create_table :outcomes do |t|
       t.string  :outcome_type
+      t.string  :ctgov_group_id
+      t.integer :ctgov_group_enumerator
       t.text    :group_title
       t.text    :group_description
       t.string  :title

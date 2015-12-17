@@ -43,6 +43,8 @@
 
 		def attribs
 			{
+			 :ctgov_group_id => get_attribute('group_id'),
+			 :ctgov_group_enumerator => integer_in(get_attribute('group_id')),
 			 :group_description => get('description'),
 			 :group_title => get('title'),
 			 :participant_count => get_attribute('count').to_i,

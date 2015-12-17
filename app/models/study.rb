@@ -42,12 +42,8 @@ require 'csv'
 		scope :completed_since, lambda {|cdate| where("completion_date >= ?", cdate )}
 		scope :sponsored_by,    lambda {|agency| joins(:sponsors).where("sponsors.agency LIKE ?", "#{agency}%")}
 
-		def self.sample
-			find_by_nct_id("NCT00023673")
-		end
-
-		def id
-			nct_id
+		def self.all_nctids
+		  all.collect{|s|s.nct_id}
 		end
 
 		def create_from(hash)
