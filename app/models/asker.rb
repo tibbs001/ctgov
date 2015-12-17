@@ -11,10 +11,6 @@ require 'zip'
 			@existing_nct_ids ||= Study.all_nctids
 		end
 
-		def self.all_nctids
-		  all.collect{|s|s.nct_id}
-		end
-
 		def self.create_all_studies(opts={})
 			self.new.create_all_studies(opts)
 		end
@@ -119,8 +115,11 @@ require 'zip'
 			  @should_refresh=opts[:should_refresh]
 			end
 			if Study.where('nct_id=?',nct_id).size > 0
-			  return if !should_refresh
-			  remove_study({:nct_id=>nct_id,:msg=>'remove existing pre-creation'})
+			  if !should_refresh
+					"Exists and should not refresh.  Do nothing"
+				else
+			    remove_study({:nct_id=>nct_id,:msg=>'remove existing pre-creation'})
+				end
 			end
 
 			begin
