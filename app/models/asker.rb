@@ -105,7 +105,8 @@ require 'zip'
 		end
 
 		def get_study(nct_id)
-			xml=Nokogiri::XML(Faraday.get("http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true").body)
+			url="http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true"
+			xml=Nokogiri::XML(call_to_ctgov(url))
 			StudyTemplate.new({:xml=>xml,:nct_id=>nct_id})
 		end
 
@@ -166,15 +167,15 @@ require 'zip'
 
 		def ctgov_pages
 			collection=[]
-			response = Faraday.get('https://clinicaltrials.gov/ct2/crawl').body
-			Nokogiri::HTML(response).css('.layout_table').search('a').each { |link| collection << link['href'] }
+			response=call_to_ctgov('https://clinicaltrials.gov/ct2/crawl')
+			Nokogiri::HTML(response).css('.layout_table').search('a').each {|link| collection << link['href']}
 			collection
 		end
 
 		def call_to_ctgov(query_url)
 			begin
 			  tries=50
-				response = Faraday.get(query_url).body
+				Faraday.get(query_url).body
 			rescue => error
 				tries = tries-1
 				if tries > 0
