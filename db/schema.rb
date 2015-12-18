@@ -136,7 +136,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string "outcome_type", limit: 255
     t.string "title",        limit: 255
     t.string "measure",      limit: 255
-    t.string "time_frame",   limit: 255
+    t.text   "time_frame",   limit: 65535
     t.string "safety_issue", limit: 255
     t.string "population",   limit: 255
     t.text   "description",  limit: 65535

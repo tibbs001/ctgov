@@ -11,6 +11,16 @@ require 'zip'
 			@existing_nct_ids ||= Study.all_nctids
 		end
 
+		def load_studies_from_file(file_name='search_results/all.zip')
+			Zip::ZipFile.open(file_name){|zip_file|
+				zip_file.each {|f|
+					nct_id=f.name.split('.').first
+					xml=Nokogiri::XML(zip_file.read(f))
+			    Study.new.create_from(StudyTemplate.new({:xml=>xml,:nct_id=>nct_id}).attribs)
+				}
+      }
+		end
+
 		def self.create_all_studies(opts={})
 			self.new.create_all_studies(opts)
 		end

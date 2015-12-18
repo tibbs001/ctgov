@@ -149,7 +149,7 @@ class CreateStudies < ActiveRecord::Migration
       t.string :outcome_type
       t.string :title
       t.string :measure
-      t.string :time_frame
+      t.text   :time_frame
       t.string :safety_issue
       t.string :population
       t.text   :description
