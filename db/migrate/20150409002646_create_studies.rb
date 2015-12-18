@@ -148,7 +148,7 @@ class CreateStudies < ActiveRecord::Migration
     create_table :expected_outcomes do |t|
       t.string :outcome_type
       t.string :title
-      t.string :measure
+      t.text   :measure
       t.text   :time_frame
       t.string :safety_issue
       t.string :population

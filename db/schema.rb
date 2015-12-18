@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   create_table "expected_outcomes", force: :cascade do |t|
     t.string "outcome_type", limit: 255
     t.string "title",        limit: 255
-    t.string "measure",      limit: 255
+    t.text   "measure",      limit: 65535
     t.text   "time_frame",   limit: 65535
     t.string "safety_issue", limit: 255
     t.string "population",   limit: 255
