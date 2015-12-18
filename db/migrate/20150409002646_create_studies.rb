@@ -68,7 +68,7 @@ class CreateStudies < ActiveRecord::Migration
       t.string :contact_backup_name
       t.string :contact_backup_phone
       t.string :contact_backup_email
-      t.string :investigator_name
+      t.text   :investigator_name
       t.string :investigator_role
       t.timestamps null: false
     end

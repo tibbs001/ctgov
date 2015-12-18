@@ -158,10 +158,10 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "contact_backup_name",  limit: 255
     t.string   "contact_backup_phone", limit: 255
     t.string   "contact_backup_email", limit: 255
-    t.string   "investigator_name",    limit: 255
+    t.text     "investigator_name",    limit: 65535
     t.string   "investigator_role",    limit: 255
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "nct_id",               limit: 255
   end
 
