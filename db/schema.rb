@@ -134,7 +134,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
 
   create_table "expected_outcomes", force: :cascade do |t|
     t.string "outcome_type", limit: 255
-    t.string "title",        limit: 255
+    t.text   "title",        limit: 65535
     t.text   "measure",      limit: 65535
     t.text   "time_frame",   limit: 65535
     t.string "safety_issue", limit: 255
@@ -159,7 +159,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "contact_backup_phone", limit: 255
     t.string   "contact_backup_email", limit: 255
     t.text     "investigator_name",    limit: 65535
-    t.string   "investigator_role",    limit: 255
+    t.text     "investigator_role",    limit: 65535
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
     t.string   "nct_id",               limit: 255
@@ -225,8 +225,8 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "keywords", ["nct_id"], name: "index_keywords_on_nct_id", using: :btree
 
   create_table "links", force: :cascade do |t|
-    t.string "url",         limit: 255
-    t.string "description", limit: 255
+    t.text   "url",         limit: 65535
+    t.text   "description", limit: 65535
     t.string "nct_id",      limit: 255
   end
 
@@ -269,20 +269,22 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "title",                       limit: 255
     t.string   "non_inferiority",             limit: 255
     t.text     "non_inferiority_description", limit: 65535
-    t.string   "p_value",                     limit: 255
+    t.decimal  "p_value",                                   precision: 6, scale: 6
     t.string   "param_type",                  limit: 255
-    t.string   "param_value",                 limit: 255
+    t.decimal  "param_value",                               precision: 6, scale: 6
+    t.string   "dispersion_type",             limit: 255
+    t.decimal  "dispersion_value",                          precision: 6, scale: 6
     t.string   "ci_percent",                  limit: 255
     t.string   "ci_n_sides",                  limit: 255
-    t.string   "ci_lower_limit",              limit: 255
-    t.string   "ci_upper_limit",              limit: 255
+    t.decimal  "ci_lower_limit",                            precision: 6, scale: 6
+    t.decimal  "ci_upper_limit",                            precision: 6, scale: 6
     t.string   "method",                      limit: 255
     t.text     "description",                 limit: 65535
     t.text     "group_description",           limit: 65535
     t.text     "method_description",          limit: 65535
     t.text     "estimate_description",        limit: 65535
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.datetime "created_at",                                                        null: false
+    t.datetime "updated_at",                                                        null: false
     t.string   "nct_id",                      limit: 255
     t.integer  "outcome_id",                  limit: 4
     t.integer  "group_id",                    limit: 4

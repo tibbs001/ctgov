@@ -69,7 +69,7 @@ class CreateStudies < ActiveRecord::Migration
       t.string :contact_backup_phone
       t.string :contact_backup_email
       t.text   :investigator_name
-      t.string :investigator_role
+      t.text   :investigator_role
       t.timestamps null: false
     end
     add_column :facilities, :nct_id, :string, references: :studies
@@ -147,7 +147,7 @@ class CreateStudies < ActiveRecord::Migration
 
     create_table :expected_outcomes do |t|
       t.string :outcome_type
-      t.string :title
+      t.text   :title
       t.text   :measure
       t.text   :time_frame
       t.string :safety_issue
@@ -211,8 +211,8 @@ class CreateStudies < ActiveRecord::Migration
 		add_index  :oversight_authorities, :nct_id
 
     create_table :links do |t|
-      t.string :url
-      t.string :description
+      t.text   :url
+      t.text   :description
     end
     add_column :links, :nct_id, :string, references: :studies
 		add_index  :links, :nct_id

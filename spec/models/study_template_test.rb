@@ -6,6 +6,7 @@
       expect(study.nct_id).to eq(nct_id)
       expect(study.limitations_and_caveats).to eq('This study was originally designed to escalate 3DRT via increasing doses per fraction. However, due to excessive toxicity at dose level 1 (75.25 Gy, 2.15 Gy/fraction), the protocol was amended in January 2003 to de-escalate 3DRT dose.')
       expect(study.outcomes.size).to eq(6)
+			study.groups.each {|x| puts x.inspect}
       expect(study.groups.size).to eq(4)
       g1=study.groups.select{|g|g.ctgov_group_enumerator==1}.first
       g2=study.groups.select{|g|g.ctgov_group_enumerator==2}.first
@@ -185,21 +186,21 @@
       expect(measure.param).to eq('Number')
       expect(measure.units).to eq('participants')
       expect(measure.measure_value).to eq('606')
-      expect(outcome.analyses.size).to eq(4)
+      expect(outcome.analyses.size).to eq(2)
 
-      analyses=(outcome.analyses.select{|m| m.method=='Comparison of poisson rates'})
-      expect(analyses.size).to eq(2)
+      analyses=(outcome.analyses.select{|m|m.method=='Comparison of poisson rates'})
+      expect(analyses.size).to eq(1)
       analysis=analyses.select{|x|x.ctgov_group_enumerator==1}.first
-      expect(analysis.p_value).to eq('0.43')
+      expect(analysis.p_value).to eq(0.43)
       expect(analysis.non_inferiority).to eq('Yes')
       expect(analysis.non_inferiority_description).to eq('With assumptions detailed above, &gt;90% power and one-sided alpha=0.05, 1160 children would be required to exclude an increase in progression rate of 1.6% from 2.5% to 4.1% per year in the CDM arm (upper 95% confidence limit of LCM: CDM hazard ratio 1.64).')
       expect(analysis.method_description).to eq('Statistical analysis plan specified that p-value was to be calculated from the log-rank test, so not provided for the risk difference')
       expect(analysis.param_type).to eq('Risk Difference (RD)')
-      expect(analysis.param_value).to eq('0.32')
+      expect(analysis.param_value).to eq(0.32)
       expect(analysis.ci_percent).to eq('95')
       expect(analysis.ci_n_sides).to eq('2-Sided')
-      expect(analysis.ci_lower_limit).to eq('-0.47')
-      expect(analysis.ci_upper_limit).to eq('1.12')
+      expect(analysis.ci_lower_limit).to eq(-0.47)
+      expect(analysis.ci_upper_limit).to eq(1.12)
       expect(analysis.estimate_description).to eq('Difference is CDM minus LCM')
     end
 
