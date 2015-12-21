@@ -55,6 +55,14 @@
 			@outer_xml=opts[:outer_xml]
 			gid=opts[:xml].attribute('group_id').try(:value)
 			opts[:groups].each{|g| self.group=g if g.ctgov_group_enumerator==integer_in(gid)}
+
+			# found case where groups were not defined in participant_flow tag, but referenced in outcomes.  In that case, create a group for this outcome.
+			# But if this outcome doesn't define any groups (gid is nil), then just link the outcome to the study and not to any groups.
+			if !gid.nil? && self.group.nil?
+				g=Group.create_from(opts)
+				self.group=g
+				opts[:groups] << g
+			end
 			self.outcome_type = opts[:type]
 			self.title        = opts[:title]
 			self.time_frame   = opts[:time_frame]
@@ -62,18 +70,9 @@
 			self.population   = opts[:population]
 			self.description  = opts[:description]
 			super
-			self.outcome_measures=OutcomeMeasure.create_all_from(opts.merge(:outcome=>self,:xml=>outer_xml,:group_id_of_interest=>gid))
-			self.outcome_analyses=OutcomeAnalysis.create_all_from(opts.merge(:outcome=>self,:xml=>outer_xml,:group_id_of_interest=>gid))
+			self.outcome_measures=OutcomeMeasure.create_all_from(opts.merge(:outcome=>self,:xml=>outer_xml,:group_id_of_interest=>gid)).compact
+			self.outcome_analyses=OutcomeAnalysis.create_all_from(opts.merge(:outcome=>self,:xml=>outer_xml)).compact
 			self
-		end
-
-		##############################################################################################
-		def milestones
-			@milesones ||=Milestone.where("nct_id=? and ctgov_group_enumerator=?",nct_id,ctgov_group_enumerator)
-		end
-
-		def drop_withdrawals
-			@drop_withdrawals ||=DropWithdrawal.where("nct_id=? and ctgov_group_enumerator=?",nct_id,ctgov_group_enumerator)
 		end
 
 		def measures

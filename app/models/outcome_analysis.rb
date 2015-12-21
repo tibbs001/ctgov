@@ -15,6 +15,8 @@ class OutcomeAnalysis < StudyRelationship
 			opts[:p_value]=xml.xpath('p_value').inner_html
 			opts[:param_type]=xml.xpath('param_type').inner_html
 			opts[:param_value]=xml.xpath('param_value').inner_html
+			opts[:dispersion_type]=xml.xpath('dispersion_type').inner_html
+			opts[:dispersion_value]=xml.xpath('dispersion_value').inner_html
 			opts[:ci_percent]=xml.xpath('ci_percent').inner_html
 			opts[:ci_n_sides]=xml.xpath('ci_n_sides').inner_html
 			opts[:ci_lower_limit]=xml.xpath('ci_lower_limit').inner_html
@@ -37,15 +39,18 @@ class OutcomeAnalysis < StudyRelationship
   end
 
   def create_from(opts)
-    return nil if opts[:outcome].group.ctgov_group_enumerator != integer_in(opts[:group_id_of_interest])
-    self.outcome=opts[:outcome]
-    self.group=self.outcome.group
+		gid=integer_in(opts[:xml].inner_html)
+		return if gid != opts[:outcome].ctgov_group_enumerator
+		self.outcome=opts[:outcome]
+		self.group=self.outcome.group
     self.title=opts[:title]
     self.non_inferiority=opts[:non_inferiority]
     self.non_inferiority_description=opts[:non_inferiority_description]
     self.p_value=opts[:p_value]
     self.param_type=opts[:param_type]
     self.param_value=opts[:param_value]
+    self.dispersion_type=opts[:dispersion_type]
+    self.dispersion_value=opts[:dispersion_value]
     self.ci_percent=opts[:ci_percent]
     self.ci_n_sides=opts[:ci_n_sides]
     self.ci_lower_limit=opts[:ci_lower_limit]

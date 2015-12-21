@@ -8,8 +8,10 @@
 		has_many :drop_withdrawals, dependent: :destroy
 
 		def self.create_all_from(opts)
-			opts[:xml]=opts[:xml].xpath('//participant_flow')
+			opts[:xml]=opts[:study_xml].xpath('//participant_flow')
 			groups=pop_create(opts.merge(:name=>'group'))
+			opts[:xml]=opts[:study_xml].xpath('//outcome_list')
+			additional_groups=pop_create(opts.merge(:name=>'group'))
 			opts[:groups]=groups
 			Outcome.create_all_from(opts)
 			Milestone.create_all_from(opts)
