@@ -27,7 +27,7 @@ class CreateAdminTables < ActiveRecord::Migration
       t.string  :search_term
       t.string  :nct_id
       t.integer :order
-      t.decimal :score, :precision => 6, :scale => 6
+      t.decimal :score, :precision => 6, :scale => 4
       t.timestamps null: false
     end
 

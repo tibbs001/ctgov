@@ -110,15 +110,15 @@ class CreateResults < ActiveRecord::Migration
       t.string  :title
       t.string  :non_inferiority
       t.text    :non_inferiority_description
-      t.decimal :p_value, :precision => 6, :scale => 6
+      t.decimal :p_value, :precision => 15, :scale => 10
       t.string  :param_type
-      t.decimal :param_value, :precision => 6, :scale => 6
+      t.decimal :param_value, :precision => 15, :scale => 10
 			t.string  :dispersion_type
-      t.decimal :dispersion_value, :precision => 6, :scale => 6
+      t.decimal :dispersion_value, :precision => 15, :scale => 10
       t.string  :ci_percent
       t.string  :ci_n_sides
-      t.decimal :ci_lower_limit, :precision => 6, :scale => 6
-      t.decimal :ci_upper_limit, :precision => 6, :scale => 6
+      t.decimal :ci_lower_limit, :precision => 15, :scale => 10
+      t.decimal :ci_upper_limit, :precision => 15, :scale => 10
       t.string  :method
       t.text    :description
       t.text    :group_description
