@@ -14,9 +14,14 @@ require 'zip'
 		def load_studies_from_file(file_name='search_results/all.zip')
 			Zip::ZipFile.open(file_name){|zip_file|
 				zip_file.each {|f|
-					nct_id=f.name.split('.').first
-					xml=Nokogiri::XML(zip_file.read(f))
-			    Study.new.create_from(StudyTemplate.new({:xml=>xml,:nct_id=>nct_id}).attribs)
+					begin
+					  nct_id=f.name.split('.').first
+					  xml=Nokogiri::XML(zip_file.read(f))
+			      Study.new.create_from(StudyTemplate.new({:xml=>xml,:nct_id=>nct_id}).attribs)
+			    rescue => error
+			      e=LoadEvent.new(:nct_id=>nct_id,:event_type=>'express load',:status=>'failed',:description=>error)
+				    e.save!
+					end
 				}
       }
 		end
