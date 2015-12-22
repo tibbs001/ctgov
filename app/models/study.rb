@@ -28,7 +28,6 @@ require 'csv'
 		has_many :outcome_measures,      :foreign_key => 'nct_id', dependent: :destroy
 		has_many :overall_officials,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :oversight_authorities, :foreign_key => 'nct_id', dependent: :destroy
-		has_many :periods,               :foreign_key => 'nct_id', dependent: :destroy
 		has_many :reported_events,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :responsible_parties,   :foreign_key => 'nct_id', dependent: :destroy
 		has_many :result_agreements,     :foreign_key => 'nct_id', dependent: :destroy
