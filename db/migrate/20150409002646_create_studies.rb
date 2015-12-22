@@ -167,7 +167,7 @@ class CreateStudies < ActiveRecord::Migration
 
     create_table :responsible_parties do |t|
       t.string :responsible_party_type
-      t.string :affiliation
+      t.text   :affiliation
       t.string :name
       t.string :title
     end

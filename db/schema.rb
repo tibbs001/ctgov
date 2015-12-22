@@ -277,7 +277,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "ci_percent",                  limit: 255
     t.string   "ci_n_sides",                  limit: 255
     t.decimal  "ci_lower_limit",                            precision: 15, scale: 10
-    t.decimal  "ci_upper_limit",                            precision: 15, scale: 10
+    t.decimal  "ci_upper_limit",                            precision: 16, scale: 8
     t.string   "method",                      limit: 255
     t.text     "description",                 limit: 65535
     t.text     "group_description",           limit: 65535
@@ -320,7 +320,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "title",                  limit: 255
     t.text     "description",            limit: 65535
     t.string   "measure",                limit: 255
-    t.string   "time_frame",             limit: 255
+    t.text     "time_frame",             limit: 65535
     t.string   "safety_issue",           limit: 255
     t.text     "population",             limit: 65535
     t.integer  "participant_count",      limit: 4
@@ -385,7 +385,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
 
   create_table "responsible_parties", force: :cascade do |t|
     t.string "responsible_party_type", limit: 255
-    t.string "affiliation",            limit: 255
+    t.text   "affiliation",            limit: 65535
     t.string "name",                   limit: 255
     t.string "title",                  limit: 255
     t.string "nct_id",                 limit: 255

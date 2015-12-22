@@ -75,7 +75,7 @@ class CreateResults < ActiveRecord::Migration
       t.string  :title
       t.text    :description
       t.string  :measure
-      t.string  :time_frame
+      t.text    :time_frame
       t.string  :safety_issue
       t.text    :population
       t.integer :participant_count
@@ -118,7 +118,7 @@ class CreateResults < ActiveRecord::Migration
       t.string  :ci_percent
       t.string  :ci_n_sides
       t.decimal :ci_lower_limit, :precision => 15, :scale => 10
-      t.decimal :ci_upper_limit, :precision => 15, :scale => 10
+      t.decimal :ci_upper_limit, :precision => 16, :scale => 8
       t.string  :method
       t.text    :description
       t.text    :group_description
