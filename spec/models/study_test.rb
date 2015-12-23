@@ -122,7 +122,7 @@
       expect(study.references.first.nct_id).to eq(nct_id)
       expect(study.references.size).to eq(2)
       ref=study.references.select{|x| x.pmid=='23473847'}.first
-      expect(ref.reference_type).to eq('result')
+      expect(ref.reference_type).to eq('results_reference')
       expect(study.references.map(&:citation)).to include("ARROW Trial team, Kekitiinwa A, Cook A, Nathoo K, Mugyenyi P, Nahirya-Ntege P, Bakeera-Kitaka S, Thomason M, Bwakura-Dangarembizi M, Musiime V, Munderi P, Naidoo-James B, Vhembo T, Tumusiime C, Katuramu R, Crawley J, Prendergast AJ, Musoke P, Walker AS, Gibb DM. Routine versus clinically driven laboratory monitoring and first-line antiretroviral therapy strategies in African children with HIV (ARROW): a 5-year open-label randomised factorial trial. Lancet. 2013 Apr 20;381(9875):1391-403. doi: 10.1016/S0140-6736(12)62198-9. Epub 2013 Mar 7.")
       expect(study.recruitment_details).to eq('All recruited children (n=1206) were randomly assigned to CDM vs LCM and the three different induction ART strategies at enrolment (3/2007-11/2008). This was a factorial randomisation meaning that the children were effectively randomized into 6 parallel groups. Baseline characteristics are presented below separately for each initial randomization.')
       expect(study.pre_assignment_details).to eq("There were two additional nested substudy randomizations after initial trial enrolment (see inclusion/exclusion criteria for eligibility). From 8/2009 to 6/2010, eligible children were randomized to once vs twice daily abacavir+lamivudine. From 9/2009 to 2/2011, eligible children were randomized to stop vs continue cotrimoxazole prophylaxis.")

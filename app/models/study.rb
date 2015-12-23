@@ -35,8 +35,7 @@ require 'csv'
 		has_many :result_contacts,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :secondary_ids,         :foreign_key => 'nct_id', dependent: :destroy
 		has_many :sponsors,              :foreign_key => 'nct_id', dependent: :destroy
-		has_many :study_references,      :foreign_key => 'nct_id', dependent: :destroy
-		has_many :result_references,     :foreign_key => 'nct_id', dependent: :destroy
+		has_many :references,            :foreign_key => 'nct_id', dependent: :destroy
 
 		scope :started_between, lambda {|sdate, edate| where("start_date >= ? AND created_at <= ?", sdate, edate )}
 		scope :changed_since,   lambda {|cdate| where("last_changed_date >= ?", cdate )}
@@ -70,10 +69,6 @@ require 'csv'
 			completion_date.mjd - start_date.mjd if completion_date
 		end
 
-		def references
-			study_references + result_references
-		end
-
 		def description
 			detailed_description.description
 		end
@@ -88,6 +83,14 @@ require 'csv'
 
 		def study_population
 			eligibility.study_population
+		end
+
+		def study_references
+			references.select{|r|r.type!='results_reference'}
+		end
+
+		def result_references
+			references.select{|r|r.type=='results_reference'}
 		end
 
 		def healthy_volunteers?
@@ -219,8 +222,7 @@ require 'csv'
 				:result_agreements =>     ResultAgreement.create_all_from(opts),
 				:result_contacts =>       ResultContact.create_all_from(opts),
 				:secondary_ids =>         SecondaryId.create_all_from(opts),
-				:study_references =>      StudyReference.create_all_from(opts),
-				:result_references =>     ResultReference.create_all_from(opts),
+				:references =>            Reference.create_all_from(opts),
 				:sponsors =>              Sponsor.create_all_from(opts),
 			}
 		end
