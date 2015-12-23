@@ -1,12 +1,10 @@
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     #  study=Asker.new.create_study('NCT02028676')
-    it "should have limitations_and_caveats" do
+    it "should have expected relationships" do
       nct_id='NCT00023673'
       study=Asker.new.create_study(nct_id)
       expect(study.nct_id).to eq(nct_id)
-      expect(study.limitations_and_caveats).to eq('This study was originally designed to escalate 3DRT via increasing doses per fraction. However, due to excessive toxicity at dose level 1 (75.25 Gy, 2.15 Gy/fraction), the protocol was amended in January 2003 to de-escalate 3DRT dose.')
       expect(study.outcomes.size).to eq(6)
-			study.groups.each {|x| puts x.inspect}
       expect(study.groups.size).to eq(4)
       g1=study.groups.select{|g|g.ctgov_group_enumerator==1}.first
       g2=study.groups.select{|g|g.ctgov_group_enumerator==2}.first
@@ -28,7 +26,7 @@
     end
   end
 
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     it "should have target_duration" do
       nct_id='NCT00008216'
       study=Asker.new.create_study(nct_id)
@@ -38,7 +36,7 @@
     end
   end
 
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     it 'should not create duplicate relationships' do
       nct_id='NCT02028676'
       study=Asker.new.create_study(nct_id)
@@ -80,7 +78,7 @@
     end
   end
 
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     it "should have correct biospec and why_stopped values" do
       nct_id='NCT00000105'
       study=Asker.new.create_study(nct_id)
@@ -93,7 +91,7 @@
     end
   end
 
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     it "should have all the outcomes data" do
       nct_id='NCT02028676'  # study with rich set of outcomes data
       study=Asker.new.create_study(nct_id)
@@ -231,7 +229,6 @@
       expect(study.completion_date).to eq Date.parse(study.completion_date_str)
       expect(study.primary_completion_date).to eq Date.parse(study.primary_completion_date_str)
       expect(study.verification_date).to eq Date.parse(study.verification_date_str)
-      expect(study.download_date).to eq Date.parse(study.download_date_str)
       expect(study.detailed_description.description.length).to eq(1907)
       expect(study.completion_date_type).to eq('Actual')
       expect(study.primary_completion_date_type).to eq('Actual')
@@ -270,7 +267,6 @@
 
       expect(study.secondary_ids.size).to eq(1)
       expect(study.secondary_ids.map(&:secondary_id)).to include('00-CH-0134')
-      study.outcomes.each{|o|puts o.inspect if o.type=='Primary'}
       expected_primary_outcome=study.outcomes.select{|o|o.type=='Primary' && o.group_title='Placebo Plus Weight Reduction Counseling'}.first
       expect(expected_primary_outcome.nct_id).to eq(nct_id)
       expect(expected_primary_outcome.time_frame).to eq('6 months')

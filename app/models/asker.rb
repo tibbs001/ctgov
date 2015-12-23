@@ -11,17 +11,21 @@ require 'zip'
 			@existing_nct_ids ||= Study.all_nctids
 		end
 
+		def load_from_files
+			Dir.glob('downloaded/*.xml') {|f|
+				nct_id=f.split('/').last.split('.').first
+				xml=Nokogiri::XML(File.open(f, "rb") {|io|io.read})
+			  Study.new({:xml=>xml,:nct_id=>nct_id}).create
+				FileUtils.move f, imported
+			}
+		end
+
 		def load_studies_from_file(file_name='search_results/all.zip')
 			Zip::ZipFile.open(file_name){|zip_file|
 				zip_file.each {|f|
-					begin
 					  nct_id=f.name.split('.').first
 					  xml=Nokogiri::XML(zip_file.read(f))
-			      Study.new.create_from(StudyTemplate.new({:xml=>xml,:nct_id=>nct_id}).attribs)
-			    rescue => error
-			      e=LoadEvent.new(:nct_id=>nct_id,:event_type=>'express load',:status=>'failed',:description=>error)
-				    e.save!
-					end
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
 				}
       }
 		end
@@ -112,7 +116,7 @@ require 'zip'
 		def get_study(nct_id)
 			url="http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true"
 			xml=Nokogiri::XML(call_to_ctgov(url))
-			StudyTemplate.new({:xml=>xml,:nct_id=>nct_id})
+			Study.new({:xml=>xml,:nct_id=>nct_id})
 		end
 
 		def create_search_result(opts)
@@ -140,8 +144,7 @@ require 'zip'
 
 			begin
 			  e=log_event({:nct_id=>nct_id,:event_type=>'create',:status=>'active'})
-			  attribs=get_study(nct_id).attribs
-			  study=Study.new.create_from(attribs)
+			  study=get_study(nct_id).create
 			  existing_nct_ids << nct_id
 				complete_event(e)
 			  return study
@@ -192,5 +195,9 @@ require 'zip'
 				end
 			end
 	  end
+
+    def imported
+      "#{Rails.root}/imported/"
+    end
 
   end
