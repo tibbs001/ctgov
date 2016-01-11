@@ -394,4 +394,10 @@
       expect(g2.select{|x|x.title=='Total, other adverse events'}.first.subjects_at_risk).to eq(47)
     end
 
+    it "should save correct derived values" do
+		  nct_id='NCT00000137'
+      study=Asker.new.create_study(nct_id)
+			expect(study.design_type).to eq('randomized double blind')
+    end
+
   end

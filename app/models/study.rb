@@ -64,11 +64,6 @@ require 'csv'
 			self
 		end
 
-		def actual_duration_days
-			# TODO  Store value in table?
-			completion_date.mjd - start_date.mjd if completion_date
-		end
-
 		def description
 			detailed_description.description
 		end
@@ -125,14 +120,44 @@ require 'csv'
 			facilities.size
 		end
 
-		def number_of_sites
-			facilities.size
-		end
-
 		def pi
 			val=''
 			responsible_parties.each{|r|val=r.investigator_full_name if r.responsible_party_type=='Principal Investigator'}
 			val
+		end
+
+		def calc_sponsor_type
+			return if !lead_sponsor
+			val=lead_sponsor.agency_class
+			return val if val=='Industry' or val=='NIH'
+			collaborators.each{|c|return 'NIH' if c.agency_class=='NIH'}
+			collaborators.each{|c|return 'Industry' if c.agency_class=='Industry'}
+			'Other'
+		end
+
+		def calc_design_type
+			return if !design or !design.description
+			val=''
+			val=val + 'masked '     if design.description.downcase.include?('masked')
+			val=val + 'randomized ' if design.description.downcase.include?('random')
+			val=val + 'double '     if design.description.downcase.include?('double')
+			val=val + 'blind '      if design.description.downcase.include?('blind')
+			val.strip
+		end
+
+		def calc_actual_duration
+			return if !primary_completion_date or !start_date
+			(primary_completion_date - s.start_date).to_f/365
+		end
+
+		def calc_results_reported
+			results_reported=1 if outcomes.size > 0
+		end
+
+		def calc_enrollment
+			cnt=0
+			groups.each{|g|cnt=cnt+g.participant_count}
+			cnt if cnt > 0
 		end
 
 		def status
@@ -180,7 +205,7 @@ require 'csv'
 				:overall_status => get('overall_status'),
 				:phase => get('phase'),
 				:target_duration => get('target_duration'),
-				:enrollment => get('enrollment'),
+				:reported_enrollment => get('enrollment'),
 				:biospec_description =>get_text('biospec_descr').strip,
 
 				:primary_completion_date_type => get_type('primary_completion_date'),
@@ -224,6 +249,11 @@ require 'csv'
 				:secondary_ids =>         SecondaryId.create_all_from(opts),
 				:references =>            Reference.create_all_from(opts),
 				:sponsors =>              Sponsor.create_all_from(opts),
+				:sponsor_type =>          calc_sponsor_type,
+				:design_type =>           calc_design_type,
+				:actual_duration =>       calc_actual_duration,
+				:derived_enrollment =>    calc_enrollment,
+				:results_reported =>      calc_results_reported,
 			}
 		end
 

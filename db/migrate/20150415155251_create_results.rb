@@ -72,7 +72,7 @@ class CreateResults < ActiveRecord::Migration
       t.integer :ctgov_group_enumerator
       t.text    :group_title
       t.text    :group_description
-      t.string  :title
+      t.text    :title
       t.text    :description
       t.string  :measure
       t.text    :time_frame
@@ -136,7 +136,7 @@ class CreateResults < ActiveRecord::Migration
       t.string   :group_title
       t.text     :group_description
       t.text     :description
-      t.string   :time_frame
+      t.text     :time_frame
       t.string   :category
       t.string   :event_type
       t.string   :frequency_threshold
@@ -164,6 +164,7 @@ class CreateResults < ActiveRecord::Migration
       t.string  :title
       t.text    :description
       t.integer :participant_count
+      t.integer :derived_participant_count
       t.timestamps null: false
     end
     add_column :groups, :nct_id, :string, references: :studies
