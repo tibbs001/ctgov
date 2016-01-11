@@ -11,16 +11,23 @@ require 'zip'
 			@existing_nct_ids ||= Study.all_nctids
 		end
 
-		def load_from_files
-			Dir.glob('downloaded/*.xml') {|f|
-				nct_id=f.split('/').last.split('.').first
-				xml=Nokogiri::XML(File.open(f, "rb") {|io|io.read})
-			  Study.new({:xml=>xml,:nct_id=>nct_id}).create
-				FileUtils.move f, imported
+		def load_files
+			Dir.glob("#{downloaded_dir}/NCT*.xml") {|f|
+				begin
+				  nct_id=f.split('/').last.split('.').first
+				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
+					ActiveRecord::Base.transaction do
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+					end
+				  FileUtils.move f, imported_dir
+			  rescue => error
+			    e=log_event({:nct_id=>nct_id,:event_type=>'express load',:status=>'failed',:description=>error})
+				  e.save!
+				end
 			}
 		end
 
-		def load_studies_from_file(file_name='search_results/all.zip')
+		def load_all_from_zip_file(file_name="#{downloaded_dir}/all.zip")
 			Zip::ZipFile.open(file_name){|zip_file|
 				zip_file.each {|f|
 					  nct_id=f.name.split('.').first
@@ -142,19 +149,19 @@ require 'zip'
 				end
 			end
 
-			begin
+		#	begin
 			  e=log_event({:nct_id=>nct_id,:event_type=>'create',:status=>'active'})
 			  study=get_study(nct_id).create
 			  existing_nct_ids << nct_id
 				complete_event(e)
 			  return study
-			rescue => error
-				msg="Failed: #{error}"
-				puts msg
-			  e.status='failed'
-			  e.description=msg
-				e.save!
-			end
+		#	rescue => error
+		#		msg="Failed: #{error}"
+		#		puts msg
+		#	  e.status='failed'
+		#	  e.description=msg
+		#		e.save!
+		#	end
 		end
 
 		def log_event(opts={})
@@ -196,8 +203,12 @@ require 'zip'
 			end
 	  end
 
-    def imported
-      "#{Rails.root}/imported/"
+    def imported_dir
+      "#{Rails.root}/public/imported/"
+    end
+
+    def downloaded_dir
+      "#{Rails.root}/public/downloaded/"
     end
 
   end
