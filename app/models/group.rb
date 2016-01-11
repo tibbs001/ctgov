@@ -26,11 +26,23 @@
 			 :description => get('description'),
 			 :title => get('title'),
 			 :participant_count => get_attribute('count').to_i,
+			 :derived_participant_count => calc_participant_count,
 			}
 		end
 
 		def baseline_measures
 			@baseline_measures ||=BaselineMeasure.where("nct_id=? and ctgov_group_enumerator=?",nct_id,ctgov_group_enumerator)
+		end
+
+		def calc_participant_count
+			# best guess for this group
+			values=[]
+			results={}
+			outcome_measures.each{|om|values << om.measure_value if om.title=='Number of Participants' && om.outcome.outcome_type=='Primary'}
+			values.uniq.each{|val| results[val] = values.count(val)}
+			max=0
+			results.each{|x,y| max=x.to_i if y > max}
+			max
 		end
 
 end

@@ -13,7 +13,7 @@
 
 		def self.collaborators(opts)
 			opts[:xml].xpath("//collaborator").collect {|xml|
-		Sponsor.new.create_from({:xml=>xml,:type=>'collaborator',:nct_id=>opts[:nct_id]}) }
+		  Sponsor.new.create_from({:xml=>xml,:type=>'collaborator',:nct_id=>opts[:nct_id]}) }
 		end
 
 		def create_from(opts)

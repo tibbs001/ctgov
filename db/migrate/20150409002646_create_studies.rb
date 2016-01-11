@@ -21,21 +21,26 @@ class CreateStudies < ActiveRecord::Migration
       t.string :first_received_results_date_str
       t.string :download_date_str
 
-      t.string :completion_date_type
-      t.string :primary_completion_date_type
-      t.string :org_study_id
-      t.string :secondary_id
-      t.text   :brief_title
-      t.text   :official_title
-      t.string :overall_status
-      t.string :phase
-      t.string :target_duration
-      t.integer :enrollment
-      t.string :enrollment_type
-      t.string :study_type
+      t.string  :completion_date_type
+      t.string  :primary_completion_date_type
+      t.string  :org_study_id
+      t.string  :secondary_id
+      t.text    :brief_title
+      t.text    :official_title
+      t.string  :overall_status
+      t.string  :phase
+      t.string  :target_duration
+			t.decimal :actual_duration, :precision => 5, :scale => 2
+      t.integer :reported_enrollment
+      t.integer :derived_enrollment
+      t.string  :enrollment_type
+      t.string  :study_type
       t.integer :number_of_arms
       t.integer :number_of_groups
-      t.string :source
+      t.string  :sponsor_type
+      t.string  :design_type
+      t.string  :source
+      t.integer :results_reported
 
       t.string :biospec_retention
       t.text   :biospec_description

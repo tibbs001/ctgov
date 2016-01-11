@@ -1,12 +1,10 @@
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     #  study=Asker.new.create_study('NCT02028676')
-    it "should have limitations_and_caveats" do
+    it "should have expected relationships" do
       nct_id='NCT00023673'
       study=Asker.new.create_study(nct_id)
       expect(study.nct_id).to eq(nct_id)
-      expect(study.limitations_and_caveats).to eq('This study was originally designed to escalate 3DRT via increasing doses per fraction. However, due to excessive toxicity at dose level 1 (75.25 Gy, 2.15 Gy/fraction), the protocol was amended in January 2003 to de-escalate 3DRT dose.')
       expect(study.outcomes.size).to eq(6)
-			study.groups.each {|x| puts x.inspect}
       expect(study.groups.size).to eq(4)
       g1=study.groups.select{|g|g.ctgov_group_enumerator==1}.first
       g2=study.groups.select{|g|g.ctgov_group_enumerator==2}.first
@@ -28,7 +26,7 @@
     end
   end
 
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     it "should have target_duration" do
       nct_id='NCT00008216'
       study=Asker.new.create_study(nct_id)
@@ -38,7 +36,7 @@
     end
   end
 
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     it 'should not create duplicate relationships' do
       nct_id='NCT02028676'
       study=Asker.new.create_study(nct_id)
@@ -80,7 +78,7 @@
     end
   end
 
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     it "should have correct biospec and why_stopped values" do
       nct_id='NCT00000105'
       study=Asker.new.create_study(nct_id)
@@ -93,7 +91,7 @@
     end
   end
 
-  RSpec.describe StudyTemplate do
+  RSpec.describe Study do
     it "should have all the outcomes data" do
       nct_id='NCT02028676'  # study with rich set of outcomes data
       study=Asker.new.create_study(nct_id)
@@ -124,7 +122,7 @@
       expect(study.references.first.nct_id).to eq(nct_id)
       expect(study.references.size).to eq(2)
       ref=study.references.select{|x| x.pmid=='23473847'}.first
-      expect(ref.reference_type).to eq('result')
+      expect(ref.reference_type).to eq('results_reference')
       expect(study.references.map(&:citation)).to include("ARROW Trial team, Kekitiinwa A, Cook A, Nathoo K, Mugyenyi P, Nahirya-Ntege P, Bakeera-Kitaka S, Thomason M, Bwakura-Dangarembizi M, Musiime V, Munderi P, Naidoo-James B, Vhembo T, Tumusiime C, Katuramu R, Crawley J, Prendergast AJ, Musoke P, Walker AS, Gibb DM. Routine versus clinically driven laboratory monitoring and first-line antiretroviral therapy strategies in African children with HIV (ARROW): a 5-year open-label randomised factorial trial. Lancet. 2013 Apr 20;381(9875):1391-403. doi: 10.1016/S0140-6736(12)62198-9. Epub 2013 Mar 7.")
       expect(study.recruitment_details).to eq('All recruited children (n=1206) were randomly assigned to CDM vs LCM and the three different induction ART strategies at enrolment (3/2007-11/2008). This was a factorial randomisation meaning that the children were effectively randomized into 6 parallel groups. Baseline characteristics are presented below separately for each initial randomization.')
       expect(study.pre_assignment_details).to eq("There were two additional nested substudy randomizations after initial trial enrolment (see inclusion/exclusion criteria for eligibility). From 8/2009 to 6/2010, eligible children were randomized to once vs twice daily abacavir+lamivudine. From 9/2009 to 2/2011, eligible children were randomized to stop vs continue cotrimoxazole prophylaxis.")
@@ -231,7 +229,6 @@
       expect(study.completion_date).to eq Date.parse(study.completion_date_str)
       expect(study.primary_completion_date).to eq Date.parse(study.primary_completion_date_str)
       expect(study.verification_date).to eq Date.parse(study.verification_date_str)
-      expect(study.download_date).to eq Date.parse(study.download_date_str)
       expect(study.detailed_description.description.length).to eq(1907)
       expect(study.completion_date_type).to eq('Actual')
       expect(study.primary_completion_date_type).to eq('Actual')
@@ -270,7 +267,6 @@
 
       expect(study.secondary_ids.size).to eq(1)
       expect(study.secondary_ids.map(&:secondary_id)).to include('00-CH-0134')
-      study.outcomes.each{|o|puts o.inspect if o.type=='Primary'}
       expected_primary_outcome=study.outcomes.select{|o|o.type=='Primary' && o.group_title='Placebo Plus Weight Reduction Counseling'}.first
       expect(expected_primary_outcome.nct_id).to eq(nct_id)
       expect(expected_primary_outcome.time_frame).to eq('6 months')
@@ -396,6 +392,12 @@
       expect(g2.select{|x|x.title=='Nausea'}.first.event_count).to eq(18)
       expect(g2.select{|x|x.title=='Total, other adverse events'}.first.subjects_affected).to eq(46)
       expect(g2.select{|x|x.title=='Total, other adverse events'}.first.subjects_at_risk).to eq(47)
+    end
+
+    it "should save correct derived values" do
+		  nct_id='NCT00000137'
+      study=Asker.new.create_study(nct_id)
+			expect(study.design_type).to eq('randomized double blind')
     end
 
   end

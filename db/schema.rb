@@ -168,15 +168,16 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "facilities", ["nct_id"], name: "index_facilities_on_nct_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
-    t.string   "ctgov_group_id",         limit: 255
-    t.integer  "ctgov_group_enumerator", limit: 4
-    t.string   "group_type",             limit: 255
-    t.string   "title",                  limit: 255
-    t.text     "description",            limit: 65535
-    t.integer  "participant_count",      limit: 4
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.string   "nct_id",                 limit: 255
+    t.string   "ctgov_group_id",            limit: 255
+    t.integer  "ctgov_group_enumerator",    limit: 4
+    t.string   "group_type",                limit: 255
+    t.string   "title",                     limit: 255
+    t.text     "description",               limit: 65535
+    t.integer  "participant_count",         limit: 4
+    t.integer  "derived_participant_count", limit: 4
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.string   "nct_id",                    limit: 255
   end
 
   create_table "intervention_arm_group_labels", force: :cascade do |t|
@@ -317,7 +318,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.integer  "ctgov_group_enumerator", limit: 4
     t.text     "group_title",            limit: 65535
     t.text     "group_description",      limit: 65535
-    t.string   "title",                  limit: 255
+    t.text     "title",                  limit: 65535
     t.text     "description",            limit: 65535
     t.string   "measure",                limit: 255
     t.text     "time_frame",             limit: 65535
@@ -368,7 +369,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "group_title",            limit: 255
     t.text     "group_description",      limit: 65535
     t.text     "description",            limit: 65535
-    t.string   "time_frame",             limit: 255
+    t.text     "time_frame",             limit: 65535
     t.string   "category",               limit: 255
     t.string   "event_type",             limit: 255
     t.string   "frequency_threshold",    limit: 255
@@ -473,12 +474,17 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "overall_status",                  limit: 255
     t.string   "phase",                           limit: 255
     t.string   "target_duration",                 limit: 255
-    t.integer  "enrollment",                      limit: 4
+    t.decimal  "actual_duration",                               precision: 5, scale: 2
+    t.integer  "reported_enrollment",             limit: 4
+    t.integer  "derived_enrollment",              limit: 4
     t.string   "enrollment_type",                 limit: 255
     t.string   "study_type",                      limit: 255
     t.integer  "number_of_arms",                  limit: 4
     t.integer  "number_of_groups",                limit: 4
+    t.string   "sponsor_type",                    limit: 255
+    t.string   "design_type",                     limit: 255
     t.string   "source",                          limit: 255
+    t.integer  "results_reported",                limit: 4
     t.string   "biospec_retention",               limit: 255
     t.text     "biospec_description",             limit: 65535
     t.string   "study_rank",                      limit: 255
@@ -491,8 +497,8 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.boolean  "is_fda_regulated"
     t.boolean  "has_expanded_access"
     t.boolean  "has_dmc"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at",                                                            null: false
+    t.datetime "updated_at",                                                            null: false
   end
 
   add_index "studies", ["nct_id"], name: "index_studies_on_nct_id", using: :btree

@@ -4,7 +4,7 @@ require 'active_support/all'
 
 		self.abstract_class = true;
 	  establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
-		attr_accessor :xml, :wrapper1_xml, :is_new
+		attr_accessor :xml, :wrapper1_xml
 		belongs_to :study, :foreign_key=> 'nct_id'
 
 		def self.create_all_from(opts)
@@ -54,7 +54,6 @@ require 'active_support/all'
 			@wrapper1_xml=opts[:wrapper1_xml]
 			self.nct_id=opts[:nct_id]
 			update_attributes(attribs) if !attribs.blank?
-			save!
 			self
 		end
 
@@ -62,7 +61,6 @@ require 'active_support/all'
 			{
 			 :xml=>xml,
 			 :nct_id=>nct_id,
-			 :is_new=>true,
 			}
 		end
 
@@ -99,6 +97,16 @@ require 'active_support/all'
 
 		def self.trim(str)
 			str.tr("\n\t ", "")
+		end
+
+		def get_type(label)
+			node=xml.xpath("//#{label}")
+			node.attribute('type').try(:value) if !node.blank?
+		end
+
+		def get_boolean(label)
+			val=xml.xpath("//#{label}").try(:inner_html)
+			val.downcase=='yes'||val.downcase=='y'||val.downcase=='true' if !val.blank?
 		end
 
 	end
