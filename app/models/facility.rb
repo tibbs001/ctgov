@@ -3,11 +3,11 @@
     def self.create_all_from(opts)
       all=opts[:xml]
       results=all.xpath("//location").collect{|wrapper1|
-	opts[:wrapper1_xml]=wrapper1
-	wrapper1.xpath("facility").collect{|xml|
-	  opts[:xml]=xml
-	  create_from(opts)
-	}
+				opts[:wrapper1_xml]=wrapper1
+				wrapper1.xpath("facility").collect{|xml|
+	    	  opts[:xml]=xml
+	    	  create_from(opts)
+				}
       }.flatten!
       if results.nil?
         []
