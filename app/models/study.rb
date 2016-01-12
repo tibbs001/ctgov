@@ -135,16 +135,6 @@ require 'csv'
 			'Other'
 		end
 
-		def calc_design_type
-			return if !design or !design.description
-			val=''
-			val=val + 'masked '     if design.description.downcase.include?('masked')
-			val=val + 'randomized ' if design.description.downcase.include?('random')
-			val=val + 'double '     if design.description.downcase.include?('double')
-			val=val + 'blind '      if design.description.downcase.include?('blind')
-			val.strip
-		end
-
 		def calc_actual_duration
 			return if !primary_completion_date or !start_date
 			(primary_completion_date - s.start_date).to_f/365
@@ -250,7 +240,6 @@ require 'csv'
 				:references =>            Reference.create_all_from(opts),
 				:sponsors =>              Sponsor.create_all_from(opts),
 				:sponsor_type =>          calc_sponsor_type,
-				:design_type =>           calc_design_type,
 				:actual_duration =>       calc_actual_duration,
 				:derived_enrollment =>    calc_enrollment,
 				:results_reported =>      calc_results_reported,

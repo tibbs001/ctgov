@@ -38,7 +38,6 @@ class CreateStudies < ActiveRecord::Migration
       t.integer :number_of_arms
       t.integer :number_of_groups
       t.string  :sponsor_type
-      t.string  :design_type
       t.string  :source
       t.integer :results_reported
 
@@ -179,8 +178,24 @@ class CreateStudies < ActiveRecord::Migration
     add_column :responsible_parties, :nct_id, :string, references: :studies
 		add_index :responsible_parties, :nct_id
 
+    create_table :design_validations do |t|
+			t.string  :design_name
+			t.string  :design_value
+			t.string  :masked_role
+		end
+    add_column :design_validations, :nct_id, :string, references: :studies
+		add_index :design_validations, :nct_id
+
     create_table :designs do |t|
       t.text   :description
+      t.string :masking
+      t.string :masked_roles
+      t.string :primary_purpose
+      t.string :intervention_model
+			t.string :endpoint_classification
+			t.string :allocation
+			t.string :time_perspective
+			t.string :observational_model
     end
     add_column :designs, :nct_id, :string, references: :studies
 		add_index :designs, :nct_id

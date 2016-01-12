@@ -80,9 +80,26 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string "data_field",     limit: 255
   end
 
+  create_table "design_validations", force: :cascade do |t|
+    t.string "design_name",  limit: 255
+    t.string "design_value", limit: 255
+    t.string "masked_role",  limit: 255
+    t.string "nct_id",       limit: 255
+  end
+
+  add_index "design_validations", ["nct_id"], name: "index_design_validations_on_nct_id", using: :btree
+
   create_table "designs", force: :cascade do |t|
-    t.text   "description", limit: 65535
-    t.string "nct_id",      limit: 255
+    t.text   "description",             limit: 65535
+    t.string "masking",                 limit: 255
+    t.string "masked_roles",            limit: 255
+    t.string "primary_purpose",         limit: 255
+    t.string "intervention_model",      limit: 255
+    t.string "endpoint_classification", limit: 255
+    t.string "allocation",              limit: 255
+    t.string "time_perspective",        limit: 255
+    t.string "observational_model",     limit: 255
+    t.string "nct_id",                  limit: 255
   end
 
   add_index "designs", ["nct_id"], name: "index_designs_on_nct_id", using: :btree
@@ -482,7 +499,6 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.integer  "number_of_arms",                  limit: 4
     t.integer  "number_of_groups",                limit: 4
     t.string   "sponsor_type",                    limit: 255
-    t.string   "design_type",                     limit: 255
     t.string   "source",                          limit: 255
     t.integer  "results_reported",                limit: 4
     t.string   "biospec_retention",               limit: 255
