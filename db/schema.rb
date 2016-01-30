@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150629193710) do
+ActiveRecord::Schema.define(version: 20160130223407) do
 
   create_table "baseline_measures", force: :cascade do |t|
     t.string   "ctgov_group_id",         limit: 255
@@ -169,6 +169,8 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "state",                limit: 255
     t.string   "zip",                  limit: 255
     t.string   "country",              limit: 255
+    t.string   "latitude",             limit: 255
+    t.string   "longitude",            limit: 255
     t.string   "contact_name",         limit: 255
     t.string   "contact_phone",        limit: 255
     t.string   "contact_email",        limit: 255
@@ -528,5 +530,23 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   end
 
   add_index "study_references", ["nct_id"], name: "index_study_references_on_nct_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end
