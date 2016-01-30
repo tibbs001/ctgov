@@ -13,8 +13,6 @@ $(document).ready(function(){
       <th>started</th>
       <th>completed</th>
       <th>results received</th>
-      <th>reported enrollment</th>
-      <th>calculated enrollment</th>
       <th># of groups</th>
       <th>lead sponsor</th>
       <th>title</th>
@@ -29,8 +27,6 @@ $(document).ready(function(){
         <td><%= study.start_date %></td>
         <td><%= study.completion_date %></td>
         <td><%= study.first_received_results_date %></td>
-        <td><%= study.enrollment %></td>
-        <td><%= study.estimated_enrollment %></td>
         <td><%= study.groups.size %></td>
         <td><%= study.lead_sponsor.try(:agency) %></td>
         <td><%= study.brief_title %></td>
