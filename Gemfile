@@ -31,6 +31,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+gem "mini_magick"
+#  User creation gem
+gem 'devise'
+gem 'searchkick'
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
 gem 'font-awesome-rails'
