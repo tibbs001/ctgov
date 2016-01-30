@@ -16,6 +16,9 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem gon lets you set variables in controller that you can access in javascript
 gem 'gon'
 
+# add Amazon-like study ratings
+gem 'ajaxful_rating'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks

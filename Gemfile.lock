@@ -36,6 +36,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    ajaxful_rating (3.0.0.beta8)
     arel (6.0.3)
     backbone-rails (1.1.2)
       rails (>= 3.0.0)
@@ -206,6 +207,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ajaxful_rating
   backbone-rails
   bootstrap-sass (~> 3.2.0)
   byebug
