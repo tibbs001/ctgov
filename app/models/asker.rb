@@ -203,6 +203,33 @@ require 'zip'
 			end
 	  end
 
+		def self.get_coordinates(addr)
+			new.coordinates_for(geo_url(addr))
+		end
+
+		def coordinates_for(url)
+			#TODO Fix this to be accurate
+			coordinates={}
+      loc=location(url)
+			puts loc
+			coordinates[:latitude] = loc.xpath('lat').first.try(:inner_html)
+			coordinates[:longitude] = loc.xpath('lng').first.try(:inner_html)
+			coordinates
+		end
+
+		def location(url)
+			response=Faraday.get(url).body
+			Nokogiri::XML(response).xpath('//GeocodeResponse').xpath('result').xpath('geometry').xpath('location')
+		end
+
+		def self.geo_url(addr)
+			"https://maps.googleapis.com/maps/api/geocode/xml?address=#{addr}&key=#{google_api_key}"
+		end
+
+		def self.google_api_key
+			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'
+		end
+
     def imported_dir
       "#{Rails.root}/public/imported/"
     end
@@ -211,4 +238,7 @@ require 'zip'
       "#{Rails.root}/public/downloaded/"
     end
 
+		def google_api_key
+			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'
+		end
   end

@@ -1,12 +1,13 @@
   class Facility < StudyRelationship
+		attr_accessor :coordinates
 
     def self.create_all_from(opts)
       all=opts[:xml]
       results=all.xpath("//location").collect{|wrapper1|
 				opts[:wrapper1_xml]=wrapper1
 				wrapper1.xpath("facility").collect{|xml|
-	    	  opts[:xml]=xml
-	    	  create_from(opts)
+				opts[:xml]=xml
+				create_from(opts)
 				}
       }.flatten!
       if results.nil?
@@ -32,6 +33,8 @@
       :contact_backup_email => get_from('contact_backup','email'),
       :investigator_name => get_from('investigator','last_name'),
       :investigator_role => get_from('investigator','role'),
+      :latitude => get_latitude,
+      :longitude => get_longitude,
       }
     end
 
@@ -44,5 +47,27 @@
       elem=xml.xpath('address').try(:xpath,label)
       elem.inner_html if elem
     end
+
+		def formatted_addr
+			"#{city.tr(' ','+')},+#{state.tr(' ','+')},+#{country.tr(' ','+')}"
+		end
+
+		def coordinates
+			@coordinates ||= Asker.get_coordinates(formatted_addr)
+		end
+
+		def get_latitude
+			coordinates[:latitude]
+		end
+
+		def get_longitude
+			coordinates[:longitude]
+		end
+
+		def fix_coordinates
+			self.latitude=get_latitude
+			self.longitude=get_longitude
+			self.save!
+		end
 
   end

@@ -66,6 +66,8 @@ class CreateStudies < ActiveRecord::Migration
       t.string :state
       t.string :zip
       t.string :country
+      t.string :latitude
+      t.string :longitude
       t.string :contact_name
       t.string :contact_phone
       t.string :contact_email
