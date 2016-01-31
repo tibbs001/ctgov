@@ -2,8 +2,11 @@ require 'csv'
 	class Study < ActiveRecord::Base
 		attr_accessor :xml
 		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
+		searchkick
 
 		self.primary_key = 'nct_id'
+		has_many :reviews,				       :foreign_key => 'nct_id', dependent: :destroy
+
 		has_one  :brief_summary,         :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :design,                :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :detailed_description,  :foreign_key => 'nct_id', dependent: :destroy
@@ -269,6 +272,17 @@ require 'csv'
 
 		def get_date(str)
 			Date.parse(str) if !str.blank?
+		end
+
+		def lead_sponsor
+			#TODO  May be multiple
+			sponsors.each{|s|return s if s.sponsor_type=='lead'}
+		end
+
+		def prime_address
+			#  This isn't real.  Just proof of concept.
+			return facilities.first.address if facilities.size > 0
+			return lead_sponsor.agency
 		end
 
 	end

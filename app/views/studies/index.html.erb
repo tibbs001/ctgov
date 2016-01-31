@@ -30,7 +30,7 @@ $(document).ready(function(){
         <td><%= study.groups.size %></td>
         <td><%= study.lead_sponsor.try(:agency) %></td>
         <td><%= study.brief_title %></td>
-        <td class='duke-btn'><%= link_to 'Details',edit_study_path(study), :class => "btn btn-default btn-mini" %></td>
+        <td class='duke-btn'><%= link_to 'Details',show_study_path(study), :class => "btn btn-default btn-mini" %></td>
       </tr>
     <% end %>
   </tbody>

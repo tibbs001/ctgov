@@ -52,6 +52,10 @@
 			"#{city.tr(' ','+')},+#{state.tr(' ','+')},+#{country.tr(' ','+')}"
 		end
 
+		def address
+			"#{name}, #{city}, #{state}, #{country}"
+		end
+
 		def coordinates
 			@coordinates ||= Asker.get_coordinates(formatted_addr)
 		end
