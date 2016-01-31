@@ -5,13 +5,4 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 	has_many :reviews
 
-	def first_name
-		#TODO hack to get working
-		'John'
-	end
-
-	def last_name
-		#TODO hack to get working
-		'Smith'
-	end
 end

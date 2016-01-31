@@ -9,28 +9,20 @@ $(document).ready(function(){
 <table id="sortTable" class='table table-striped table-condensed table-hover' width='100%'>
   <thead>
     <tr>
-      <th>NCT ID</th>
+      <th>title</th>
       <th>started</th>
-      <th>completed</th>
-      <th>results received</th>
-      <th># of groups</th>
       <th>lead sponsor</th>
       <th>title</th>
-      <th>details</th>
     </tr>
   </thead>
 
   <tbody>
     <% @studies.each do |study| %>
       <tr>
-        <td><%= study.nct_id %></td>
-        <td><%= study.start_date %></td>
-        <td><%= study.completion_date %></td>
-        <td><%= study.first_received_results_date %></td>
-        <td><%= study.groups.size %></td>
-        <td><%= study.lead_sponsor.try(:agency) %></td>
         <td><%= study.brief_title %></td>
-        <td class='duke-btn'><%= link_to 'Details',show_study_path(study), :class => "btn btn-default btn-mini" %></td>
+        <td><%= study.start_date %></td>
+        <td><%= study.lead_sponsor.try(:agency) %></td>
+        <td class='duke-btn'><%= link_to 'Details',study_path(study), :class => "btn btn-default btn-mini" %></td>
       </tr>
     <% end %>
   </tbody>

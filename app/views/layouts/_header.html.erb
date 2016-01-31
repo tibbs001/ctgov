@@ -1,8 +1,5 @@
 <header class="navbar">
 	<div id="header-navbar-inner">
-		<div class="pull-right container-fluid">
-			<%= link_to (image_tag 'dcri_logo_large.gif', class: 'brand', alt: 'DCRI') %>
-		</div>
 		<p class="navbar-text pull-right">
 		<% if user_signed_in? %>
   		Logged in as <strong><%= current_user.email %></strong>.

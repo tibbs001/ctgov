@@ -49,7 +49,7 @@
     end
 
 		def formatted_addr
-			"#{city.tr(' ','+')},+#{state.tr(' ','+')},+#{country.tr(' ','+')}"
+			address.tr(' ','+') if address
 		end
 
 		def address

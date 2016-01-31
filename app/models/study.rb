@@ -2,7 +2,6 @@ require 'csv'
 	class Study < ActiveRecord::Base
 		attr_accessor :xml
 		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
-		searchkick
 
 		self.primary_key = 'nct_id'
 		has_many :reviews,				       :foreign_key => 'nct_id', dependent: :destroy
@@ -131,7 +130,7 @@ require 'csv'
 
 		def calc_sponsor_type
 			return if !lead_sponsor
-			val=lead_sponsor.agency_class
+			val=lead_sponsor.try(:agency_class)
 			return val if val=='Industry' or val=='NIH'
 			collaborators.each{|c|return 'NIH' if c.agency_class=='NIH'}
 			collaborators.each{|c|return 'Industry' if c.agency_class=='Industry'}
@@ -277,6 +276,14 @@ require 'csv'
 		def lead_sponsor
 			#TODO  May be multiple
 			sponsors.each{|s|return s if s.sponsor_type=='lead'}
+		end
+
+		def average_rating
+			if reviews.size==0
+				0
+			else
+				reviews.average(:rating).round(2)
+			end
 		end
 
 		def prime_address
