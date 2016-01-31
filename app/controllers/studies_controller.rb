@@ -22,7 +22,6 @@ class StudiesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_study
 			id=params[:id]
-			id=params['format'] if !id
       @study = Study.find_by_nct_id(id)
     end
 

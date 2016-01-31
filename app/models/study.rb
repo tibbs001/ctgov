@@ -286,6 +286,14 @@ require 'csv'
 			end
 		end
 
+		def intervention_names
+			interventions.collect{|x|x.name}.join(', ')
+		end
+
+		def condition_names
+			conditions.collect{|x|x.name}.join(', ')
+		end
+
 		def prime_address
 			#  This isn't real.  Just proof of concept.
 			return facilities.first.address if facilities.size > 0

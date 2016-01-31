@@ -154,22 +154,26 @@ $(document).ready(function(){
       <thead>
       <tr>
 	<th class='span3'>type</th>
+	<th>id</th>
+	<th>group desc</th>
 	<th>assessment</th>
-	<th>group</th>
 	<th># at risk</th>
 	<th># affected</th>
 	<th>events</th>
       </tr>
       </thead>
-      <% @study.reported_events.each do |o| %>
-          <tr>
-            <td><%= o.type %></td>
-            <td><%= o.default_assessment %></td>
-            <td><%= o.ctgov_group_id %></td>
-            <td><%= o.subjects_at_risk %></td>
-            <td><%= o.subjects_affected %></td>
-            <td><%= o.event_count %></td>
-          </tr>
+      <% @study.reported_events.sort_by{|re|re.ctgov_group_enumerator}.each do |o| %>
+				  <% if o.subjects_affected != 0 and o.event_count != 0 %>
+          	<tr>
+            	<td><%= o.type %></td>
+            	<td><%= o.ctgov_group_id %></td>
+            	<td><%= o.group_title %></td>
+            	<td><%= o.title %></td>
+            	<td><%= o.subjects_at_risk %></td>
+            	<td><%= o.subjects_affected %></td>
+            	<td><%= o.event_count %></td>
+          	</tr>
+   				<% end %>
       <% end %>
       </table>
     </div>

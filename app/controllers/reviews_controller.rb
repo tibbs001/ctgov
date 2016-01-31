@@ -1,6 +1,5 @@
 class ReviewsController < ApplicationController
   before_action :set_review, only: [:edit, :update, :destroy]
-  before_action :set_study
   before_action :authenticate_user!
   before_action :check_user, only: [:edit, :update, :destroy]
 
@@ -64,11 +63,7 @@ class ReviewsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_review
       @review = Review.find(params[:id])
-    end
-
-    def set_study
-			id=params['nct_id']
-      @study = Study.find_by_nct_id(id)
+      @study = Study.find(@review.nct_id)
     end
 
     def check_user
