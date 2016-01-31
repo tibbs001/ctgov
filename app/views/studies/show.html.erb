@@ -1,183 +1,83 @@
-<script src="/assets/bootstrap-tooltip.js?body=1" type="text/javascript"></script>
-<script src="/assets/bootstrap-popover.js?body=1" type="text/javascript"></script>
+<div class="row">
+  <div class="col-md-3">
 
-<script type="text/javascript">
-$(document).ready(function(){
-  $('.has-tooltip').tooltip();
-  $('.has-popover').popover({
-    trigger: 'hover'
+    <h6>
+      <%= @study.brief_title %>
+    </h6>
+
+    <div class="star-rating" data-score= <%= @study.average_rating %> ></div>
+    <p><%= "#{@study.reviews.length} reviews" %></p>
+
+    <p>
+      <strong>Address:</strong>
+      <%= @study.prime_address %>
+    </p>
+
+    <p>
+
+		<%= link_to "Write a Review", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
+
+    <br>
+    <br>
+
+    <iframe
+      width="230"
+      height="230"
+      frameborder="0" style="border:0"
+      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBJg0HiO2KtvExTuiWB6rKhmUUsHXFk6dY
+        &q=<%= @study.prime_address.parameterize %>&zoom=14">
+    </iframe>
+  </div>
+
+  <div class="col-md-9">
+    <% if @study.reviews.blank? %>
+      <h3>No reviews yet. Be the first to write one!</h3>
+    <% else %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="col-md-3"></th>
+            <th class="col-md-9"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @study.reviews.each do |review| %>
+            <tr>
+              <td>
+                <h4>
+                  <%= "#{review.user.first_name.capitalize} #{review.user.last_name.capitalize[0]}." %>
+                </h4>
+                <p><%= review.created_at.strftime("%-m/%-d/%y") %></p>
+              </td>
+
+              <td>
+                <div class="star-rating" data-score= <%=review.rating %> ></div>
+                <p><%= h(review.comment).gsub(/\n/, '<br/>').html_safe %></p>
+                <% if user_signed_in? %>
+
+
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to 'Edit', edit_study_path(@study), class: "btn btn-link" %> |
+<%= link_to 'Back', studies_path, class: "btn btn-link" %>
+
+<script>
+  $('.star-rating').raty({
+    path: 'https://s3.amazonaws.com/yelpdemo/stars',
+    readOnly: true,
+    score: function() {
+      return $(this).attr('data-score');
+    }
   });
-
-  $('.sponsor-popover').popover({ html : true });
-});
 </script>
 
-<p id="notice"><%= notice %></p>
 
-<div class="container-fluid">
-<section id='form form-horizontal well'>
-<%= form_for(@study) do |s| %>
-  <h2>
-    <%= @study.nct_id %>
-    <span>
-      <%= @study.brief_title %>
-      <% if !@study.acronym.blank? %>
-        (<%= @study.acronym %>)
-      <% end %>
-    </span>
-  </h2>
-
-  <div class='well'>
-    <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.nlm_info_for('sponsor_type') %>">Lead Sponsor: </button>
-    <%= @study.lead_sponsor.agency %>
-    <% if !@study.org_study_id.blank? %>
-      <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.nlm_info_for('org_study_id') %>">
-	    (<%= @study.org_study_id %>)</button>
-     <% end %>
-    <div>
-      <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.nlm_info_for('study_design') %>">
-	    <%= @study.study_type %></button>
-
-      <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.nlm_info_for('phase') %>">
-            <%= @study.phase %></button>
-
-      <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.nlm_info_for('overall_status') %>">
-            <%= @study.overall_status %></button>
-
-    </div>
-    <% if !@study.start_date.blank? %>
-      <div>
-      <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.nlm_info_for('start_date') %>">
-	    Started: </button>
-      </button>
-        <%= @study.start_date %>
-      </div>
-    <% end %>
-    <% if !@study.first_received_date.blank? %>
-      <div>
-        <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
-	    First Received: </button>
-        <%= @study.first_received_date %>
-      </div>
-    <% end %>
-    <% if !@study.completion_date.blank? %>
-      <div>
-        Completed: <%= @study.completion_date %>
-      </div>
-    <% end %>
-  </div>
-
-  <div class='well'>
-    <div>
-      <%= @study.brief_summary.description %>
-    </div>
-  </div>
-
-  <% if @study.keywords.size > 0 %>
-    <h2>Keywords</h2>
-    <div class='well'>
-      <% @study.keywords.each do |k| %>
-          <p class='keyword'><%= k.name %></td>
-      <% end %>
-    </div>
-  <% end %>
-
-  <% if @study.facilities.size > 0 %>
-    <h2>Facilities</h2>
-    <div class='table-responsive well'>
-      <table id="facilitiesTable" class='table table-striped table-condensed table-hover' width='100%'>
-      <thead>
-      <tr>
-	<th>name</th>
-	<th>city</th>
-	<th>state</th>
-      </tr>
-      <thead>
-      <% @study.facilities.each do |fac| %>
-	<tr>
-          <td class="facility_element"><%= fac.name %></td>
-          <td class="facility_element"><%= fac.city %></td>
-          <td class="facility_element"><%= fac.state %></td>
-	</tr>
-      <% end %>
-      </table>
-    </div>
-  <% end %>
-
-  <% if @study.expected_outcomes.size > 0 %>
-    <h2>Prespecified Outcomes</h2>
-    <div class='table-responsive well'>
-      <table id="expectedOutcomesTable" class='table table-striped table-condensed table-hover' width='100%'>
-      <thead>
-      <tr>
-	<th>type</th>
-	<th>measure</th>
-	<th>time frame</th>
-      </tr>
-      </thead>
-      <% @study.expected_outcomes.each do |o| %>
-        <tr>
-          <td class="out"><%= o.outcome_type %></td>
-          <td class="out"><%= o.measure %></td>
-          <td class="out"><%= o.time_frame %></td>
-         </tr>
-      <% end %>
-      </table>
-    </div>
-   <% end %>
-
-  <% if @study.reported_events.size > 0 %>
-    <h2>Reported Events</h2>
-      <div class='table-responsive well'>
-      <table id="eventsTable" class='table table-striped table-condensed table-hover' width='100%'>
-      <thead>
-      <tr>
-	<th class='span3'>type</th>
-	<th>assessment</th>
-	<th>group</th>
-	<th># at risk</th>
-	<th># affected</th>
-	<th>events</th>
-      </tr>
-      </thead>
-      <% @study.reported_events.each do |o| %>
-          <tr>
-            <td><%= o.type %></td>
-            <td><%= o.default_assessment %></td>
-            <td><%= o.ctgov_group_id %></td>
-            <td><%= o.subjects_at_risk %></td>
-            <td><%= o.subjects_affected %></td>
-            <td><%= o.event_count %></td>
-          </tr>
-      <% end %>
-      </table>
-    </div>
-   <% end %>
-
-  </div>
-<% end %>
-
-</section>
-</div>
-<%= link_to 'Back', studies_path %>
