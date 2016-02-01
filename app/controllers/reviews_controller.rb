@@ -6,6 +6,7 @@ class ReviewsController < ApplicationController
   # GET /reviews/new
   def new
     @review = Review.new
+		@study=Study.find_by_nct_id(params['nct_id'])
 		@review.study=@study
   end
 
@@ -23,6 +24,7 @@ class ReviewsController < ApplicationController
     @review = Review.new(review_params)
     @review.user_id = current_user.id
     @review.nct_id = params['nct_id']
+		@study=Study.find_by_nct_id(params['nct_id'])
 
     respond_to do |format|
       if @review.save

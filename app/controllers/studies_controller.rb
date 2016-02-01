@@ -4,7 +4,7 @@ class StudiesController < ApplicationController
   def search
     if params[:search].present?
       @studies = Study.all
-      #TODO  Get this working...  @studies = Study.search(params[:search])
+      @studies = Study.search(params[:search])
     else
       @studies = Study.all
     end

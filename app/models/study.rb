@@ -2,6 +2,7 @@ require 'csv'
 	class Study < ActiveRecord::Base
 		attr_accessor :xml
 		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
+		searchkick
 
 		self.primary_key = 'nct_id'
 		has_many :reviews,				       :foreign_key => 'nct_id', dependent: :destroy

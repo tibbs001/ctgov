@@ -10,7 +10,9 @@
     <p><%= "#{@study.reviews.length} reviews" %></p>
 
     <p>
-      <%= @study.overall_status %>
+			<li><i class="fa-li fa fa-check-square"></i> <%= @study.overall_status %></li>
+			<li><i class="fa-li fa fa-check-square"></i> <%= @study.study_type %></li>
+			<li><i class="fa-li fa fa-check-square"></i> <%= @study.phase %></li>
     </p>
 
     <p>
@@ -21,7 +23,7 @@
 
 		<%= link_to "Write a Review", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
 
-		<%= link_to 'Back to List', studies_path, class: "btn btn-primary" %>
+		<%= link_to 'Return to List', studies_path, class: "btn btn-primary" %>
 
     <br>
     <br>
