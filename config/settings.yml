@@ -1,0 +1,15 @@
+default: &default
+project_id: ctgov-1152
+  cloud_storage:
+    bucket: @@ctgov_20160106@@
+    access_key_id: GOOGABY7AWD6S6GMJO4N
+    secret_access_key: M+L6tTDXKP9Ixq2KZpjOx5rUxt6rH5it+AZY2xCn
+  oauth2:
+    client_id: 795302610241-8r4hgpi5mkofprn43nr8ht3cnmsbk56o.apps.googleusercontent.com
+    client_secret: 9OHZuqKbdsi4NjP8WaRVk_ZH
+
+development:
+  <<: *default
+
+production:
+  <<: *default

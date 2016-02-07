@@ -35,8 +35,6 @@ gem "mini_magick"
 #  User creation gem
 gem 'devise'
 gem 'searchkick'
-# Use Capistrano for deployment
-gem 'capistrano-rails', group: :development
 gem 'font-awesome-rails'
 gem 'faraday'
 gem 'bootstrap-sass', '~> 3.2.0'
