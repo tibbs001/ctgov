@@ -7,3 +7,8 @@ db/*
 config/secrets.yml
 config/database.yml
 
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
