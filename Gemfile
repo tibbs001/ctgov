@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'puma'
 gem 'zip'
 gem 'rails', '4.2.4'
 # MySQL database gem
@@ -48,8 +47,14 @@ gem 'factory_girl_rails'
 #gem 'activerecord-oracle_enhanced-adapter', github: 'OIT-ADS-Web/oracle-enhanced', branch: "rescue-close"
 #gem 'ruby-oci8'
 
+gem 'figaro'
+gem 'puma'
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'capistrano'
+  gem 'capistrano3-puma'
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm'
   gem 'byebug'
 
   # tool to use ActiveRecord to generate an ER Diagram
