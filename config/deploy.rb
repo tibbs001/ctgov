@@ -14,8 +14,8 @@ set :rvm_ruby_version, 'ruby-2.1.4' # Edit this if you are using MRI Ruby
 set :bundle_path,     nil
 set :bundle_binstubs, nil
 set :bundle_flags,    '--system'
-set :passenger_environment_variables, { :path => '/home/deploy/.rvm/gems/2.1.4/bin/passenger:$PATH' }
-set :passenger_restart_command, '/home/deploy/.rvm/gems/2.1.4/passenger/bin/passenger-config restart-app'
+set :passenger_environment_variables, { :path => '/home/deploy/.rvm/gems/ruby-2.1.4/bin/passenger:$PATH' }
+set :passenger_restart_command, '/home/deploy/.rvm/gems/ruby-2.1.4/bin/passenger-config restart-app'
 
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
 set :puma_state, "#{shared_path}/tmp/pids/puma.state"
