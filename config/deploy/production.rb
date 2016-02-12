@@ -9,8 +9,7 @@
 
 server 'ec2-52-87-233-209.compute-1.amazonaws.com', roles: %w{web app db},
   ssh_options: {
-  	user: 'deploy',
-  	keys: ['/User/tibbs001/.ssh/tibbs001.pem'],
+  	user: 'deploy'
   }
 
 # role-based syntax
