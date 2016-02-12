@@ -16,6 +16,9 @@ set :bundle_binstubs, nil
 set :bundle_flags,    '--system'
 set :passenger_environment_variables, { :path => '/home/deploy/.rvm/gems/ruby-2.1.4/bin/passenger:$PATH' }
 set :passenger_restart_command, '/home/deploy/.rvm/gems/ruby-2.1.4/bin/passenger-config restart-app'
+set :default_env, { 'rvmsudo_secure_path' => '0' }
+set :passenger_restart_command, '-i passenger-config restart-app'
+set :passenger_restart_options, -> { "#{deploy_to} --ignore-app-not-running" }
 
 set :puma_rackup, -> { File.join(current_path, 'config.ru') }
 set :puma_state, "#{shared_path}/tmp/pids/puma.state"
