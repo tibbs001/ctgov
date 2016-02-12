@@ -47,6 +47,8 @@ gem 'factory_girl_rails'
 #gem 'activerecord-oracle_enhanced-adapter', github: 'OIT-ADS-Web/oracle-enhanced', branch: "rescue-close"
 #gem 'ruby-oci8'
 
+gem 'execjs'
+gem 'therubyracer'
 gem 'figaro'
 gem 'puma'
 gem 'net-ssh'
