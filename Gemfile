@@ -47,21 +47,23 @@ gem 'factory_girl_rails'
 #gem 'activerecord-oracle_enhanced-adapter', github: 'OIT-ADS-Web/oracle-enhanced', branch: "rescue-close"
 #gem 'ruby-oci8'
 
+gem 'execjs'
+gem 'therubyracer'
 gem 'figaro'
 gem 'puma'
-group :development, :test do
+gem 'net-ssh'
   gem 'capistrano'
+	gem 'capistrano-passenger'
   gem 'capistrano3-puma'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm'
-  gem 'byebug'
 
+group :development, :test do
+  gem 'byebug'
   # tool to use ActiveRecord to generate an ER Diagram
   gem 'rails-erd'
-
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-
 end
 
