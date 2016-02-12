@@ -40,7 +40,7 @@ set :puma_preload_app, false
 # set :format, :pretty
 
 # Default value for :log_level is :debug
-# set :log_level, :debug
+set :log_level, :debug
 
 # Default value for :pty is false
 # set :pty, true
