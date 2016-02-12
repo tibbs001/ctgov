@@ -6,7 +6,12 @@
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
-server '52.87.233.209', user: 'deploy', roles: %w{web app db}
+
+server 'ec2-52-87-233-209.compute-1.amazonaws.com', roles: %w{web app db},
+  ssh_options: {
+  	user: 'deploy',
+  	keys: ['/User/tibbs001/.ssh/tibbs001.pem'],
+  }
 
 # role-based syntax
 # ==================
