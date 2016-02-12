@@ -139,6 +139,9 @@ GEM
     nokogiri (1.6.7)
       mini_portile2 (~> 2.0.0.rc2)
     orm_adapter (0.5.0)
+    passenger (5.0.24)
+      rack
+      rake (>= 0.8.1)
     puma (2.16.0)
     rack (1.6.4)
     rack-test (0.6.3)
@@ -270,6 +273,7 @@ DEPENDENCIES
   mysql2 (~> 0.3.18)
   net-ssh
   nokogiri
+  passenger
   puma
   rails (= 4.2.4)
   rails-erd
