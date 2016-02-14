@@ -3,7 +3,6 @@ log/*.log
 search_results/*
 imported/*
 downloaded/*
-db/*
 config/secrets.yml
 config/database.yml
 
