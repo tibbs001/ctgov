@@ -64,6 +64,11 @@ require 'csv'
 
 		def create
 			update(attribs)
+			self.sponsor_type =          calc_sponsor_type
+			self.actual_duration =       calc_actual_duration
+			self.derived_enrollment =    calc_enrollment
+			self.results_reported =      calc_results_reported
+			self.save!
 			self
 		end
 
@@ -134,12 +139,12 @@ require 'csv'
 			return val if val=='Industry' or val=='NIH'
 			collaborators.each{|c|return 'NIH' if c.agency_class=='NIH'}
 			collaborators.each{|c|return 'Industry' if c.agency_class=='Industry'}
-			'Other'
+			return 'Other'
 		end
 
 		def calc_actual_duration
 			return if !primary_completion_date or !start_date
-			(primary_completion_date - s.start_date).to_f/365
+			(primary_completion_date - start_date).to_f/365
 		end
 
 		def calc_results_reported
@@ -241,10 +246,6 @@ require 'csv'
 				:secondary_ids =>         SecondaryId.create_all_from(opts),
 				:references =>            Reference.create_all_from(opts),
 				:sponsors =>              Sponsor.create_all_from(opts),
-				:sponsor_type =>          calc_sponsor_type,
-				:actual_duration =>       calc_actual_duration,
-				:derived_enrollment =>    calc_enrollment,
-				:results_reported =>      calc_results_reported,
 			}
 		end
 
