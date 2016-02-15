@@ -130,7 +130,6 @@ require 'csv'
 		end
 
 		def calc_sponsor_type
-			return if !lead_sponsor
 			val=lead_sponsor.try(:agency_class)
 			return val if val=='Industry' or val=='NIH'
 			collaborators.each{|c|return 'NIH' if c.agency_class=='NIH'}
