@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215004455) do
+ActiveRecord::Schema.define(version: 20160215212240) do
 
   create_table "baseline_measures", force: :cascade do |t|
     t.string   "ctgov_group_id",         limit: 255
@@ -478,6 +478,17 @@ ActiveRecord::Schema.define(version: 20160215004455) do
 
   add_index "sponsors", ["nct_id"], name: "index_sponsors_on_nct_id", using: :btree
 
+  create_table "statistics", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "sponsor_type",      limit: 255
+    t.string   "stat_category",     limit: 255
+    t.string   "stat_value",        limit: 255
+    t.integer  "number_of_studies", limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
   create_table "studies", id: false, force: :cascade do |t|
     t.string   "nct_id",                          limit: 255
     t.date     "start_date"
@@ -515,6 +526,7 @@ ActiveRecord::Schema.define(version: 20160215004455) do
     t.string   "sponsor_type",                    limit: 255
     t.string   "source",                          limit: 255
     t.integer  "results_reported",                limit: 4
+    t.integer  "registered_in_fiscal_year",       limit: 4
     t.string   "biospec_retention",               limit: 255
     t.text     "biospec_description",             limit: 65535
     t.string   "study_rank",                      limit: 255

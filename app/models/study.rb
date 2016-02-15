@@ -4,6 +4,14 @@ require 'csv'
 		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
 		searchkick
 
+		scope :interventional,  -> {where(study_type: 'Interventional')}
+		scope :observational,   -> {where(study_type: 'Observational')}
+		scope :current, -> { where("first_received_date >= '2007/10/01' and study_type='Interventional'") }
+
+		def self.current_interventional
+			self.interventional and self.current
+		end
+
 		self.primary_key = 'nct_id'
 		has_many :reviews,				       :foreign_key => 'nct_id', dependent: :destroy
 
@@ -64,10 +72,11 @@ require 'csv'
 
 		def create
 			update(attribs)
-			self.sponsor_type =          calc_sponsor_type
-			self.actual_duration =       calc_actual_duration
-			self.derived_enrollment =    calc_enrollment
-			self.results_reported =      calc_results_reported
+			self.sponsor_type              = calc_sponsor_type
+			self.actual_duration           = calc_actual_duration
+			self.derived_enrollment        = calc_enrollment
+			self.results_reported          = calc_results_reported
+			self.registered_in_fiscal_year = calc_registered_in_fiscal_year
 			self.save!
 			self
 		end
@@ -140,6 +149,14 @@ require 'csv'
 			collaborators.each{|c|return 'NIH' if c.agency_class=='NIH'}
 			collaborators.each{|c|return 'Industry' if c.agency_class=='Industry'}
 			return 'Other'
+		end
+
+		def calc_registered_in_fiscal_year
+			if first_received_date.month < 10
+				first_received_date.year
+			else
+				first_received_date.year + 1.year
+			end
 		end
 
 		def calc_actual_duration

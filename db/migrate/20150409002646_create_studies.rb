@@ -40,6 +40,7 @@ class CreateStudies < ActiveRecord::Migration
       t.string  :sponsor_type
       t.string  :source
       t.integer :results_reported
+      t.integer :registered_in_fiscal_year
 
       t.string :biospec_retention
       t.text   :biospec_description

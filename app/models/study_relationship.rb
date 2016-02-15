@@ -1,6 +1,6 @@
 require 'csv'
 require 'active_support/all'
-	class StudyRelationship < ActiveRecord::Base
+class StudyRelationship < ActiveRecord::Base
 
 		self.abstract_class = true;
 	  establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
@@ -109,4 +109,4 @@ require 'active_support/all'
 			val.downcase=='yes'||val.downcase=='y'||val.downcase=='true' if !val.blank?
 		end
 
-	end
+end
