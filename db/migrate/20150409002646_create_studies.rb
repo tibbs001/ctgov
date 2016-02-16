@@ -37,10 +37,13 @@ class CreateStudies < ActiveRecord::Migration
       t.string  :study_type
       t.integer :number_of_arms
       t.integer :number_of_groups
+      t.integer :number_of_facilities
+      t.integer :number_of_nsae_subjects
+      t.integer :number_of_sae_subjects
       t.string  :sponsor_type
       t.string  :source
-      t.integer :results_reported
       t.integer :registered_in_fiscal_year
+      t.boolean :results_reported
 
       t.string :biospec_retention
       t.text   :biospec_description

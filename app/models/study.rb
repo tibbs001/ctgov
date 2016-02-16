@@ -77,6 +77,9 @@ require 'csv'
 			self.derived_enrollment        = calc_enrollment
 			self.results_reported          = calc_results_reported
 			self.registered_in_fiscal_year = calc_registered_in_fiscal_year
+			self.number_of_facilities      = calc_number_of_facilities
+			self.number_of_sae_subjects    = calc_number_of_sae_subjects
+			self.number_of_nsae_subjects   = calc_number_of_nsae_subjects
 			self.save!
 			self
 		end
@@ -151,12 +154,28 @@ require 'csv'
 			return 'Other'
 		end
 
+		def calc_number_of_sae_subjects
+			cnt=0
+			reported_events.each{|re|cnt=cnt+re.subjects_affected if re.event_type.downcase == 'serious'}
+			cnt
+		end
+
+		def calc_number_of_nsae_subjects
+			cnt=0
+			reported_events.each{|re|cnt=cnt+re.subjects_affected if re.event_type.downcase != 'serious'}
+			cnt
+		end
+
 		def calc_registered_in_fiscal_year
 			if first_received_date.month < 10
 				first_received_date.year
 			else
-				first_received_date.year + 1.year
+				(first_received_date + 1.years).year
 			end
+		end
+
+		def calc_number_of_facilities
+			facilities.size
 		end
 
 		def calc_actual_duration
