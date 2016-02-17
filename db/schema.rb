@@ -529,7 +529,7 @@ ActiveRecord::Schema.define(version: 20160215212240) do
     t.string   "sponsor_type",                    limit: 255
     t.string   "source",                          limit: 255
     t.integer  "registered_in_fiscal_year",       limit: 4
-    t.boolean  "results_reported"
+    t.integer  "results_reported",                limit: 4
     t.string   "biospec_retention",               limit: 255
     t.text     "biospec_description",             limit: 65535
     t.string   "study_rank",                      limit: 255
