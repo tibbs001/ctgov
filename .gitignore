@@ -1,11 +1,12 @@
 .bundle/
 log/*.log
 search_results/*
-imported/*
-downloaded/*
+public/imported/*
+public/downloaded/*
+vendor/*
+tmp/*
 config/secrets.yml
 config/database.yml
-
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
