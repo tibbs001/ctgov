@@ -1,3 +1,5 @@
+# TODO - missing a test for link - previous tested on NCT00005669 but that study seems to have been updated to remove it.
+# 		- primary/secondary outcomes
   RSpec.describe Study do
     #  study=Asker.new.create_study('NCT02028676')
     it "should have expected relationships" do
@@ -277,10 +279,6 @@
       expect(expected_primary_outcome.safety_issue).to eq('No')
       expect(expected_primary_outcome.title).to eq('Changes in Body Weight as Determined by Body Mass Index-standard Deviation Score (BMI-SDS).')
       expect(study.eligibility.criteria.length).to eq(2337)
-      expect(study.links.size).to eq(1)
-      expect(study.links.first.nct_id).to eq(nct_id)
-      expect(study.links.map(&:url)).to include('http://clinicalstudies.info.nih.gov/detail/B_2000-CH-0134.html')
-      expect(study.links.map(&:description)).to include('NIH Clinical Center Detailed Web Page')
       expect(study.references.first.nct_id).to eq(nct_id)
       expect(study.references.size).to eq(3)
       expect(study.references.map(&:pmid)).to include('9481594')

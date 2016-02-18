@@ -76,6 +76,7 @@ require 'csv'
 			self.actual_duration           = calc_actual_duration
 			self.derived_enrollment        = calc_enrollment
 			self.results_reported          = calc_results_reported
+			self.months_to_report_results  = calc_months_to_report_results
 			self.registered_in_fiscal_year = calc_registered_in_fiscal_year
 			self.number_of_facilities      = calc_number_of_facilities
 			self.number_of_sae_subjects    = calc_number_of_sae_subjects
@@ -185,6 +186,11 @@ require 'csv'
 
 		def calc_results_reported
 			results_reported=1 if outcomes.size > 0
+		end
+
+		def months_to_report_results
+			return nil if first_received_results_date.nil? or primary_completion_date.nil?
+			((first_received_results_date.to_time -  primary_completion_date.to_time)/1.month.second).to_i
 		end
 
 		def calc_enrollment

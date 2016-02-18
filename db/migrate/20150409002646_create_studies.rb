@@ -44,6 +44,7 @@ class CreateStudies < ActiveRecord::Migration
       t.string  :source
       t.integer :registered_in_fiscal_year
       t.integer :results_reported
+      t.integer :months_to_report_results
 
       t.string :biospec_retention
       t.text   :biospec_description
