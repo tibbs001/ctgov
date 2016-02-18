@@ -17,8 +17,11 @@ $(document).ready(function(){
 <div class="container-fluid">
 <section id='form form-horizontal well'>
 <%= form_for(@study) do |s| %>
-  <h2>
+  <h4>
     <%= @study.nct_id %>
+  </h4>
+
+  <h2>
     <span>
       <%= @study.brief_title %>
       <% if !@study.acronym.blank? %>
@@ -26,7 +29,6 @@ $(document).ready(function(){
       <% end %>
     </span>
   </h2>
-
   <div class='well'>
     <button type="button"
 	    class="btn btn-link has-popover"
@@ -60,32 +62,45 @@ $(document).ready(function(){
             <%= @study.overall_status %></button>
 
     </div>
+		<div class='well'>
     <% if !@study.start_date.blank? %>
       <div>
       <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.nlm_info_for('start_date') %>">
-	    Started: </button>
+	    				class="btn btn-link has-popover"
+	    				data-toggle="popover"
+      				data-content="<%= DataDefinition.nlm_info_for('start_date') %>">
+	    		Started:
       </button>
-        <%= @study.start_date %>
+				<span class=''>
+        	<%= @study.start_date %>
+				</span>
       </div>
     <% end %>
     <% if !@study.first_received_date.blank? %>
       <div>
-        <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
-            data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
-	    First Received: </button>
-        <%= @study.first_received_date %>
+        <button type="button" class="btn btn-link has-popover"
+	    					data-toggle="popover"
+      					data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
+						First Received:
+				</button>
+				<span class=''>
+        	<%= @study.first_received_date %>
+				</span>
       </div>
     <% end %>
     <% if !@study.completion_date.blank? %>
       <div>
-        Completed: <%= @study.completion_date %>
+        <button type="button" class="btn btn-link has-popover "
+	    					data-toggle="popover"
+      					data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
+					Completed:
+				</button>
+				<span class=''>
+        	<%= @study.completion_date %>
+				</span>
       </div>
     <% end %>
+  	</div>
   </div>
 
   <div class='well'>

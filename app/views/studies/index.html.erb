@@ -11,7 +11,6 @@ $(document).ready(function(){
     <tr>
       <th>status</th>
       <th>conditions</th>
-      <th>interventions</th>
       <th>title</th>
       <th>started</th>
       <th>lead sponsor</th>
@@ -20,7 +19,6 @@ $(document).ready(function(){
   </thead>
   <colgroup>
     <col class="col-md-1">
-    <col class="col-md-4">
     <col class="col-md-4">
     <col class="col-md-6">
     <col class="col-md-4">
@@ -33,13 +31,11 @@ $(document).ready(function(){
       <tr>
         <td><%= study.overall_status %></td>
         <td><%= study.condition_names %></td>
-        <td><%= study.intervention_names %></td>
         <td><%= study.brief_title %></td>
         <td><%= study.start_date %></td>
         <td><%= study.lead_sponsor.try(:agency) %></td>
 				<td class='duke-btn'>
-					<%= link_to 'View Details',edit_study_path(study), :class => "btn btn-default btn-mini" %>
-					<%= link_to 'Contribute',study_path(study), :class => "btn btn-default btn-mini" %>
+					<%= link_to 'categorize',study_path(study), :class => "btn btn-default btn-mini" %>
 			  </td>
       </tr>
     <% end %>

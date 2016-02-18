@@ -1,3 +1,8 @@
+<script src="/assets/jquery.js" type="text/javascript"></script>
+<script src="/assets/bootstrap-transfer.js" type="text/javascript"></script>
+<link href="/assets/bootstrap.css" media="screen" rel="stylesheet" />
+<link href="/assets/bootstrap-transfer.css" media="screen" rel="stylesheet" />
+
 <div class="row">
   <div class="col-md-3">
 
@@ -5,9 +10,6 @@
       <%= @study.acronym %>
       <%= @study.brief_title %>
     </h4>
-
-    <div class="star-rating" data-score= <%= @study.average_rating %> ></div>
-    <p><%= "#{@study.reviews.length} reviews" %></p>
 
     <p>
 			<li><i class="fa-li fa fa-check-square"></i> <%= @study.overall_status %></li>
@@ -21,7 +23,6 @@
 
     <p>
 
-		<%= link_to "Write a Review", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
 
 		<%= link_to 'Return to List', studies_path, class: "btn btn-primary" %>
 
@@ -39,7 +40,51 @@
 
   <div class="col-md-9">
     <% if @study.reviews.blank? %>
-      <h3>No reviews yet. Be the first to write one!</h3>
+			<div class='well'>
+				Brief Summary:
+      	<%= @study.brief_summary.description %>
+			</div>
+			<div class='well'>
+				Eligibility:
+      	<%= @study.eligibility.criteria %>
+			</div>
+
+			<div class='well'>
+				<div id="test" style="width:400px">
+				</div>
+				<%= link_to "Update Clinical Category", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
+			</div>
+
+    <script>
+		$(function() {
+			var t = $('#test').bootstrapTransfer(
+				{'target_id': 'multi-select-input',
+				 'height': '15em',
+				 'hilite_selection': true});
+
+			t.populate([
+
+				{value:"1", content:"Cardiology"},
+				{value:"2", content:"Dermatology"},
+				{value:"3", content:"Endocrinology"},
+				{value:"4", content:"Genomics"},
+				{value:"5", content:"GI/Hepatology"},
+				{value:"6", content:"Immunology/Rheumatology"},
+				{value:"7", content:"Infectious Diseases"},
+				{value:"8", content:"Medicine"},
+				{value:"9", content:"Nephrology"},
+				{value:"10", content:"Neurosciences Medicine (Neurology)"},
+				{value:"11", content:"Neurosciences Medicine (Psych)"},
+				{value:"12", content:"Oncology"},
+				{value:"13", content:"Otolaryngology"},
+				{value:"14", content:"Pediatrics Cardiology"},
+				{value:"15", content:"Pulmonary/Critical Care"},
+				{value:"16", content:"Reporductive Medicine/OB-GYN"}
+
+			]);
+		});
+    </script>
+
     <% else %>
       <table class="table">
         <thead>
