@@ -188,7 +188,7 @@ require 'csv'
 			results_reported=1 if outcomes.size > 0
 		end
 
-		def months_to_report_results
+		def calc_months_to_report_results
 			return nil if first_received_results_date.nil? or primary_completion_date.nil?
 			((first_received_results_date.to_time -  primary_completion_date.to_time)/1.month.second).to_i
 		end
