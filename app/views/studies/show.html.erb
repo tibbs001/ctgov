@@ -1,3 +1,8 @@
+<script src="/assets/jquery.js" type="text/javascript"></script>
+<script src="/assets/bootstrap-transfer.js" type="text/javascript"></script>
+<link href="/assets/bootstrap.css" media="screen" rel="stylesheet" />
+<link href="/assets/bootstrap-transfer.css" media="screen" rel="stylesheet" />
+
 <div class="row">
   <div class="col-md-3">
 
@@ -5,9 +10,6 @@
       <%= @study.acronym %>
       <%= @study.brief_title %>
     </h4>
-
-    <div class="star-rating" data-score= <%= @study.average_rating %> ></div>
-    <p><%= "#{@study.reviews.length} reviews" %></p>
 
     <p>
 			<li><i class="fa-li fa fa-check-square"></i> <%= @study.overall_status %></li>
@@ -21,7 +23,6 @@
 
     <p>
 
-		<%= link_to "Write a Review", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
 
 		<%= link_to 'Return to List', studies_path, class: "btn btn-primary" %>
 
@@ -38,54 +39,58 @@
   </div>
 
   <div class="col-md-9">
-    <% if @study.reviews.blank? %>
-      <h3>No reviews yet. Be the first to write one!</h3>
-    <% else %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th class="col-md-3"></th>
-            <th class="col-md-9"></th>
-          </tr>
-        </thead>
+			<div class='well'>
+				<div class='badge'>Brief Summary</div>
+      	<%= @study.brief_summary.description %>
+				<br/>
+				<div class='badge'>Eligibility Criteria</div>
+      	<%= @study.eligibility.criteria %>
+			</div>
 
-        <tbody>
-          <% @study.reviews.each do |review| %>
-            <tr>
-              <td>
-                <h4>
-                  <%= "#{review.user.first_name.capitalize} #{review.user.last_name.capitalize[0]}." %>
-                </h4>
-                <p><%= review.created_at.strftime("%-m/%-d/%y") %></p>
-              </td>
+			<div class='well'>
+				<h4>&nbsp &nbsp Identify Specialty Domain</h4>
+				<div id="test" style="width:400px">
+				</div>
+				<div>
+					&nbsp;Notes/Justification:
+					&nbsp;<input type="text" class="form-control span7" id="annotation">
+				</div>
+				&nbsp<%= link_to "Submit Specialty Domain Suggestion", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
+			</div>
 
-              <td>
-                <div class="star-rating" data-score= <%=review.rating %> ></div>
-                <p><%= h(review.comment).gsub(/\n/, '<br/>').html_safe %></p>
-                <% if user_signed_in? %>
-									<td><%= link_to 'Edit', edit_review_path(review), data: {:id=>review.id}, class: "btn btn-link" %></td>
-									<td><%= link_to 'Destroy', review, method: :delete, data: {confirm: 'Are you sure?',:id=>review.id}, class: "btn btn-link" %></td>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+    <script>
+		$(function() {
+			var t = $('#test').bootstrapTransfer(
+				{'target_id': 'multi-select-input',
+				 'height': '18em',
+				 'hilite_selection': true});
+
+			t.populate([
+
+				{value:"1", content:"Cardiology"},
+				{value:"2", content:"Dermatology"},
+				{value:"3", content:"Endocrinology"},
+				{value:"4", content:"Genomics"},
+				{value:"5", content:"GI/Hepatology"},
+				{value:"6", content:"Immunology/Rheumatology"},
+				{value:"7", content:"Infectious Diseases"},
+				{value:"8", content:"Medicine"},
+				{value:"9", content:"Nephrology"},
+				{value:"10", content:"Neurosciences Medicine (Neurology)"},
+				{value:"11", content:"Neurosciences Medicine (Psych)"},
+				{value:"12", content:"Oncology"},
+				{value:"13", content:"Otolaryngology"},
+				{value:"14", content:"Pediatrics Cardiology"},
+				{value:"15", content:"Pulmonary/Critical Care"},
+				{value:"16", content:"Reporductive Medicine/OB-GYN"}
+
+			]);
+		});
+    </script>
+
   </div>
 </div>
 
 <%= link_to 'Edit', edit_study_path(@study), class: "btn btn-link" %> |
 <%= link_to 'Back', studies_path, class: "btn btn-link" %>
-
-<script>
-  $('.star-rating').raty({
-    path: 'https://s3.amazonaws.com/yelpdemo/stars',
-    readOnly: true,
-    score: function() {
-      return $(this).attr('data-score');
-    }
-  });
-</script>
-
 

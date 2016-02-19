@@ -1,7 +1,7 @@
 require 'csv'
 	class Study < ActiveRecord::Base
 		attr_accessor :xml
-		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
+#		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
 		searchkick
 
 		scope :interventional,  -> {where(study_type: 'Interventional')}
