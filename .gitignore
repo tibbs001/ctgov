@@ -2,10 +2,13 @@
 log/*.log
 search_results/*
 imported/*
+db/test.sqlite3
 downloaded/*
+tmp/*
+public/downloaded/*
+public/imported/*
 config/secrets.yml
 config/database.yml
-
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
