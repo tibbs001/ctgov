@@ -141,7 +141,7 @@
         });
     };
     $.fn.bootstrapTransfer.defaults = {
-        'template':                                         
+        'template':
             '<table width="100%" cellspacing="0" cellpadding="0">\
                 <tr>\
                     <td width="50%">\
@@ -163,7 +163,6 @@
                             </div>\
                             <select multiple="multiple" class="filtered remaining">\
                             </select>\
-                            <a href="#" class="selector-chooseall">Choose all</a>\
                         </div>\
                     </td>\
                     <td>\
@@ -175,12 +174,11 @@
                     <td width="50%">\
                         <div class="selector-chosen">\
                             <h2>Chosen</h2>\
-                            <div class="selector-filter right">\
-                                <p>Select then click</p><span class="illustration"></span>\
+                            <div>\
+                                <p> </p><span class="illustration"></span>\
                             </div>\
                             <select multiple="multiple" class="filtered target">\
                             </select>\
-                            <a href="#" class="selector-clearall">Clear all</a>\
                         </div>\
                     </td>\
                 </tr>\

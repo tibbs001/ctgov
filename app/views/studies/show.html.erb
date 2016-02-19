@@ -39,27 +39,30 @@
   </div>
 
   <div class="col-md-9">
-    <% if @study.reviews.blank? %>
 			<div class='well'>
-				Brief Summary:
+				<div class='badge'>Brief Summary</div>
       	<%= @study.brief_summary.description %>
-			</div>
-			<div class='well'>
-				Eligibility:
+				<br/>
+				<div class='badge'>Eligibility Criteria</div>
       	<%= @study.eligibility.criteria %>
 			</div>
 
 			<div class='well'>
+				<h4>&nbsp &nbsp Identify Specialty Domain</h4>
 				<div id="test" style="width:400px">
 				</div>
-				<%= link_to "Update Clinical Category", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
+				<div>
+					&nbsp;Notes/Justification:
+					&nbsp;<input type="text" class="form-control span7" id="annotation">
+				</div>
+				&nbsp<%= link_to "Submit Specialty Domain Suggestion", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
 			</div>
 
     <script>
 		$(function() {
 			var t = $('#test').bootstrapTransfer(
 				{'target_id': 'multi-select-input',
-				 'height': '15em',
+				 'height': '18em',
 				 'hilite_selection': true});
 
 			t.populate([
@@ -85,52 +88,9 @@
 		});
     </script>
 
-    <% else %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th class="col-md-3"></th>
-            <th class="col-md-9"></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% @study.reviews.each do |review| %>
-            <tr>
-              <td>
-                <h4>
-                  <%= "#{review.user.first_name.capitalize} #{review.user.last_name.capitalize[0]}." %>
-                </h4>
-                <p><%= review.created_at.strftime("%-m/%-d/%y") %></p>
-              </td>
-
-              <td>
-                <div class="star-rating" data-score= <%=review.rating %> ></div>
-                <p><%= h(review.comment).gsub(/\n/, '<br/>').html_safe %></p>
-                <% if user_signed_in? %>
-									<td><%= link_to 'Edit', edit_review_path(review), data: {:id=>review.id}, class: "btn btn-link" %></td>
-									<td><%= link_to 'Destroy', review, method: :delete, data: {confirm: 'Are you sure?',:id=>review.id}, class: "btn btn-link" %></td>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
   </div>
 </div>
 
 <%= link_to 'Edit', edit_study_path(@study), class: "btn btn-link" %> |
 <%= link_to 'Back', studies_path, class: "btn btn-link" %>
-
-<script>
-  $('.star-rating').raty({
-    path: 'https://s3.amazonaws.com/yelpdemo/stars',
-    readOnly: true,
-    score: function() {
-      return $(this).attr('data-score');
-    }
-  });
-</script>
-
 
