@@ -84,7 +84,7 @@
 }
 
 .bootstrap-transfer-container a.selector-chooseall {
-  background: url('/assets/bootstrap-transfer-selector-addall.jpg') left center no-repeat);
+  background: url('/assets/bootstrap-transfer-selector-addall.jpg') left center no-repeat;
 }
 
 .bootstrap-transfer-container a.selector-clearall {

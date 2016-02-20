@@ -27,9 +27,9 @@ $(document).ready(function(){
   <tbody>
     <% @studies.each do |study| %>
       <tr>
-        <td class='duke-btn'>
-	  <%= link_to 'Contribute',study_path(study), :class => "btn btn-default btn-mini" %>
-	</td>
+				<td class='duke-btn'>
+					<%= link_to 'select',study_path(study), :class => "btn btn-default btn-mini" %>
+				</td>
         <td><%= study.overall_status %></td>
         <td><%= study.brief_title %></td>
         <td><%= study.start_date %></td>

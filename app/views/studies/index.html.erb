@@ -18,7 +18,7 @@ $(document).ready(function(){
   </thead>
   <colgroup>
     <col class="col-md-1">
-    <col class="col-md-4">
+    <col class="col-md-2">
     <col class="col-md-6">
     <col class="col-md-4">
     <col class="col-md-2">
@@ -27,13 +27,13 @@ $(document).ready(function(){
   <tbody>
     <% @studies.each do |study| %>
       <tr>
+				<td class='duke-btn'>
+					<%= link_to 'select',study_path(study), :class => "btn btn-default btn-mini" %>
+				</td>
         <td><%= study.overall_status %></td>
         <td><%= study.brief_title %></td>
         <td><%= study.start_date %></td>
         <td><%= study.lead_sponsor.try(:agency) %></td>
-				<td class='duke-btn'>
-					<%= link_to 'categorize',study_path(study), :class => "btn btn-default btn-mini" %>
-			  </td>
       </tr>
     <% end %>
   </tbody>
