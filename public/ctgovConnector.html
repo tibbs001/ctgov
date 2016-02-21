@@ -225,7 +225,8 @@ $(document).ready(function(){
   $("#inputForm").submit(function(e) { // This event fires when a button is clicked
     // Since we use a form for input, make sure to stop the default form behavior
     cancel(e);
-    var xmlUrl = $('input[name=xmlUrl]')[0].value.trim();
+    var url = 'https://clinicaltrials.gov/show/' + document.getElementById('nctId').value + '?resultsxml=true';
+    var xmlUrl = url.trim();
     _submitXMLToTableau(xmlUrl);
   });
 
@@ -240,8 +241,7 @@ $(document).ready(function(){
 
 		<form id="inputForm" action="">
 			Enter Study NCT ID:
-			<input type="text" name="nctId" size="50" />
-			<input type="hidden" name='xmlUrl' value='https://clinicaltrials.gov/show/NCT00005669?resultsxml=true' />
+			<input type="text" id="nctId" size="20" />
 			<input type="submit" value="Submit">
 		</form>
 
