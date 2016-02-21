@@ -207,16 +207,6 @@ function _submitXMLToTableau(xmlUrl) {
     tableau.submit();
 }
 
-function _buildConnectionUrl(url) {
-  // var yqlQueryBase = "http://query.yahooapis.com/v1/public/yql?q=";
-  // var query = "select * from html where url='" + url + "'";
-  // var restOfQueryString = "&format=xml";
-  // var yqlUrl = yqlQueryBase + encodeURIComponent(query) + restOfQueryString;
-  // return yqlUrl;
-  // return url;
-	return 'https://clinicaltrials.gov/show/NCT00005669?resultsxml=true';
-}
-
 $(document).ready(function(){
   var cancel = function (e) {
       e.stopPropagation();
@@ -225,8 +215,15 @@ $(document).ready(function(){
   $("#inputForm").submit(function(e) { // This event fires when a button is clicked
     // Since we use a form for input, make sure to stop the default form behavior
     cancel(e);
-    var url = 'https://clinicaltrials.gov/show/' + document.getElementById('nctId').value + '?resultsxml=true';
-    var xmlUrl = url.trim();
+		var nctId = document.getElementById('nctId').value;
+		if (nctId == '') {
+				var url = 'https://clinicaltrials.gov/search?term=' + document.getElementById('searchTerm').value + '&displayxml=true';
+		} else {
+			console.log('NCT ID found:');
+			console.log(nctId);
+			var url = 'https://clinicaltrials.gov/show/' + document.getElementById('nctId').value + '?resultsxml=true';
+		}
+	var xmlUrl = url.trim();
     _submitXMLToTableau(xmlUrl);
   });
 
@@ -240,8 +237,8 @@ $(document).ready(function(){
 	<body>
 
 		<form id="inputForm" action="">
-			Enter Study NCT ID:
-			<input type="text" id="nctId" size="20" />
+			Enter Study NCT ID: <input type="text" id="nctId" size="15" /> or
+			Search Term: <input type="text" id="searchTerm" size="25" />
 			<input type="submit" value="Submit">
 		</form>
 
