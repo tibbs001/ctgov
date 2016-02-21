@@ -26,19 +26,14 @@ body {
 }
 
 .tools {
-  width:360px;
-  height: 140px;
+  width: 10px;
+  height: 30px;
 }
-
-.tools label {display: inline-block; width: 150px; text-align: right; }
-.tools input {display: inline-block; margin-top:2px; margin-bottom:2px; width: 130px;}
-.tools h4 {margin: 2px;}
-
 
 .main {
   position: absolute;
   height: 150px;
-  left:323px; top:44px; right:0; bottom:0;
+  left:30px; top:44px; right:0; bottom:0;
 }
 
 #fetchedData {

@@ -11,34 +11,16 @@
     </head>
 
     <body>
-        <!-- Header DIV -->
-        <div class="header">
-                <p>Web Connector URL: </p>
-            <input type="text" id="url" size="70"/>
-            <button type="button" id="reload" class="headerButton">Reload</button>
-            <button type="button" id="incrementalRefresh" class="headerButton">Incremental Refresh</button>
-        </div>
-
+        <h2>&nbsp;&nbsp;&nbsp;&nbsp;Tableau Web Data Connector</h2>
         <!-- Tools Menu -->
         <div class="tools">
             <div id="tableauObject">
-                <h4>Fields</h4>
-                <label for="connectionName">Connection Name:</label>
-                <input type="text" id="connectionName"/>
-                <br>
-                <label for="connectionData">Connection Data:</label>
-                <input type="text" id="connectionData" />
-                <br>
-                <label for="incrementalExtractColumn">Incremental Refresh Column:</label>
-                <input type="text" id="incrementalExtractColumn" />
-                </div>
-                <br>
-                 </div>
+            </div>
         </div>
 
         <!-- Web Data Connector iframe -->
         <div class="main">
-                <iframe id="host-iframe" onload="iframeLoaded()" frameborder="0" style="width: 98%; height:100px;"></iframe>
+           <iframe id="host-iframe" onload="iframeLoaded()" frameborder="0" style="width: 40%; height:40px;"></iframe>
         </div>
 
         <!-- Web Data Connector Results -->
