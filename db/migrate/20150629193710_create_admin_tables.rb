@@ -19,6 +19,7 @@ class CreateAdminTables < ActiveRecord::Migration
       t.string :event_type
       t.string :status
       t.text   :description
+      t.float  :load_time
       t.timestamps null: false
     end
 

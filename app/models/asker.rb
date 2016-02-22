@@ -117,7 +117,7 @@ require 'zip'
 			end
 	    e=log_event({:nct_id=>nct_id,:event_type=>'remove',:status=>'active',:description=>msg})
 			Study.where('nct_id=?',nct_id).first.destroy
-			complete_event(e)
+			e.complete
 		end
 
 		def get_study(nct_id)
@@ -130,7 +130,7 @@ require 'zip'
       e=log_event({:nct_id=>opts[:nct_id],:event_type=>'search_result',:status=>'active'})
 			s=SearchResult.new(opts)
 			s.save!
-			complete_event(e)
+			e.complete
 			return s
 		end
 
@@ -150,10 +150,10 @@ require 'zip'
 			end
 
 		#	begin
-			  e=log_event({:nct_id=>nct_id,:event_type=>'create',:status=>'active'})
+			  e=log_event({:nct_id=>nct_id,:event_type=>"create",:status=>'active'})
 			  study=get_study(nct_id).create
 			  existing_nct_ids << nct_id
-				complete_event(e)
+				e.complete
 			  return study
 		#	rescue => error
 		#		msg="Failed: #{error}"
@@ -165,16 +165,11 @@ require 'zip'
 		end
 
 		def log_event(opts={})
-			puts "Event:  #{opts[:nct_id]}: #{opts[:event_type]} #{opts[:status]}  #{opts[:description]}"
 			e=LoadEvent.new(:nct_id=>opts[:nct_id],:event_type=>opts[:event_type],:status=>opts[:status],:description=>opts[:description])
+			e.start_clock
 			e.save!
 			e
 		end
-
-		def complete_event(event)
-			event.status='complete'
-			event.save!
-    end
 
 		def self.get(nct_id)
 			self.new.get_study(nct_id)
@@ -211,7 +206,6 @@ require 'zip'
 			#TODO Fix this to be accurate
 			coordinates={}
       loc=location(url)
-			puts loc
 			coordinates[:latitude] = loc.xpath('lat').first.try(:inner_html)
 			coordinates[:longitude] = loc.xpath('lng').first.try(:inner_html)
 			coordinates
@@ -227,6 +221,7 @@ require 'zip'
 		end
 
 		def self.google_api_key
+			#TODO when official, move out to an environment variable
 			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'
 		end
 
