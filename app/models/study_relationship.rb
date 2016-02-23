@@ -8,11 +8,13 @@ class StudyRelationship < ActiveRecord::Base
 
 		def self.create_all_from(opts)
 			original_xml=opts[:xml]
+			original_outer_xml=opts[:outer_xml]
 			objects=xml_entries(opts).collect{|xml|
 				opts[:xml]=xml
 				new.create_from(opts)
 			}.compact
 			opts[:xml]=original_xml
+			opts[:outer_xml]=original_outer_xml
 			return objects
 		end
 
@@ -59,10 +61,10 @@ class StudyRelationship < ActiveRecord::Base
 		def create_from(opts={})
 			@opts=opts
 			@xml=opts[:xml]
-			@wrapper1_xml=opts[:wrapper1_xml]
+			@wrapper1_xml=opts[:wrapper1_xml]   # I think we can get rid of this
 			self.nct_id=opts[:nct_id]
-			update_attributes(attribs) if !attribs.blank?
-			#assign_attributes(attribs) if !attribs.blank?
+			#update_attributes(attribs) if !attribs.blank?
+			assign_attributes(attribs) if !attribs.blank?
 			self
 		end
 

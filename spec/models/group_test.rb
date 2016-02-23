@@ -9,10 +9,8 @@
 
 		it "should save groups that are missing in the participant_flow section" do
       nct_id='NCT02320695'
-			xml=Nokogiri::XML(Faraday.get("http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true").body)
-			opts={:xml=>xml,:study_xml=>xml,:nct_id=>nct_id}
-			groups=Group.create_all_from(opts)
-			g4_array=groups.select{|g|g.ctgov_group_enumerator==4}
+      study=Asker.new.create_study(nct_id)
+			g4_array=study.groups.select{|g|g.ctgov_group_enumerator==4}
 			expect(g4_array.size).to eq(1)
 			g4=g4_array.first
 			expect(g4.outcome_analyses.size).to eq(2)

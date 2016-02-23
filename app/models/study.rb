@@ -1,6 +1,6 @@
 require 'csv'
 	class Study < ActiveRecord::Base
-		attr_accessor :xml
+		attr_accessor :xml, :new_groups
 #		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
 		searchkick
 
@@ -262,7 +262,10 @@ require 'csv'
 				#:delivery_mechanism =>delivery_mechanism,
 
 				:expected_groups =>       ExpectedGroup.create_all_from(opts),
-				:groups =>                Group.create_all_from(opts.merge(:study_xml=>xml)),
+				:groups =>                get_groups(opts.merge(:study_xml=>xml)),
+				:outcomes =>              Outcome.create_all_from(opts.merge(:groups=>new_groups)),
+				:milestones =>						Milestone.create_all_from(opts.merge(:groups=>new_groups)),
+				:drop_withdrawals =>			DropWithdrawal.create_all_from(opts.merge(:groups=>new_groups)),
 				:detailed_description =>  DetailedDescription.new.create_from(opts),
 				:design =>                Design.new.create_from(opts),
 				:brief_summary        =>  BriefSummary.new.create_from(opts),
@@ -289,6 +292,11 @@ require 'csv'
 				:references =>            Reference.create_all_from(opts),
 				:sponsors =>              Sponsor.create_all_from(opts),
 			}
+		end
+
+		def get_groups(opts)
+			@new_groups=Group.create_all_from(opts)
+			@new_groups
 		end
 
 		def get(label)

@@ -1,5 +1,5 @@
 	class Outcome < StudyRelationship
-		attr_accessor :milestones, :drop_withdrawals, :outer_xml
+		attr_accessor :milestones, :drop_withdrawals
 
 		belongs_to :group
 		has_many :outcome_measures
@@ -55,6 +55,8 @@
 			 :safety_issue => get_opt(:safety_issue),
 			 :population   => get_opt(:population),
 			 :description  => get_opt(:description),
+			 :outcome_analyses => OutcomeAnalysis.create_all_from(opts.merge(:outcome=>self,:xml=>opts[:outer_xml],:group_id_of_interest=>gid)).compact,
+			 :outcome_measures => OutcomeMeasure.create_all_from(opts.merge(:outcome=>self,:xml=>opts[:outer_xml],:group_id_of_interest=>gid)).compact,
 			}
 		end
 
@@ -73,14 +75,6 @@
 				opts[:groups] << new_group
 				return new_group
 			end
-		end
-
-		def create_from(opts)
-			@outer_xml=opts[:outer_xml]
-			super
-			self.outcome_measures=OutcomeMeasure.create_all_from(opts.merge(:outcome=>self,:xml=>outer_xml,:group_id_of_interest=>gid)).compact
-			self.outcome_analyses=OutcomeAnalysis.create_all_from(opts.merge(:outcome=>self,:xml=>outer_xml)).compact
-			self
 		end
 
 		def measures

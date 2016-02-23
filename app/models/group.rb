@@ -13,9 +13,6 @@
 			opts[:xml]=opts[:study_xml].xpath('//outcome_list')
 			additional_groups=pop_create(opts.merge(:name=>'group'))
 			opts[:groups]=groups
-			Outcome.create_all_from(opts)
-			Milestone.create_all_from(opts)
-			DropWithdrawal.create_all_from(opts)
 			groups
 		end
 

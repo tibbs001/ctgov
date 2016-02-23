@@ -152,6 +152,7 @@ require 'zip'
 		#	begin
 			  e=log_event({:nct_id=>nct_id,:event_type=>"create",:status=>'active'})
 			  study=get_study(nct_id).create
+				study.save!
 			  existing_nct_ids << nct_id
 				e.complete
 			  return study

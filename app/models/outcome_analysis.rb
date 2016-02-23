@@ -52,7 +52,7 @@ class OutcomeAnalysis < StudyRelationship
      :method_description => get_opt(:method_description),
      :estimate_description => get_opt(:estimate_description),
 		 :outcome => get_opt(:outcome),
-		 :group => get_opt(:outcome).group
+		 :group => get_group,
     }
   end
 
@@ -60,9 +60,15 @@ class OutcomeAnalysis < StudyRelationship
 		integer_in(opts[:xml].inner_html)
 	end
 
+	def get_group
+		opts[:groups].each {|g|
+			return g if g.ctgov_group_enumerator==gid
+		}
+	end
+
   def conditionally_create_from(opts)
 		@opts=opts
-		return if gid != opts[:outcome].ctgov_group_enumerator
+    return nil if opts[:xml].inner_html != opts[:group_id_of_interest]
     create_from(opts)
   end
 

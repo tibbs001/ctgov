@@ -7,7 +7,7 @@ class Milestone < StudyRelationship
 
 	def self.nested_pop_create(opts)
 		name=opts[:name]
-		all=opts[:study_xml].xpath("//#{name}_list").xpath(name)
+		all=opts[:xml].xpath("//#{name}_list").xpath(name)
 		col=[]
 		xml=all.pop
 		while xml
@@ -35,7 +35,11 @@ class Milestone < StudyRelationship
 	def get_group
 		group_node=xml.attribute('group_id')
 		gid=group_node.try(:value)
-		opts[:groups].each{|g| return g if g.ctgov_group_enumerator==integer_in(gid)}
+		opts[:groups].each{|g|
+			if g.ctgov_group_enumerator==integer_in(gid)
+				return g
+			end
+		}
 	end
 
 end
