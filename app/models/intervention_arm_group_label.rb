@@ -5,7 +5,7 @@ class InterventionArmGroupLabel < StudyRelationship
   end
 
   def attribs
-    {:label=>xml.inner_html}
+    {:label=>opts[:xml].inner_html}
   end
 
 end

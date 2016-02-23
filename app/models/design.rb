@@ -3,22 +3,20 @@ class Design < StudyRelationship
 
   def attribs
     {
-		:description=>source,
-		:primary_purpose=>get_value_for('Primary Purpose:'),
-		:time_perspective=>get_value_for('Time Perspective:'),
-		:observational_model=>get_value_for('Observational Model:'),
-		:intervention_model=>get_value_for('Intervention Model:'),
-		:endpoint_classification=>get_value_for('Endpoint Classification:'),
-    :allocation=>get_value_for('Allocation:'),
-    :masking=>get_masking,
-    :masked_roles=>get_masked_roles,
+		:description => source,
+		:primary_purpose => get_value_for('Primary Purpose:'),
+		:time_perspective => get_value_for('Time Perspective:'),
+		:observational_model => get_value_for('Observational Model:'),
+		:intervention_model => get_value_for('Intervention Model:'),
+		:endpoint_classification => get_value_for('Endpoint Classification:'),
+    :allocation => get_value_for('Allocation:'),
+    :masking => get_masking,
+    :masked_roles => get_masked_roles,
 		}
   end
 
-	def create_from(opts)
-    @source=opts[:xml].xpath("//study_design").try(:inner_html)
-		super
-		self
+	def source
+		@source ||= get_opt(:xml).xpath("//study_design").try(:inner_html)
 	end
 
 	def labels

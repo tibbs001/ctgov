@@ -35,32 +35,35 @@ class OutcomeAnalysis < StudyRelationship
     {
      :ctgov_group_id => xml.inner_html,
      :ctgov_group_enumerator => integer_in(xml.inner_html),
+     :title => get_opt(:title),
+     :non_inferiority => get_opt(:non_inferiority),
+     :non_inferiority_description => get_opt(:non_inferiority_description),
+     :p_value => get_opt(:p_value),
+     :param_type => get_opt(:param_type),
+     :param_value => get_opt(:param_value),
+     :dispersion_type => get_opt(:dispersion_type),
+     :dispersion_value => get_opt(:dispersion_value),
+     :ci_percent => get_opt(:ci_percent),
+     :ci_n_sides => get_opt(:ci_n_sides),
+     :ci_lower_limit => get_opt(:ci_lower_limit),
+     :ci_upper_limit => get_opt(:ci_upper_limit),
+     :method => get_opt(:method),
+     :group_description => get_opt(:group_description),
+     :method_description => get_opt(:method_description),
+     :estimate_description => get_opt(:estimate_description),
+		 :outcome => get_opt(:outcome),
+		 :group => get_opt(:outcome).group
     }
   end
 
-  def create_from(opts)
-		gid=integer_in(opts[:xml].inner_html)
+	def gid
+		integer_in(opts[:xml].inner_html)
+	end
+
+  def conditionally_create_from(opts)
+		@opts=opts
 		return if gid != opts[:outcome].ctgov_group_enumerator
-		self.outcome=opts[:outcome]
-		self.group=self.outcome.group
-    self.title=opts[:title]
-    self.non_inferiority=opts[:non_inferiority]
-    self.non_inferiority_description=opts[:non_inferiority_description]
-    self.p_value=opts[:p_value]
-    self.param_type=opts[:param_type]
-    self.param_value=opts[:param_value]
-    self.dispersion_type=opts[:dispersion_type]
-    self.dispersion_value=opts[:dispersion_value]
-    self.ci_percent=opts[:ci_percent]
-    self.ci_n_sides=opts[:ci_n_sides]
-    self.ci_lower_limit=opts[:ci_lower_limit]
-    self.ci_upper_limit=opts[:ci_upper_limit]
-    self.method=opts[:method]
-    self.group_description=opts[:group_description]
-    self.method_description=opts[:method_description]
-    self.estimate_description=opts[:estimate_description]
-    super
-    self
+    create_from(opts)
   end
 
 end

@@ -7,7 +7,7 @@
 				opts[:wrapper1_xml]=wrapper1
 				wrapper1.xpath("facility").collect{|xml|
 				opts[:xml]=xml
-				create_from(opts)
+				new.create_from(opts)
 				}
       }.flatten!
       if results.nil?

@@ -14,15 +14,10 @@
 			col.compact
 		end
 
-		def create_from(opts)
-      self.reference_type=opts[:xml].name
-			super
-			self
-		end
-
 		def attribs
 			{ :citation => get('citation'),
 				:pmid => get('PMID'),
+				:reference_type => get_opt('xml').name,
 			}
 		end
 

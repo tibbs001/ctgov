@@ -6,6 +6,7 @@
       nct_id='NCT00023673'
       study=Asker.new.create_study(nct_id)
       expect(study.nct_id).to eq(nct_id)
+      expect(study.expected_outcomes.size).to eq(5)
       expect(study.outcomes.size).to eq(6)
       expect(study.groups.size).to eq(4)
       g1=study.groups.select{|g|g.ctgov_group_enumerator==1}.first

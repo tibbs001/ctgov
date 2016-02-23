@@ -3,14 +3,21 @@ require 'active_support/all'
 class StudyRelationship < ActiveRecord::Base
 
 		self.abstract_class = true;
-		attr_accessor :xml, :wrapper1_xml
+		attr_accessor :xml, :opts, :wrapper1_xml
 		belongs_to :study, :foreign_key=> 'nct_id'
 
 		def self.create_all_from(opts)
-			xml_entries(opts).collect{|xml|
+			original_xml=opts[:xml]
+			objects=xml_entries(opts).collect{|xml|
 				opts[:xml]=xml
-				create_from(opts)
+				new.create_from(opts)
 			}.compact
+			opts[:xml]=original_xml
+			return objects
+		end
+
+		def self.create_from(opts)
+			new.conditionally_create_from(opts)
 		end
 
 		def self.pop_create(opts)
@@ -35,10 +42,6 @@ class StudyRelationship < ActiveRecord::Base
 			opts[:xml].xpath(top_level_label)
 		end
 
-		def self.create_from(opts)
-			new.create_from(opts)
-		end
-
 		def self.remove_existing(nct_id)
 			existing=self.where(nct_id: nct_id)
 			existing.each{|x|x.destroy!}
@@ -48,19 +51,19 @@ class StudyRelationship < ActiveRecord::Base
 			@wrapper1_xml ||= Nokogiri::XML('')
 		end
 
+		def conditionally_create_from(opts)
+			# this is a hook that any model can override to decide whether or not to proceed
+			create_from(opts)
+		end
+
 		def create_from(opts={})
+			@opts=opts
 			@xml=opts[:xml]
 			@wrapper1_xml=opts[:wrapper1_xml]
 			self.nct_id=opts[:nct_id]
 			update_attributes(attribs) if !attribs.blank?
+			#assign_attributes(attribs) if !attribs.blank?
 			self
-		end
-
-		def opts
-			{
-			 :xml=>xml,
-			 :nct_id=>nct_id,
-			}
 		end
 
 		def get_from_wrapper1(label)
@@ -96,6 +99,10 @@ class StudyRelationship < ActiveRecord::Base
 
 		def self.trim(str)
 			str.tr("\n\t ", "")
+		end
+
+		def get_opt(label)
+			@opts[label.to_sym]
 		end
 
 		def get_type(label)

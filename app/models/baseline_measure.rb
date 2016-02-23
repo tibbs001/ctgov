@@ -1,8 +1,7 @@
 	class BaselineMeasure < StudyRelationship
 
-		def self.create_all_from(options={})
-			opts=options
-			all=options[:xml].xpath('//baseline').xpath("measure_list").xpath('measure')
+		def self.create_all_from(opts={})
+			all=opts[:xml].xpath('//baseline').xpath("measure_list").xpath('measure')
 			col=[]
 			xml=all.pop
 			while xml
@@ -13,16 +12,15 @@
 				opts[:dispersion]=xml.xpath('dispersion').inner_html
 				opts[:name]='category'
 				opts[:xml]=xml
-				col << nested_pop_create(opts)
+				col << self.nested_pop_create(opts)
 				xml=all.pop
 			end
 			col.flatten
 		end
 
-		def self.nested_pop_create(options)
-			opts=options
-			name=options[:name]
-			all=options[:xml].xpath("#{name}_list").xpath(name)
+		def self.nested_pop_create(opts)
+			name=opts[:name]
+			all=opts[:xml].xpath("#{name}_list").xpath(name)
 			col=[]
 			xml=all.pop
 			while xml
@@ -43,18 +41,14 @@
 			 :lower_limit => get_attribute('lower_limit'),
 			 :upper_limit => get_attribute('upper_limit'),
 			 :spread => get_attribute('spread'),
-			 :measure_description => xml.inner_html
+			 :measure_description => xml.inner_html,
+			 :category => get_opt(:category),
+			 :title => get_opt(:title),
+			 :description => get_opt(:description),
+			 :units => get_opt(:units),
+			 :param => get_opt(:param),
+			 :dispersion => get_opt(:dispersion),
 			}
-		end
-
-		def create_from(options={})
-			self.category=options[:category]
-			self.title=options[:title]
-			self.description=options[:description]
-			self.units=options[:units]
-			self.param=options[:param]
-			self.dispersion=options[:dispersion]
-			super
 		end
 
 	end

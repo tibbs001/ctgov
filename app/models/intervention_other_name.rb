@@ -5,7 +5,7 @@ class InterventionOtherName < StudyRelationship
   end
 
   def attribs
-    {:name=>xml.inner_html}
+    {:name=>opts[:xml].inner_html}
   end
 
 end
