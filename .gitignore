@@ -3,7 +3,7 @@ log/*.log
 search_results/*
 public/imported/*
 public/downloaded/*
-db/test.sqlite3
+db/*.sqlite3
 vendor/*
 tmp/*
 config/secrets.yml

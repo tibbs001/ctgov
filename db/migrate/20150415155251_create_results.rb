@@ -88,7 +88,7 @@ class CreateResults < ActiveRecord::Migration
       t.string  :ctgov_group_id
       t.integer :ctgov_group_enumerator
       t.string  :category
-      t.string  :title
+      t.text    :title
       t.text    :description
       t.string  :units
       t.string  :param

@@ -5,13 +5,131 @@ require 'zip'
 
 	class Asker
 
-		attr_accessor :existing_nct_ids, :should_refresh
+		attr_accessor :existing_nct_ids, :should_refresh, :all_studies_file_name
 
 		def existing_nct_ids
 			@existing_nct_ids ||= Study.all_nctids
 		end
 
-		def load_files
+    def imported_dir
+			# obsolete
+      "#{Rails.root}/public/imported/"
+    end
+
+    def downloaded_dir
+		# obsolete
+      "#{Rails.root}/public/downloaded/"
+    end
+
+
+
+
+
+		def preprocess_dir
+			'public/studies/preprocessed'
+		end
+
+		def incoming_dir
+			'public/studies/incoming'
+		end
+
+		def duplicate_dir
+			'public/studies/duplicate'
+		end
+
+		def new_dir
+			'public/studies/new'
+		end
+
+		def changed_dir
+			'public/studies/changed'
+		end
+
+		def loaded_dir
+			'public/studies/loaded'
+		end
+
+		def all_studies_file_name
+			date_stamp=Time.now.strftime("%Y%m%d")
+			@all_studies_file_name ||= "#{date_stamp}_all.zip"
+		end
+
+		def url_to_get_all
+			'https://clinicaltrials.gov/search?term=pancreatic+cancer+vaccine&resultsxml=true'
+			#'http://clinicaltrials.gov/search?term=&resultsxml=true'
+		end
+
+		def daily_loader
+			pull_down_studies  # New studies put into public/studies/new.  Changed studies put into public/studies/changed.
+			load_new_studies
+			update_changed_studies
+		end
+
+		def load_new_studies
+			Dir.glob("#{new_dir}/NCT*.xml") {|f|
+				begin
+				  nct_id=f.split('/').last.split('.').first
+				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
+					ActiveRecord::Base.transaction do
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+					end
+				  FileUtils.move f, loaded_dir
+			  rescue => error
+			    e=log_event({:nct_id=>nct_id,:event_type=>'load new study',:status=>'failed',:description=>error})
+				  e.save!
+				end
+			}
+		end
+
+		def update_changed_studies
+			#TODO   Ideally we will only update values that change, not the whole study.  For now, we remove and recreate.
+			Dir.glob("#{new_dir}/NCT*.xml") {|f|
+				begin
+				  nct_id=f.split('/').last.split('.').first
+				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
+					ActiveRecord::Base.transaction do
+			    	remove_study({:nct_id=>nct_id,:msg=>'study changed'})
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+					end
+				  FileUtils.move f, loaded_dir
+			  rescue => error
+			    e=log_event({:nct_id=>nct_id,:event_type=>'update study',:status=>'failed',:description=>error})
+				  e.save!
+				end
+			}
+		end
+
+		def pull_down_studies
+			FileUtils.rm_rf Dir.glob("#{preprocess_dir}/*.xml")
+			system("curl -vs '#{url_to_get_all}' > #{preprocess_dir}/#{all_studies_file_name};
+							cd #{preprocess_dir};
+							unzip #{all_studies_file_name}")
+
+			Dir.glob("#{preprocess_dir}/NCT*.xml") do |f|
+				# remove lines that will trick us into thinkin the study changed"
+				file_name=f.split("/").last
+				system("sed '/<download_date>/d' #{f} > #{incoming_dir}/#{file_name}")
+			end
+
+			Dir.glob("#{incoming_dir}/NCT*.xml") do |f|
+				file_name=f.split("/").last
+				loaded_file="#{loaded_dir}/#{file_name}"
+				if !File.exist?(loaded_file)
+				  FileUtils.move f, new_dir
+				else
+					if !FileUtils.identical?(f,loaded_file)
+				  	FileUtils.move f, changed_dir
+					else
+						#TODO  Create a LoadEvent to report this  -or- log to a file?
+						puts "Study hasn't changed since last load.  Skipping #{file_name}"
+					end
+				end
+			end
+			FileUtils.rm_rf Dir.glob("#{preprocess_dir}/*.xml")
+			#(0..9).each {|digit| system("mv public/preprocessed_studies/*#{digit}.xml public/preprocessed_studies/#{format('%02d',digit)}") }
+		end
+
+		def ad_hoc_load_downloaded_files
 			Dir.glob("#{downloaded_dir}/NCT*.xml") {|f|
 				begin
 				  nct_id=f.split('/').last.split('.').first
@@ -225,14 +343,6 @@ require 'zip'
 			#TODO when official, move out to an environment variable
 			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'
 		end
-
-    def imported_dir
-      "#{Rails.root}/public/imported/"
-    end
-
-    def downloaded_dir
-      "#{Rails.root}/public/downloaded/"
-    end
 
 		def google_api_key
 			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'

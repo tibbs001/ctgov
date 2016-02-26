@@ -315,7 +315,7 @@ ActiveRecord::Schema.define(version: 20160215212240) do
     t.string   "ctgov_group_id",         limit: 255
     t.integer  "ctgov_group_enumerator", limit: 4
     t.string   "category",               limit: 255
-    t.string   "title",                  limit: 255
+    t.text     "title",                  limit: 65535
     t.text     "description",            limit: 65535
     t.string   "units",                  limit: 255
     t.string   "param",                  limit: 255
