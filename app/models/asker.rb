@@ -11,20 +11,6 @@ require 'zip'
 			@existing_nct_ids ||= Study.all_nctids
 		end
 
-    def imported_dir
-			# obsolete
-      "#{Rails.root}/public/imported/"
-    end
-
-    def downloaded_dir
-		# obsolete
-      "#{Rails.root}/public/downloaded/"
-    end
-
-
-
-
-
 		def preprocess_dir
 			'public/studies/preprocessed'
 		end
@@ -55,48 +41,23 @@ require 'zip'
 		end
 
 		def url_to_get_all
-			'https://clinicaltrials.gov/search?term=pancreatic+cancer+vaccine&resultsxml=true'
-			#'http://clinicaltrials.gov/search?term=&resultsxml=true'
+			#  small example:  'https://clinicaltrials.gov/search?term=pancreatic+cancer+vaccine&resultsxml=true'
+			'http://clinicaltrials.gov/search?term=&resultsxml=true'
+		end
+
+		def monthly_loader(nctid='')
+			#  assumes pull_down_studies has already been run
+			# can pass in a specific nctid, or a nctid suffix to load just a subset of studies
+			# For speed - the intention is to run 10 simultaneous processes - each loading just studies that end with the given integer
+			suffix="#{nctid}.xml"
+			load_files(suffix)
 		end
 
 		def daily_loader
-			pull_down_studies  # New studies put into public/studies/new.  Changed studies put into public/studies/changed.
+			pull_down_studies  #retrieve all studies from ct.gov
+			organize_by_new_or_changed  # New studies put into public/studies/new.  Changed studies put into public/studies/changed.
 			load_new_studies
 			update_changed_studies
-		end
-
-		def load_new_studies
-			Dir.glob("#{new_dir}/NCT*.xml") {|f|
-				begin
-				  nct_id=f.split('/').last.split('.').first
-				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
-					ActiveRecord::Base.transaction do
-			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
-					end
-				  FileUtils.move f, loaded_dir
-			  rescue => error
-			    e=log_event({:nct_id=>nct_id,:event_type=>'load new study',:status=>'failed',:description=>error})
-				  e.save!
-				end
-			}
-		end
-
-		def update_changed_studies
-			#TODO   Ideally we will only update values that change, not the whole study.  For now, we remove and recreate.
-			Dir.glob("#{changed_dir}/NCT*.xml") {|f|
-				begin
-				  nct_id=f.split('/').last.split('.').first
-				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
-					ActiveRecord::Base.transaction do
-			    	remove_study({:nct_id=>nct_id,:msg=>'study changed'})
-			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
-					end
-				  FileUtils.move f, loaded_dir
-			  rescue => error
-			    e=log_event({:nct_id=>nct_id,:event_type=>'update study',:status=>'failed',:description=>error})
-				  e.save!
-				end
-			}
 		end
 
 		def pull_down_studies
@@ -104,7 +65,9 @@ require 'zip'
 			system("curl -vs '#{url_to_get_all}' > #{preprocess_dir}/#{all_studies_file_name};
 							cd #{preprocess_dir};
 							unzip #{all_studies_file_name}")
+		end
 
+		def organize_by_new_or_changed
 			Dir.glob("#{preprocess_dir}/NCT*.xml") do |f|
 				# remove lines that will trick us into thinkin the study changed"
 				file_name=f.split("/").last
@@ -129,15 +92,51 @@ require 'zip'
 			#(0..9).each {|digit| system("mv public/preprocessed_studies/*#{digit}.xml public/preprocessed_studies/#{format('%02d',digit)}") }
 		end
 
-		def ad_hoc_load_downloaded_files
-			Dir.glob("#{downloaded_dir}/NCT*.xml") {|f|
+		def load_new_studies
+			Dir.glob("#{new_dir}/NCT*.xml") {|f|
 				begin
 				  nct_id=f.split('/').last.split('.').first
 				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
 					ActiveRecord::Base.transaction do
 			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
 					end
-				  FileUtils.move f, imported_dir
+				  FileUtils.move f, loaded_dir
+			  rescue => error
+			    e=log_event({:nct_id=>nct_id,:event_type=>'load new study',:status=>'failed',:description=>error})
+				  e.save!
+				end
+			}
+		end
+
+		def update_changed_studies
+			#TODO   Ideally we would be updating only values that change, not the whole study.  For now, we remove and recreate.
+			Dir.glob("#{changed_dir}/NCT*.xml") {|f|
+				begin
+				  nct_id=f.split('/').last.split('.').first
+				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
+					ActiveRecord::Base.transaction do
+			    	remove_study({:nct_id=>nct_id,:msg=>'study changed'})
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+					end
+				  FileUtils.move f, loaded_dir
+			  rescue => error
+			    e=log_event({:nct_id=>nct_id,:event_type=>'update study',:status=>'failed',:description=>error})
+				  e.save!
+				end
+			}
+		end
+
+		def load_files(suffix='.xml')
+			# iterate through every file in preprocess directory and load into db.  No refreshing - assumes the study doesn't exist.
+			# we have a suffix so that we can run 10 processes simultaneously - each process loading files that end with a certain integer.
+			Dir.glob("#{preprocess_dir}/NCT*#{suffix}") {|f|
+				begin
+				  nct_id=f.split('/').last.split('.').first
+				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
+					ActiveRecord::Base.transaction do
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+					end
+				  FileUtils.move f, loaded_dir
 			  rescue => error
 			    e=log_event({:nct_id=>nct_id,:event_type=>'express load',:status=>'failed',:description=>error})
 				  e.save!
@@ -145,7 +144,7 @@ require 'zip'
 			}
 		end
 
-		def load_all_from_zip_file(file_name="#{downloaded_dir}/all.zip")
+		def load_all_from_zip_file(file_name="#{preprocess_dir}/all.zip")
 			Zip::ZipFile.open(file_name){|zip_file|
 				zip_file.each {|f|
 					  nct_id=f.name.split('.').first
