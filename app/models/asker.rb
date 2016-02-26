@@ -83,7 +83,7 @@ require 'zip'
 
 		def update_changed_studies
 			#TODO   Ideally we will only update values that change, not the whole study.  For now, we remove and recreate.
-			Dir.glob("#{new_dir}/NCT*.xml") {|f|
+			Dir.glob("#{changed_dir}/NCT*.xml") {|f|
 				begin
 				  nct_id=f.split('/').last.split('.').first
 				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
@@ -234,7 +234,7 @@ require 'zip'
 			  msg=opts[:msg]
 			end
 	    e=log_event({:nct_id=>nct_id,:event_type=>'remove',:status=>'active',:description=>msg})
-			Study.where('nct_id=?',nct_id).first.destroy
+			Study.where('nct_id=?',nct_id).first.try(:destroy)
 			e.complete
 		end
 
