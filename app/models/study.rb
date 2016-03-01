@@ -81,12 +81,9 @@ require 'csv'
 			self.number_of_facilities      = calc_number_of_facilities
 			self.number_of_sae_subjects    = calc_number_of_sae_subjects
 			self.number_of_nsae_subjects   = calc_number_of_nsae_subjects
+			#  takes too long - maybe run as a separate process  self.link_to_data              = calc_link_to_data
 			self.save!
 			self
-		end
-
-		def description
-			detailed_description.description
 		end
 
 		def summary
@@ -145,6 +142,25 @@ require 'csv'
 			val=''
 			responsible_parties.each{|r|val=r.investigator_full_name if r.responsible_party_type=='Principal Investigator'}
 			val
+		end
+
+		def link_to_study_data
+			self.link_to_data=calc_link_to_data
+			self.save!
+		end
+
+		def calc_link_to_data
+			if org_study_id.upcase[/^NIDA/]
+				url="https://datashare.nida.nih.gov/protocol/#{org_study_id.gsub(' ','')}"
+				results=Faraday.get(url).body
+				self.link_to_data=url if !results.downcase.include?('page not found')
+			else
+				#protocol link.....
+				#url="http://clinicalstudies.info.nih.gov/cgi/cs/processqry3.pl?sort=1&search=#{nct_id}&searchtype=0&patient_type=All&protocoltype=All&institute=%25&conditions=All"
+				#results=Faraday.get(url).body
+				#self.link_to_data=url if !results.downcase.include?('page not found')
+				#end
+			end
 		end
 
 		def calc_sponsor_type

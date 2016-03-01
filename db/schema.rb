@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215212240) do
+ActiveRecord::Schema.define(version: 20160301134116) do
 
   create_table "baseline_measures", force: :cascade do |t|
     t.string   "ctgov_group_id",         limit: 255
@@ -546,6 +546,7 @@ ActiveRecord::Schema.define(version: 20160215212240) do
     t.boolean  "has_dmc"
     t.datetime "created_at",                                                            null: false
     t.datetime "updated_at",                                                            null: false
+    t.string   "link_to_data",                    limit: 255
   end
 
   add_index "studies", ["nct_id"], name: "index_studies_on_nct_id", using: :btree
