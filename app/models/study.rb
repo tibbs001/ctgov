@@ -21,6 +21,8 @@ require 'csv'
 		has_one  :eligibility,           :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :participant_flow,      :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :result_detail,         :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :pma_mapping,           :foreign_key => 'nct_id'
+		has_one  :pma_record,           :foreign_key => 'nct_id', dependent: :destroy
 
 		has_many :expected_groups,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :expected_outcomes,     :foreign_key => 'nct_id', dependent: :destroy
@@ -148,6 +150,24 @@ require 'csv'
 			self.link_to_data=calc_link_to_data
 			self.save!
 		end
+
+		def pma_id
+			{:pma_number=>pma_mapping.pma_number,:supplement_number=>pma_mapping.supplement_number}
+		end
+
+		def create_pma_record
+			#TODO move this code to Asker.get_pma_data
+			url="https://api.fda.gov/device/pma.json?search=pma_number:#{pma_id[:pma_number]}+AND+supplement_number:#{pma_id[:supplement_number]}"
+			conn = Faraday.new(url: url) do |faraday|
+  			faraday.adapter Faraday.default_adapter
+  			faraday.response :json
+			end
+			result=conn.get.body
+			return if result.nil?
+			return if result['error'] && result['error']['code']=='NOT_FOUND'
+			self.pma_record=PmaRecord.create_from_api(result)
+			self.save!
+	end
 
 		def calc_link_to_data
 			if org_study_id.upcase[/^NIDA/]

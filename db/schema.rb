@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160301134116) do
+ActiveRecord::Schema.define(version: 20160301202629) do
 
   create_table "baseline_measures", force: :cascade do |t|
     t.string   "ctgov_group_id",         limit: 255
@@ -373,6 +373,62 @@ ActiveRecord::Schema.define(version: 20160301134116) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.string   "nct_id",                 limit: 255
+  end
+
+  create_table "pma_mappings", force: :cascade do |t|
+    t.string   "unique_id",         limit: 255
+    t.integer  "ct_pma_id",         limit: 4
+    t.string   "pma_number",        limit: 255
+    t.string   "supplement_number", limit: 255
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "nct_id",            limit: 255
+  end
+
+  create_table "pma_nct_mappings", force: :cascade do |t|
+    t.string   "unique_id",         limit: 255
+    t.integer  "ct_pma_id",         limit: 4
+    t.string   "nct_id",            limit: 255
+    t.string   "pma_number",        limit: 255
+    t.string   "supplement_number", limit: 255
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "pma_records", force: :cascade do |t|
+    t.string   "unique_id",                      limit: 255
+    t.string   "pma_number",                     limit: 255
+    t.string   "supplement_number",              limit: 255
+    t.string   "supplement_type",                limit: 255
+    t.string   "supplement_reason",              limit: 255
+    t.string   "applicant",                      limit: 255
+    t.string   "street_1",                       limit: 255
+    t.string   "street_2",                       limit: 255
+    t.string   "city",                           limit: 255
+    t.string   "state",                          limit: 255
+    t.string   "zip",                            limit: 255
+    t.string   "zip_ext",                        limit: 255
+    t.date     "last_updated"
+    t.date     "date_received"
+    t.date     "decision_date"
+    t.string   "decision_code",                  limit: 255
+    t.string   "expedited_review_flag",          limit: 255
+    t.string   "advisory_committee",             limit: 255
+    t.string   "advisory_committee_description", limit: 255
+    t.string   "device_name",                    limit: 255
+    t.string   "device_class",                   limit: 255
+    t.string   "product_code",                   limit: 255
+    t.string   "generic_name",                   limit: 255
+    t.string   "trade_name",                     limit: 255
+    t.string   "medical_specialty_description",  limit: 255
+    t.string   "docket_number",                  limit: 255
+    t.string   "regulation_number",              limit: 255
+    t.text     "fei_numbers",                    limit: 65535
+    t.text     "registration_numbers",           limit: 65535
+    t.text     "ao_statement",                   limit: 65535
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.string   "nct_id",                         limit: 255
   end
 
   create_table "reported_event_overviews", force: :cascade do |t|
