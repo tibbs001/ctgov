@@ -334,8 +334,32 @@ require 'zip'
 			Nokogiri::XML(response).xpath('//GeocodeResponse').xpath('result').xpath('geometry').xpath('location')
 		end
 
+		def get_pma_data(ids)
+			pid=ids[:pma_number]
+			sid=ids[:supplement_number]
+			if sid.nil?
+				url="https://api.fda.gov/device/pma.json?api_key=#{fda_api_key}&search=pma_number:#{pid}"
+			else
+				url="https://api.fda.gov/device/pma.json?api_key=#{fda_api_key}&search=pma_number:#{pid}+AND+supplement_number:#{sid}"
+			end
+			conn = Faraday.new(url: url) do |faraday|
+  			faraday.adapter Faraday.default_adapter
+  			faraday.response :json
+			end
+			result=conn.get.body
+			return nil if result.nil?
+			return nil if result['error'] && result['error']['code']=='NOT_FOUND'
+			return nil if result['error'] && result['error']['code']=='OVER_RATE_LIMIT' # TODO send email
+			return result
+		end
+
 		def self.geo_url(addr)
 			"https://maps.googleapis.com/maps/api/geocode/xml?address=#{addr}&key=#{google_api_key}"
+		end
+
+		def fda_api_key
+			#TODO when official, move out to an environment variable
+			'1d5o6WslMKSeCqVV8sTlNcVaCgAXyr0QHtSH4REO'
 		end
 
 		def self.google_api_key
