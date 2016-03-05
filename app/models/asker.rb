@@ -5,10 +5,153 @@ require 'zip'
 
 	class Asker
 
-		attr_accessor :existing_nct_ids, :should_refresh
+		attr_accessor :existing_nct_ids, :should_refresh, :all_studies_file_name
 
 		def existing_nct_ids
 			@existing_nct_ids ||= Study.all_nctids
+		end
+
+		def preprocess_dir
+			'public/studies/preprocessed'
+		end
+
+		def incoming_dir
+			'public/studies/incoming'
+		end
+
+		def duplicate_dir
+			'public/studies/duplicate'
+		end
+
+		def new_dir
+			'public/studies/new'
+		end
+
+		def changed_dir
+			'public/studies/changed'
+		end
+
+		def loaded_dir
+			'public/studies/loaded'
+		end
+
+		def all_studies_file_name
+			date_stamp=Time.now.strftime("%Y%m%d")
+			@all_studies_file_name ||= "#{date_stamp}_all.zip"
+		end
+
+		def url_to_get_all
+			#  small example:  'https://clinicaltrials.gov/search?term=pancreatic+cancer+vaccine&resultsxml=true'
+			'http://clinicaltrials.gov/search?term=&resultsxml=true'
+		end
+
+		def monthly_loader(nctid='')
+			#  assumes pull_down_studies has already been run
+			# can pass in a specific nctid, or a nctid suffix to load just a subset of studies
+			# For speed - the intention is to run 10 simultaneous processes - each loading just studies that end with the given integer
+			suffix="#{nctid}.xml"
+			load_files(suffix)
+		end
+
+		def daily_loader
+			pull_down_studies  #retrieve all studies from ct.gov
+			organize_by_new_or_changed  # New studies put into public/studies/new.  Changed studies put into public/studies/changed.
+			load_new_studies
+			update_changed_studies
+		end
+
+		def pull_down_studies
+			FileUtils.rm_rf Dir.glob("#{preprocess_dir}/*.xml")
+			system("curl -vs '#{url_to_get_all}' > #{preprocess_dir}/#{all_studies_file_name};
+							cd #{preprocess_dir};
+							unzip #{all_studies_file_name}")
+		end
+
+		def organize_by_new_or_changed
+			Dir.glob("#{preprocess_dir}/NCT*.xml") do |f|
+				# remove lines that will trick us into thinkin the study changed"
+				file_name=f.split("/").last
+				system("sed '/<download_date>/d' #{f} > #{incoming_dir}/#{file_name}")
+			end
+
+			Dir.glob("#{incoming_dir}/NCT*.xml") do |f|
+				file_name=f.split("/").last
+				loaded_file="#{loaded_dir}/#{file_name}"
+				if !File.exist?(loaded_file)
+				  FileUtils.move f, new_dir
+				else
+					if !FileUtils.identical?(f,loaded_file)
+				  	FileUtils.move f, changed_dir
+					else
+						#TODO  Create a LoadEvent to report this  -or- log to a file?
+						puts "Study hasn't changed since last load.  Skipping #{file_name}"
+					end
+				end
+			end
+			FileUtils.rm_rf Dir.glob("#{preprocess_dir}/*.xml")
+			#(0..9).each {|digit| system("mv public/preprocessed_studies/*#{digit}.xml public/preprocessed_studies/#{format('%02d',digit)}") }
+		end
+
+		def load_new_studies
+			Dir.glob("#{new_dir}/NCT*.xml") {|f|
+				begin
+				  nct_id=f.split('/').last.split('.').first
+				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
+					ActiveRecord::Base.transaction do
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+					end
+				  FileUtils.move f, loaded_dir
+			  rescue => error
+			    e=log_event({:nct_id=>nct_id,:event_type=>'load new study',:status=>'failed',:description=>error})
+				  e.save!
+				end
+			}
+		end
+
+		def update_changed_studies
+			#TODO   Ideally we would be updating only values that change, not the whole study.  For now, we remove and recreate.
+			Dir.glob("#{changed_dir}/NCT*.xml") {|f|
+				begin
+				  nct_id=f.split('/').last.split('.').first
+				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
+					ActiveRecord::Base.transaction do
+			    	remove_study({:nct_id=>nct_id,:msg=>'study changed'})
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+					end
+				  FileUtils.move f, loaded_dir
+			  rescue => error
+			    e=log_event({:nct_id=>nct_id,:event_type=>'update study',:status=>'failed',:description=>error})
+				  e.save!
+				end
+			}
+		end
+
+		def load_files(suffix='.xml')
+			# iterate through every file in preprocess directory and load into db.  No refreshing - assumes the study doesn't exist.
+			# we have a suffix so that we can run 10 processes simultaneously - each process loading files that end with a certain integer.
+			Dir.glob("#{preprocess_dir}/NCT*#{suffix}") {|f|
+				begin
+				  nct_id=f.split('/').last.split('.').first
+				  xml=Nokogiri::XML(File.open(f,"rb"){|io|io.read})
+					ActiveRecord::Base.transaction do
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+					end
+				  FileUtils.move f, loaded_dir
+			  rescue => error
+			    e=log_event({:nct_id=>nct_id,:event_type=>'express load',:status=>'failed',:description=>error})
+				  e.save!
+				end
+			}
+		end
+
+		def load_all_from_zip_file(file_name="#{preprocess_dir}/all.zip")
+			Zip::ZipFile.open(file_name){|zip_file|
+				zip_file.each {|f|
+					  nct_id=f.name.split('.').first
+					  xml=Nokogiri::XML(zip_file.read(f))
+			      Study.new({:xml=>xml,:nct_id=>nct_id}).create
+				}
+      }
 		end
 
 		def self.create_all_studies(opts={})
@@ -90,20 +233,21 @@ require 'zip'
 			  msg=opts[:msg]
 			end
 	    e=log_event({:nct_id=>nct_id,:event_type=>'remove',:status=>'active',:description=>msg})
-			Study.where('nct_id=?',nct_id).first.destroy
-			complete_event(e)
+			Study.where('nct_id=?',nct_id).first.try(:destroy)
+			e.complete
 		end
 
 		def get_study(nct_id)
-			xml=Nokogiri::XML(Faraday.get("http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true").body)
-			StudyTemplate.new({:xml=>xml,:nct_id=>nct_id})
+			url="http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true"
+			xml=Nokogiri::XML(call_to_ctgov(url))
+			Study.new({:xml=>xml,:nct_id=>nct_id})
 		end
 
 		def create_search_result(opts)
       e=log_event({:nct_id=>opts[:nct_id],:event_type=>'search_result',:status=>'active'})
 			s=SearchResult.new(opts)
 			s.save!
-			complete_event(e)
+			e.complete
 			return s
 		end
 
@@ -122,33 +266,28 @@ require 'zip'
 				end
 			end
 
-			begin
-			  e=log_event({:nct_id=>nct_id,:event_type=>'create',:status=>'active'})
-			  attribs=get_study(nct_id).attribs
-			  study=Study.new.create_from(attribs)
+		#	begin
+			  e=log_event({:nct_id=>nct_id,:event_type=>"create",:status=>'active'})
+			  study=get_study(nct_id).create
+				study.save!
 			  existing_nct_ids << nct_id
-				complete_event(e)
+				e.complete
 			  return study
-			rescue => error
-				msg="Failed: #{error}"
-				puts msg
-			  e.status='failed'
-			  e.description=msg
-				e.save!
-			end
+		#	rescue => error
+		#		msg="Failed: #{error}"
+		#		puts msg
+		#	  e.status='failed'
+		#	  e.description=msg
+		#		e.save!
+		#	end
 		end
 
 		def log_event(opts={})
-			puts "Event:  #{opts[:nct_id]}: #{opts[:event_type]} #{opts[:status]}  #{opts[:description]}"
 			e=LoadEvent.new(:nct_id=>opts[:nct_id],:event_type=>opts[:event_type],:status=>opts[:status],:description=>opts[:description])
+			e.start_clock
 			e.save!
 			e
 		end
-
-		def complete_event(event)
-			event.status='complete'
-			event.save!
-    end
 
 		def self.get(nct_id)
 			self.new.get_study(nct_id)
@@ -156,15 +295,15 @@ require 'zip'
 
 		def ctgov_pages
 			collection=[]
-			response = Faraday.get('https://clinicaltrials.gov/ct2/crawl').body
-			Nokogiri::HTML(response).css('.layout_table').search('a').each { |link| collection << link['href'] }
+			response=call_to_ctgov('https://clinicaltrials.gov/ct2/crawl')
+			Nokogiri::HTML(response).css('.layout_table').search('a').each {|link| collection << link['href']}
 			collection
 		end
 
 		def call_to_ctgov(query_url)
 			begin
 			  tries=50
-				response = Faraday.get(query_url).body
+				Faraday.get(query_url).body
 			rescue => error
 				tries = tries-1
 				if tries > 0
@@ -177,4 +316,58 @@ require 'zip'
 			end
 	  end
 
+		def self.get_coordinates(addr)
+			new.coordinates_for(geo_url(addr))
+		end
+
+		def coordinates_for(url)
+			#TODO Fix this to be accurate
+			coordinates={}
+      loc=location(url)
+			coordinates[:latitude] = loc.xpath('lat').first.try(:inner_html)
+			coordinates[:longitude] = loc.xpath('lng').first.try(:inner_html)
+			coordinates
+		end
+
+		def location(url)
+			response=Faraday.get(url).body
+			Nokogiri::XML(response).xpath('//GeocodeResponse').xpath('result').xpath('geometry').xpath('location')
+		end
+
+		def get_pma_data(ids)
+			pid=ids[:pma_number]
+			sid=ids[:supplement_number]
+			if sid.nil?
+				url="https://api.fda.gov/device/pma.json?api_key=#{fda_api_key}&search=pma_number:#{pid}"
+			else
+				url="https://api.fda.gov/device/pma.json?api_key=#{fda_api_key}&search=pma_number:#{pid}+AND+supplement_number:#{sid}"
+			end
+			conn = Faraday.new(url: url) do |faraday|
+  			faraday.adapter Faraday.default_adapter
+  			faraday.response :json
+			end
+			result=conn.get.body
+			return nil if result.nil?
+			return nil if result['error'] && result['error']['code']=='NOT_FOUND'
+			return nil if result['error'] && result['error']['code']=='OVER_RATE_LIMIT' # TODO send email
+			return result
+		end
+
+		def self.geo_url(addr)
+			"https://maps.googleapis.com/maps/api/geocode/xml?address=#{addr}&key=#{google_api_key}"
+		end
+
+		def fda_api_key
+			#TODO when official, move out to an environment variable
+			'1d5o6WslMKSeCqVV8sTlNcVaCgAXyr0QHtSH4REO'
+		end
+
+		def self.google_api_key
+			#TODO when official, move out to an environment variable
+			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'
+		end
+
+		def google_api_key
+			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'
+		end
   end

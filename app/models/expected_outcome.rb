@@ -19,19 +19,7 @@ class ExpectedOutcome < StudyRelationship
       :safety_issue => get('safety_issue'),
       :description => get('description'),
       :population => get('population'),
-    }
-  end
-
-  def create_from(opts={})
-    @xml=opts[:xml]
-    self.outcome_type=opts[:type]
-    super
-  end
-
-  def self.summary
-    column_headers= ['nct_id','outcome_type','time_frame','population']
-    CSV.open("expected_outcome_report.csv", "wb", :write_headers=> true, :headers => column_headers) {|csv|
-      all.each{|g| csv << [g.nct_id,g.outcome_type,g.time_frame,g.population] }
+      :outcome_type => get_opt(:type)
     }
   end
 

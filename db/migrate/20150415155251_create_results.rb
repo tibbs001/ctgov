@@ -72,10 +72,10 @@ class CreateResults < ActiveRecord::Migration
       t.integer :ctgov_group_enumerator
       t.text    :group_title
       t.text    :group_description
-      t.string  :title
+      t.text    :title
       t.text    :description
       t.string  :measure
-      t.string  :time_frame
+      t.text    :time_frame
       t.string  :safety_issue
       t.text    :population
       t.integer :participant_count
@@ -88,7 +88,7 @@ class CreateResults < ActiveRecord::Migration
       t.string  :ctgov_group_id
       t.integer :ctgov_group_enumerator
       t.string  :category
-      t.string  :title
+      t.text    :title
       t.text    :description
       t.string  :units
       t.string  :param
@@ -110,13 +110,15 @@ class CreateResults < ActiveRecord::Migration
       t.string  :title
       t.string  :non_inferiority
       t.text    :non_inferiority_description
-      t.string  :p_value
+      t.decimal :p_value, :precision => 15, :scale => 10
       t.string  :param_type
-      t.string  :param_value
+      t.decimal :param_value, :precision => 15, :scale => 10
+			t.string  :dispersion_type
+      t.decimal :dispersion_value, :precision => 15, :scale => 10
       t.string  :ci_percent
       t.string  :ci_n_sides
-      t.string  :ci_lower_limit
-      t.string  :ci_upper_limit
+      t.decimal :ci_lower_limit, :precision => 15, :scale => 10
+      t.decimal :ci_upper_limit, :precision => 16, :scale => 8
       t.string  :method
       t.text    :description
       t.text    :group_description
@@ -134,7 +136,7 @@ class CreateResults < ActiveRecord::Migration
       t.string   :group_title
       t.text     :group_description
       t.text     :description
-      t.string   :time_frame
+      t.text     :time_frame
       t.string   :category
       t.string   :event_type
       t.string   :frequency_threshold
@@ -162,6 +164,7 @@ class CreateResults < ActiveRecord::Migration
       t.string  :title
       t.text    :description
       t.integer :participant_count
+      t.integer :derived_participant_count
       t.timestamps null: false
     end
     add_column :groups, :nct_id, :string, references: :studies

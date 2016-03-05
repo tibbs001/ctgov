@@ -112,27 +112,33 @@ class ReportedEvent < StudyRelationship
     event_collection
   end
 
-  def create_from(opts)
-    gid=opts[:group_id]
-    ginfo=(opts[:groups].first)[gid]
-    self.group_title=ginfo[:title] if ginfo
-    self.group_description=ginfo[:description] if ginfo
-    self.ctgov_group_id=gid
-    self.ctgov_group_enumerator=integer_in(gid)
-    self.nct_id=opts[:nct_id]
-    self.category=opts[:category]
-    self.event_type=opts[:type]
-    self.time_frame=opts[:time_frame]
-    self.description=opts[:description]
-    self.frequency_threshold=opts[:frequency_threshold]
-    self.default_vocab=opts[:default_vocab]
-    self.default_assessment=opts[:default_assessment]
-    self.title=opts[:title]
-    self.event_count=opts[:event_count]
-    self.subjects_affected=opts[:subjects_affected]
-    self.subjects_at_risk=opts[:subjects_at_risk]
-    self
-  end
+	def attribs
+		{
+    	:category => get_opt(:category),
+    	:event_type => get_opt(:type),
+    	:time_frame => get_opt(:time_frame),
+    	:description => get_opt(:description),
+    	:frequency_threshold => get_opt(:frequency_threshold),
+    	:default_vocab => get_opt(:default_vocab),
+    	:default_assessment => get_opt(:default_assessment),
+    	:title => get_opt(:title),
+    	:event_count => get_opt(:event_count),
+    	:subjects_affected => get_opt(:subjects_affected),
+    	:subjects_at_risk => get_opt(:subjects_at_risk),
+    	:ctgov_group_id => gid,
+    	:ctgov_group_enumerator => integer_in(gid),
+    	:group_description => (ginfo[:description] if ginfo),
+    	:group_title => (ginfo[:title] if ginfo)
+		}
+	end
+
+	def gid
+    opts[:group_id]
+	end
+
+	def ginfo
+    get_opt(:groups).first[gid]
+	end
 
   def type
     event_type

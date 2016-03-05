@@ -5,9 +5,9 @@ class OverallOfficial < StudyRelationship
   end
 
   def attribs
-    {:name=>get('last_name'),
-     :role=>get('role'),
-     :affiliation=>get('affiliation')}
+    {:name => get('last_name'),
+     :role => get('role'),
+     :affiliation => get('affiliation')}
   end
 
 end

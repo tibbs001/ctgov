@@ -17,15 +17,4 @@
 			xml.xpath("//#{label}").inner_html
 		end
 
-		def self.with_exclusion_criteria
-			where("lower(study_population) like '%exclusion criter%'")
-		end
-
-		def self.with_inclusion_criteria
-			where("lower(study_population) like '%inclusion criter%'")
-		end
-
-		def inclusion_criteria
-		  (study_population.split('Inclusion Criteria')).each{|x| puts x}
-	  end
 	end

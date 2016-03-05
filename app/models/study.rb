@@ -1,8 +1,20 @@
 require 'csv'
 	class Study < ActiveRecord::Base
-		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
+		attr_accessor :xml, :new_groups
+#		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
+		searchkick
+
+		scope :interventional,  -> {where(study_type: 'Interventional')}
+		scope :observational,   -> {where(study_type: 'Observational')}
+		scope :current, -> { where("first_received_date >= '2007/10/01' and study_type='Interventional'") }
+
+		def self.current_interventional
+			self.interventional and self.current
+		end
 
 		self.primary_key = 'nct_id'
+		has_many :reviews,				       :foreign_key => 'nct_id', dependent: :destroy
+
 		has_one  :brief_summary,         :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :design,                :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :detailed_description,  :foreign_key => 'nct_id', dependent: :destroy
@@ -10,6 +22,8 @@ require 'csv'
 		has_one  :participant_flow,      :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :result_detail,         :foreign_key => 'nct_id', dependent: :destroy
 
+		has_many :pma_mappings,          :foreign_key => 'nct_id'
+		has_many :pma_records,           :foreign_key => 'nct_id', dependent: :destroy
 		has_many :expected_groups,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :expected_outcomes,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :groups,                :foreign_key => 'nct_id', dependent: :destroy
@@ -28,69 +42,54 @@ require 'csv'
 		has_many :outcome_measures,      :foreign_key => 'nct_id', dependent: :destroy
 		has_many :overall_officials,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :oversight_authorities, :foreign_key => 'nct_id', dependent: :destroy
-		has_many :periods,               :foreign_key => 'nct_id', dependent: :destroy
 		has_many :reported_events,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :responsible_parties,   :foreign_key => 'nct_id', dependent: :destroy
 		has_many :result_agreements,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :result_contacts,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :secondary_ids,         :foreign_key => 'nct_id', dependent: :destroy
 		has_many :sponsors,              :foreign_key => 'nct_id', dependent: :destroy
-		has_many :study_references,      :foreign_key => 'nct_id', dependent: :destroy
-		has_many :result_references,     :foreign_key => 'nct_id', dependent: :destroy
+		has_many :references,            :foreign_key => 'nct_id', dependent: :destroy
 
 		scope :started_between, lambda {|sdate, edate| where("start_date >= ? AND created_at <= ?", sdate, edate )}
 		scope :changed_since,   lambda {|cdate| where("last_changed_date >= ?", cdate )}
 		scope :completed_since, lambda {|cdate| where("completion_date >= ?", cdate )}
 		scope :sponsored_by,    lambda {|agency| joins(:sponsors).where("sponsors.agency LIKE ?", "#{agency}%")}
 
+		def initialize(hash)
+			super
+			@xml=hash[:xml]
+			self.nct_id=hash[:nct_id]
+		end
+
+		def opts
+			{
+				:xml=>xml,
+				:nct_id=>nct_id
+			}
+		end
+
 		def self.all_nctids
 		  all.collect{|s|s.nct_id}
 		end
 
-		def create_from(hash)
-			update_attributes(hash)
+		def create
+			update(attribs)
+			self.sponsor_type              = calc_sponsor_type
+			self.actual_duration           = calc_actual_duration
+			self.derived_enrollment        = calc_enrollment
+			self.results_reported          = calc_results_reported
+			self.months_to_report_results  = calc_months_to_report_results
+			self.registered_in_fiscal_year = calc_registered_in_fiscal_year
+			self.number_of_facilities      = calc_number_of_facilities
+			self.number_of_sae_subjects    = calc_number_of_sae_subjects
+			self.number_of_nsae_subjects   = calc_number_of_nsae_subjects
+			#  takes too long - maybe run as a separate process  self.link_to_data              = calc_link_to_data
+			self.save!
 			self
-		end
-
-		def actual_duration_days
-			# TODO  Store value in table?
-			completion_date.mjd - start_date.mjd if completion_date
-		end
-
-		def references
-			study_references + result_references
-		end
-
-		def description
-			detailed_description.description
 		end
 
 		def summary
 			brief_summary.description
-		end
-
-		def all_outcomes(exp_act='actual',prim_sec='primary')
-			if exp_act=='expected'
-				expected_outcomes.select {|o| o.outcome_type==prim_sec}
-			else
-				outcomes.select{|o|o.outcome_type==prim_sec}
-			end
-		end
-
-		def recruitment_details
-			result_detail.try(:recruitment_details)
-		end
-
-		def pre_assignment_details
-			result_detail.try(:pre_assignment_details)
-		end
-
-		def gender
-			eligibility.try(:gender)
-		end
-
-		def criteria
-			eligibility.try(:criteria)
 		end
 
 		def sampling_method
@@ -99,6 +98,14 @@ require 'csv'
 
 		def study_population
 			eligibility.study_population
+		end
+
+		def study_references
+			references.select{|r|r.type!='results_reference'}
+		end
+
+		def result_references
+			references.select{|r|r.type=='results_reference'}
 		end
 
 		def healthy_volunteers?
@@ -133,119 +140,95 @@ require 'csv'
 			facilities.size
 		end
 
-		def counted_num_sites
-			facilities.size
-		end
-
-		def ctms_study
-			CtmsStudy.where('nct_id=?',nct_id).first
-		end
-
-		def number_of_sites
-			facilities.size
-		end
-
-		def act_num_sites
-			# TODO filter on actual
-			#facilities.size
-		end
-
-		def est_num_sites
-			# TODO filter on estimated
-			facilities.size
-		end
-
-		def drug_product
-			expected_groups.collect{|c|c.title}.join(",")
-		end
-
-		def dcri_services_provided
-			nil
-		end
-
-		def product_actual
-			groups.collect{|c|c.title}.join(",")
-		end
-
-		def self.create_all
-			Asker.create_all_studies
-		end
-
-		def self.recruitment_info
-			column_headers= ['nct_id','phase','status','study_type','enrollment_type','enrollment','min_age','max_age','gender','healthy_volunteer','population','start','completion']
-			CSV.open("recruitment_info.csv", "wb", :write_headers=> true, :headers => column_headers) {|csv|
-				all.each{|s|
-					csv << [s.nct_id,s.phase,s.status,s.study_type,s.enrollment_type,s.enrollment,s.minimum_age,s.maximum_age,s.gender,s.healthy_volunteers?,s.study_population,s.start_date,s.completion_date]
-				}
-			}
-		end
-
-		def self.countries_studying(condition)
-			nct_ids=[]
-			locations=[]
-			column_headers= ['nct_id','brief_title','study_type','phase','status','start_date','completion_date','enrollment','org_study_id','country']
-			BrowseCondition.where('mesh_term=?',condition).each{|x| nct_ids << x.nct_id}
-
-			nct_ids.uniq.each{|x|
-				LocationCountry.where('nct_id=?',x).each {|lc|locations << lc}
-				CSV.open("#{condition}.csv", "wb", :write_headers=> true, :headers => column_headers) {|csv| locations.each {|l|
-							 csv << [l.nct_id,l.study.brief_title,l.study.study_type,l.study.phase,l.study.status,l.study.start_date,l.study.completion_date,l.study.enrollment,l.study.org_study_id,l.country]}
-				}
-			}
-		end
-
-		def self.irb_headers
-			['DOCR_NCT_CODE','DSR_INSERT_DATE_TIME','ID','SHORT_TITLE','TITLE',
-			 'NAME','TYPE','TYPECODE','ALIAS','PROTOCOL_TYPE','REVIEW_TYPE',
-			 'CREATED_ON','REVIEWED_ON','APPROVED_ON','EXPIRES_ON','PREVIOUSLY_EXPIRED_ON',
-			 'STATUS','DEPARTMENT','DIVISION','CRU','PI_DUKEID','PI_FIRST_NAME','PI_LAST_NAME',
-			 'IRB_LEGACY_ID','FEDERAL_ID','BIOBANKING','BLOOD_DRAWS','MTA_AGREEMENT_REQUIRED',
-			 'DOCR_NCT_CODE','BLOOD_DRAWS_PER_WEEK','BLOOD_DRAWS_MAXIMUM_AMOUNT','SPS_NUMBER',
-			 'ENROLLMENT_MAX_AT_ALL_SITES','ENROLLMENT_MAX_AT_DUKE']
-		end
-
-		def self.headers
-			(Study.first.attributes.collect{|a|a.first} +
-			 ['sponsor','responsible_party','number_of_sites','drug_product','product_actual']).flatten
-		end
-
-		def self.irb_data
-			asker=Asker.new
-			column_headers=(irb_headers + headers).flatten
-			CSV.open("irb_data_out.csv", "wb",:write_headers=> true,:headers =>column_headers) {|csv|
-				row_count=0
-				CSV.foreach('irb_data.csv', :headers => true, :encoding => 'windows-1251:utf-8') do |row|
-					begin
-						row_count=row_count+1
-						id=row['DOCR_NCT_CODE']
-			if id
-							nct_id=id.split(' ').first if id
-							s=asker.create_study(nct_id) if (nct_id[/^NCT/])
-			end
-				if s
-				s.attributes.each{|a|row << [a.first,"#{a.last.to_s.gsub(/\n/," ")}"]}
-				row << ['sponsor',s.lead_sponsor_name]
-				row << ['responsible_party',s.responsible_parties.first.label] if s.responsible_parties.size==1
-				row << ['number_of_sites',s.number_of_sites]
-				row << ['drug_product',s.drug_product]
-				row << ['product_actual',s.product_actual]
-				csv << row
-			else
-							csv << row
-			end
-					rescue => e
-						msg="Failed on row #{row_count}: #{row}: #{e}"
-						logger.info(msg)
-						csv << row
-					end
-				end
-			}
-		end
-
 		def pi
 			val=''
 			responsible_parties.each{|r|val=r.investigator_full_name if r.responsible_party_type=='Principal Investigator'}
 			val
+		end
+
+		def link_to_study_data
+			self.link_to_data=calc_link_to_data
+			self.save!
+		end
+
+		def pma_mapping_ids
+			pma_mappings.collect{|p| {:pma_number=>p.pma_number,:supplement_number=>p.supplement_number} }
+		end
+
+		def create_pma_records
+			return if pma_mappings.empty?
+			pma_mapping_ids.each{|id|
+				data=Asker.new.get_pma_data(id)
+				rec = PmaRecord.new.create_from(data) if !data.nil?
+				self.pma_records << rec if !rec.nil?
+			}
+			self.save!
+		end
+
+		def calc_link_to_data
+			if org_study_id.upcase[/^NIDA/]
+				url="https://datashare.nida.nih.gov/protocol/#{org_study_id.gsub(' ','')}"
+				results=Faraday.get(url).body
+				self.link_to_data=url if !results.downcase.include?('page not found')
+			else
+				#protocol link.....
+				#url="http://clinicalstudies.info.nih.gov/cgi/cs/processqry3.pl?sort=1&search=#{nct_id}&searchtype=0&patient_type=All&protocoltype=All&institute=%25&conditions=All"
+				#results=Faraday.get(url).body
+				#self.link_to_data=url if !results.downcase.include?('page not found')
+				#end
+			end
+		end
+
+		def calc_sponsor_type
+			val=lead_sponsor.try(:agency_class)
+			return val if val=='Industry' or val=='NIH'
+			collaborators.each{|c|return 'NIH' if c.agency_class=='NIH'}
+			collaborators.each{|c|return 'Industry' if c.agency_class=='Industry'}
+			return 'Other'
+		end
+
+		def calc_number_of_sae_subjects
+			cnt=0
+			reported_events.each{|re|cnt=cnt+re.subjects_affected if re.event_type.downcase == 'serious'}
+			cnt
+		end
+
+		def calc_number_of_nsae_subjects
+			cnt=0
+			reported_events.each{|re|cnt=cnt+re.subjects_affected if re.event_type.downcase != 'serious'}
+			cnt
+		end
+
+		def calc_registered_in_fiscal_year
+			if first_received_date.month < 10
+				first_received_date.year
+			else
+				(first_received_date + 1.years).year
+			end
+		end
+
+		def calc_number_of_facilities
+			facilities.size
+		end
+
+		def calc_actual_duration
+			return if !primary_completion_date or !start_date
+			(primary_completion_date - start_date).to_f/365
+		end
+
+		def calc_results_reported
+			results_reported=1 if outcomes.size > 0
+		end
+
+		def calc_months_to_report_results
+			return nil if first_received_results_date.nil? or primary_completion_date.nil?
+			((first_received_results_date.to_time -  primary_completion_date.to_time)/1.month.second).to_i
+		end
+
+		def calc_enrollment
+			cnt=0
+			groups.each{|g|cnt=cnt+g.participant_count}
+			cnt if cnt > 0
 		end
 
 		def status
@@ -256,24 +239,148 @@ require 'csv'
 			brief_title
 		end
 
-		def funding_source
-			nil  #epm and irb are better sources
+		def recruitment_details
+			result_detail.try(:recruitment_details)
 		end
 
-		def therapeutic_area
-			conditions.collect{|c|c.name}.join(",")
+		def pre_assignment_details
+			result_detail.try(:pre_assignment_details)
 		end
 
-		def start_year
-			start_date
+		def attribs
+			{
+				:start_date => get_date(get('start_date')),
+				:first_received_date => get_date(get('firstreceived_date')),
+				:verification_date => get_date(get('verification_date')),
+				:last_changed_date => get_date(get('lastchanged_date')),
+				:primary_completion_date => get_date(get('primary_completion_date')),
+				:completion_date => get_date(get('completion_date')),
+				:first_received_results_date => get_date(get('firstreceived_results_date')),
+
+				:start_date_str => get('start_date'),
+				:first_received_date_str => get('firstreceived_date'),
+				:verification_date_str => get('verification_date'),
+				:last_changed_date_str => get('lastchanged_date'),
+				:primary_completion_date_str => get('primary_completion_date'),
+				:completion_date_str => get('completion_date'),
+				:first_received_results_date_str => get('firstreceived_results_date'),
+				:download_date_str => xml.xpath('//download_date'),
+
+				:org_study_id => xml.xpath('//org_study_id').inner_html,
+				:acronym =>get('acronym'),
+				:number_of_arms => get('number_of_arms'),
+				:number_of_groups =>get('number_of_groups'),
+				:source => get('study_source'),
+				:brief_title  => get('brief_title') ,
+				:official_title => get('official_title'),
+				:overall_status => get('overall_status'),
+				:phase => get('phase'),
+				:target_duration => get('target_duration'),
+				:reported_enrollment => get('enrollment'),
+				:biospec_description =>get_text('biospec_descr').strip,
+
+				:primary_completion_date_type => get_type('primary_completion_date'),
+				:completion_date_type => get_type('completion_date'),
+				:enrollment_type => get_type('enrollment'),
+				:study_type => get('study_type'),
+				:biospec_retention =>get('biospec_retention').strip,
+				:limitations_and_caveats  =>get('limitations_and_caveats'),
+
+				:is_section_801 => get_boolean('is_section_801'),
+				:is_fda_regulated => get_boolean('is_fda_regulated'),
+				:has_expanded_access => get_boolean('has_expanded_access'),
+				:has_dmc => get_boolean('has_dmc'),
+				:why_stopped =>get('why_stopped').strip,
+				#:delivery_mechanism =>delivery_mechanism,
+
+				:expected_groups =>       ExpectedGroup.create_all_from(opts),
+				:groups =>                get_groups(opts.merge(:study_xml=>xml)),
+				:outcomes =>              Outcome.create_all_from(opts.merge(:groups=>new_groups)),
+				:milestones =>						Milestone.create_all_from(opts.merge(:groups=>new_groups)),
+				:drop_withdrawals =>			DropWithdrawal.create_all_from(opts.merge(:groups=>new_groups)),
+				:detailed_description =>  DetailedDescription.new.create_from(opts),
+				:design =>                Design.new.create_from(opts),
+				:brief_summary        =>  BriefSummary.new.create_from(opts),
+				:eligibility =>           Eligibility.new.create_from(opts),
+				:participant_flow     =>  ParticipantFlow.new.create_from(opts),
+				:result_detail =>         ResultDetail.new.create_from(opts),
+				:baseline_measures =>     BaselineMeasure.create_all_from(opts),
+				:browse_conditions =>     BrowseCondition.create_all_from(opts),
+				:browse_interventions =>  BrowseIntervention.create_all_from(opts),
+				:conditions =>            Condition.create_all_from(opts),
+				:facilities =>            Facility.create_all_from(opts),
+				:interventions =>         Intervention.create_all_from(opts),
+				:keywords =>              Keyword.create_all_from(opts),
+				:links =>                 Link.create_all_from(opts),
+				:location_countries =>    LocationCountry.create_all_from(opts),
+				:oversight_authorities => OversightAuthority.create_all_from(opts),
+				:overall_officials =>     OverallOfficial.create_all_from(opts),
+				:expected_outcomes =>     ExpectedOutcome.create_all_from(opts),
+				:reported_events =>       ReportedEvent.create_all_from(opts),
+				:responsible_parties =>   ResponsibleParty.create_all_from(opts),
+				:result_agreements =>     ResultAgreement.create_all_from(opts),
+				:result_contacts =>       ResultContact.create_all_from(opts),
+				:secondary_ids =>         SecondaryId.create_all_from(opts),
+				:references =>            Reference.create_all_from(opts),
+				:sponsors =>              Sponsor.create_all_from(opts),
+			}
 		end
 
-		def end_year
-		 completion_date if completion_date_type=='Actual'
+		def get_groups(opts)
+			@new_groups=Group.create_all_from(opts)
+			@new_groups
 		end
 
-		def drug_product
-			expected_groups.collect{|c|c.title}.join(",")
+		def get(label)
+			xml.xpath('//clinical_study').xpath("#{label}").inner_html
+		end
+
+		def get_text(label)
+			str=''
+			nodes=xml.xpath("//#{label}")
+			nodes.each {|node| str << node.xpath("textblock").inner_html}
+			str
+		end
+
+		def get_type(label)
+			node=xml.xpath("//#{label}")
+			node.attribute('type').try(:value) if !node.blank?
+		end
+
+		def get_boolean(label)
+			val=xml.xpath("//#{label}").try(:inner_html)
+			val.downcase=='yes'||val.downcase=='y'||val.downcase=='true' if !val.blank?
+		end
+
+		def get_date(str)
+			Date.parse(str) if !str.blank?
+		end
+
+		def lead_sponsor
+			#TODO  May be multiple
+			sponsors.each{|s|return s if s.sponsor_type=='lead'}
+		end
+
+		def average_rating
+			if reviews.size==0
+				0
+			else
+				reviews.average(:rating).round(2)
+			end
+		end
+
+		def intervention_names
+			interventions.collect{|x|x.name}.join(', ')
+		end
+
+		def condition_names
+			conditions.collect{|x|x.name}.join(', ')
+		end
+
+		def prime_address
+			#  This isn't real.  Just proof of concept.
+			return facilities.first.address if facilities.size > 0
+			return lead_sponsor.agency
 		end
 
 	end

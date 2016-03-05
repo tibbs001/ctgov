@@ -24,21 +24,26 @@ class DropWithdrawal < StudyRelationship
     col.flatten
   end
 
-  def create_from(opts)
-		@xml=opts[:xml]
-		gid=get_attribute('group_id')
-    self.nct_id=opts[:nct_id]
-    self.reason=opts[:reason]
-    self.period_title=opts[:period_title]
-    self.participant_count=get_attribute('count').to_i
-		self.ctgov_group_id=gid
-		self.ctgov_group_enumerator=integer_in(gid)
+	def get_group
 		opts[:groups].each{|g|
-		  self.group=g if g.ctgov_group_enumerator==self.ctgov_group_enumerator
+		  return g if g.ctgov_group_enumerator==integer_in(gid)
 		}
-		self.save!
-		self
-  end
+	end
+
+	def gid
+		get_attribute('group_id')
+	end
+
+	def attribs
+		{
+    :reason => get_opt(:reason),
+    :period_title => get_opt(:period_title),
+    :participant_count => get_attribute('count').to_i,
+		:ctgov_group_id => gid,
+		:ctgov_group_enumerator => integer_in(gid),
+		:group => get_group,
+		}
+	end
 
   def self.extract_summary
     column_headers= ['nct_id','period','group','participant_count','reason']

@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'passenger'
 gem 'zip'
 gem 'rails', '4.2.4'
 # MySQL database gem
@@ -23,6 +24,7 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
+gem 'rake', '~> 10.4.2'  # for reasons I don't understand, seems passenger expects this version
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
@@ -31,10 +33,13 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 
-# Use Capistrano for deployment
-gem 'capistrano-rails', group: :development
+gem "mini_magick"
+#  User creation gem
+gem 'devise'
+gem 'searchkick'
 gem 'font-awesome-rails'
 gem 'faraday'
+gem 'faraday_middleware'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'backbone-rails'
 gem 'nokogiri'
@@ -45,15 +50,23 @@ gem 'factory_girl_rails'
 #gem 'activerecord-oracle_enhanced-adapter', github: 'OIT-ADS-Web/oracle-enhanced', branch: "rescue-close"
 #gem 'ruby-oci8'
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+gem 'execjs'
+gem 'therubyracer'
+gem 'figaro'
+gem 'puma'
+gem 'net-ssh'
+  gem 'capistrano'
+	gem 'capistrano-passenger'
+  gem 'capistrano3-puma'
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm'
 
+group :development, :test do
+  gem 'byebug'
   # tool to use ActiveRecord to generate an ER Diagram
   gem 'rails-erd'
-
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-
 end
 

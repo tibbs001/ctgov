@@ -1,10 +1,8 @@
   RSpec.describe Milestone do
 		it "should link milestones and drop_withdrawals to the group" do
 			nct_id='NCT00006409'
-			xml=Nokogiri::XML(Faraday.get("http://clinicaltrials.gov/show/#{nct_id}?resultsxml=true").body)
-			opts={:xml=>xml,:nct_id=>nct_id,:study_xml=>xml}
-			groups=Group.create_all_from(opts)
-			g1_array=groups.select{|g|g.ctgov_group_enumerator==1}
+      study=Asker.new.create_study(nct_id)
+			g1_array=study.groups.select{|g|g.ctgov_group_enumerator==1}
 			expect(g1_array.size).to eq(1)
 			g1=g1_array.first
 			expect(g1.milestones.size).to eq(9)

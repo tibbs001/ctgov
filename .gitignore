@@ -1,4 +1,15 @@
 .bundle/
 log/*.log
-db/*
+search_results/*
+public/imported/*
+public/downloaded/*
+db/*.sqlite3
+vendor/*
+tmp/*
+config/secrets.yml
+config/database.yml
 
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

@@ -1,8 +1,20 @@
 Rails.application.routes.draw do
   resources :charts
-
-  resources :studies
+	resources :reviews
   root 'studies#index'
+  get 'pages/about'
+  get 'pages/contact'
+
+	devise_for :users do
+  	get '/users/sign_out' => 'devise/sessions#destroy'
+	end
+
+  resources :studies do
+    collection do
+      get 'search'
+    end
+    resources :reviews, except: [:index]
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

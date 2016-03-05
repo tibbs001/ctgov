@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150629193710) do
+ActiveRecord::Schema.define(version: 20160301202629) do
 
   create_table "baseline_measures", force: :cascade do |t|
     t.string   "ctgov_group_id",         limit: 255
@@ -80,9 +80,26 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string "data_field",     limit: 255
   end
 
+  create_table "design_validations", force: :cascade do |t|
+    t.string "design_name",  limit: 255
+    t.string "design_value", limit: 255
+    t.string "masked_role",  limit: 255
+    t.string "nct_id",       limit: 255
+  end
+
+  add_index "design_validations", ["nct_id"], name: "index_design_validations_on_nct_id", using: :btree
+
   create_table "designs", force: :cascade do |t|
-    t.text   "description", limit: 65535
-    t.string "nct_id",      limit: 255
+    t.text   "description",             limit: 65535
+    t.string "masking",                 limit: 255
+    t.string "masked_roles",            limit: 255
+    t.string "primary_purpose",         limit: 255
+    t.string "intervention_model",      limit: 255
+    t.string "endpoint_classification", limit: 255
+    t.string "allocation",              limit: 255
+    t.string "time_perspective",        limit: 255
+    t.string "observational_model",     limit: 255
+    t.string "nct_id",                  limit: 255
   end
 
   add_index "designs", ["nct_id"], name: "index_designs_on_nct_id", using: :btree
@@ -134,9 +151,9 @@ ActiveRecord::Schema.define(version: 20150629193710) do
 
   create_table "expected_outcomes", force: :cascade do |t|
     t.string "outcome_type", limit: 255
-    t.string "title",        limit: 255
-    t.string "measure",      limit: 255
-    t.string "time_frame",   limit: 255
+    t.text   "title",        limit: 65535
+    t.text   "measure",      limit: 65535
+    t.text   "time_frame",   limit: 65535
     t.string "safety_issue", limit: 255
     t.string "population",   limit: 255
     t.text   "description",  limit: 65535
@@ -152,31 +169,34 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "state",                limit: 255
     t.string   "zip",                  limit: 255
     t.string   "country",              limit: 255
+    t.string   "latitude",             limit: 255
+    t.string   "longitude",            limit: 255
     t.string   "contact_name",         limit: 255
     t.string   "contact_phone",        limit: 255
     t.string   "contact_email",        limit: 255
     t.string   "contact_backup_name",  limit: 255
     t.string   "contact_backup_phone", limit: 255
     t.string   "contact_backup_email", limit: 255
-    t.string   "investigator_name",    limit: 255
-    t.string   "investigator_role",    limit: 255
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.text     "investigator_name",    limit: 65535
+    t.text     "investigator_role",    limit: 65535
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "nct_id",               limit: 255
   end
 
   add_index "facilities", ["nct_id"], name: "index_facilities_on_nct_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
-    t.string   "ctgov_group_id",         limit: 255
-    t.integer  "ctgov_group_enumerator", limit: 4
-    t.string   "group_type",             limit: 255
-    t.string   "title",                  limit: 255
-    t.text     "description",            limit: 65535
-    t.integer  "participant_count",      limit: 4
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.string   "nct_id",                 limit: 255
+    t.string   "ctgov_group_id",            limit: 255
+    t.integer  "ctgov_group_enumerator",    limit: 4
+    t.string   "group_type",                limit: 255
+    t.string   "title",                     limit: 255
+    t.text     "description",               limit: 65535
+    t.integer  "participant_count",         limit: 4
+    t.integer  "derived_participant_count", limit: 4
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.string   "nct_id",                    limit: 255
   end
 
   create_table "intervention_arm_group_labels", force: :cascade do |t|
@@ -225,8 +245,8 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   add_index "keywords", ["nct_id"], name: "index_keywords_on_nct_id", using: :btree
 
   create_table "links", force: :cascade do |t|
-    t.string "url",         limit: 255
-    t.string "description", limit: 255
+    t.text   "url",         limit: 65535
+    t.text   "description", limit: 65535
     t.string "nct_id",      limit: 255
   end
 
@@ -237,6 +257,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "event_type",  limit: 255
     t.string   "status",      limit: 255
     t.text     "description", limit: 65535
+    t.float    "load_time",   limit: 24
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
@@ -269,20 +290,22 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "title",                       limit: 255
     t.string   "non_inferiority",             limit: 255
     t.text     "non_inferiority_description", limit: 65535
-    t.string   "p_value",                     limit: 255
+    t.decimal  "p_value",                                   precision: 15, scale: 10
     t.string   "param_type",                  limit: 255
-    t.string   "param_value",                 limit: 255
+    t.decimal  "param_value",                               precision: 15, scale: 10
+    t.string   "dispersion_type",             limit: 255
+    t.decimal  "dispersion_value",                          precision: 15, scale: 10
     t.string   "ci_percent",                  limit: 255
     t.string   "ci_n_sides",                  limit: 255
-    t.string   "ci_lower_limit",              limit: 255
-    t.string   "ci_upper_limit",              limit: 255
+    t.decimal  "ci_lower_limit",                            precision: 15, scale: 10
+    t.decimal  "ci_upper_limit",                            precision: 16, scale: 8
     t.string   "method",                      limit: 255
     t.text     "description",                 limit: 65535
     t.text     "group_description",           limit: 65535
     t.text     "method_description",          limit: 65535
     t.text     "estimate_description",        limit: 65535
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
     t.string   "nct_id",                      limit: 255
     t.integer  "outcome_id",                  limit: 4
     t.integer  "group_id",                    limit: 4
@@ -292,7 +315,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "ctgov_group_id",         limit: 255
     t.integer  "ctgov_group_enumerator", limit: 4
     t.string   "category",               limit: 255
-    t.string   "title",                  limit: 255
+    t.text     "title",                  limit: 65535
     t.text     "description",            limit: 65535
     t.string   "units",                  limit: 255
     t.string   "param",                  limit: 255
@@ -315,10 +338,10 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.integer  "ctgov_group_enumerator", limit: 4
     t.text     "group_title",            limit: 65535
     t.text     "group_description",      limit: 65535
-    t.string   "title",                  limit: 255
+    t.text     "title",                  limit: 65535
     t.text     "description",            limit: 65535
     t.string   "measure",                limit: 255
-    t.string   "time_frame",             limit: 255
+    t.text     "time_frame",             limit: 65535
     t.string   "safety_issue",           limit: 255
     t.text     "population",             limit: 65535
     t.integer  "participant_count",      limit: 4
@@ -352,6 +375,62 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "nct_id",                 limit: 255
   end
 
+  create_table "pma_mappings", force: :cascade do |t|
+    t.string   "unique_id",         limit: 255
+    t.integer  "ct_pma_id",         limit: 4
+    t.string   "pma_number",        limit: 255
+    t.string   "supplement_number", limit: 255
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "nct_id",            limit: 255
+  end
+
+  create_table "pma_nct_mappings", force: :cascade do |t|
+    t.string   "unique_id",         limit: 255
+    t.integer  "ct_pma_id",         limit: 4
+    t.string   "nct_id",            limit: 255
+    t.string   "pma_number",        limit: 255
+    t.string   "supplement_number", limit: 255
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "pma_records", force: :cascade do |t|
+    t.string   "unique_id",                      limit: 255
+    t.string   "pma_number",                     limit: 255
+    t.string   "supplement_number",              limit: 255
+    t.string   "supplement_type",                limit: 255
+    t.string   "supplement_reason",              limit: 255
+    t.string   "applicant",                      limit: 255
+    t.string   "street_1",                       limit: 255
+    t.string   "street_2",                       limit: 255
+    t.string   "city",                           limit: 255
+    t.string   "state",                          limit: 255
+    t.string   "zip",                            limit: 255
+    t.string   "zip_ext",                        limit: 255
+    t.date     "last_updated"
+    t.date     "date_received"
+    t.date     "decision_date"
+    t.string   "decision_code",                  limit: 255
+    t.string   "expedited_review_flag",          limit: 255
+    t.string   "advisory_committee",             limit: 255
+    t.string   "advisory_committee_description", limit: 255
+    t.string   "device_name",                    limit: 255
+    t.string   "device_class",                   limit: 255
+    t.string   "product_code",                   limit: 255
+    t.string   "generic_name",                   limit: 255
+    t.string   "trade_name",                     limit: 255
+    t.string   "medical_specialty_description",  limit: 255
+    t.string   "docket_number",                  limit: 255
+    t.string   "regulation_number",              limit: 255
+    t.text     "fei_numbers",                    limit: 65535
+    t.text     "registration_numbers",           limit: 65535
+    t.text     "ao_statement",                   limit: 65535
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.string   "nct_id",                         limit: 255
+  end
+
   create_table "reported_event_overviews", force: :cascade do |t|
     t.string   "time_frame",  limit: 255
     t.text     "description", limit: 65535
@@ -366,7 +445,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "group_title",            limit: 255
     t.text     "group_description",      limit: 65535
     t.text     "description",            limit: 65535
-    t.string   "time_frame",             limit: 255
+    t.text     "time_frame",             limit: 65535
     t.string   "category",               limit: 255
     t.string   "event_type",             limit: 255
     t.string   "frequency_threshold",    limit: 255
@@ -383,7 +462,7 @@ ActiveRecord::Schema.define(version: 20150629193710) do
 
   create_table "responsible_parties", force: :cascade do |t|
     t.string "responsible_party_type", limit: 255
-    t.string "affiliation",            limit: 255
+    t.text   "affiliation",            limit: 65535
     t.string "name",                   limit: 255
     t.string "title",                  limit: 255
     t.string "nct_id",                 limit: 255
@@ -418,12 +497,24 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "nct_id",                 limit: 255
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.integer  "rating",     limit: 4
+    t.text     "comment",    limit: 65535
+    t.string   "nct_id",     limit: 255
+    t.string   "user_id",    limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "reviews", ["nct_id"], name: "index_reviews_on_nct_id", using: :btree
+  add_index "reviews", ["user_id"], name: "index_reviews_on_user_id", using: :btree
+
   create_table "search_results", force: :cascade do |t|
     t.date     "search_datestamp"
     t.string   "search_term",      limit: 255
     t.string   "nct_id",           limit: 255
     t.integer  "order",            limit: 4
-    t.decimal  "score",                        precision: 6, scale: 6
+    t.decimal  "score",                        precision: 6, scale: 4
     t.datetime "created_at",                                           null: false
     t.datetime "updated_at",                                           null: false
   end
@@ -443,6 +534,17 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   end
 
   add_index "sponsors", ["nct_id"], name: "index_sponsors_on_nct_id", using: :btree
+
+  create_table "statistics", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "sponsor_type",      limit: 255
+    t.string   "stat_category",     limit: 255
+    t.string   "stat_value",        limit: 255
+    t.integer  "number_of_studies", limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
 
   create_table "studies", id: false, force: :cascade do |t|
     t.string   "nct_id",                          limit: 255
@@ -471,12 +573,21 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.string   "overall_status",                  limit: 255
     t.string   "phase",                           limit: 255
     t.string   "target_duration",                 limit: 255
-    t.integer  "enrollment",                      limit: 4
+    t.decimal  "actual_duration",                               precision: 5, scale: 2
+    t.integer  "reported_enrollment",             limit: 4
+    t.integer  "derived_enrollment",              limit: 4
     t.string   "enrollment_type",                 limit: 255
     t.string   "study_type",                      limit: 255
     t.integer  "number_of_arms",                  limit: 4
     t.integer  "number_of_groups",                limit: 4
+    t.integer  "number_of_facilities",            limit: 4
+    t.integer  "number_of_nsae_subjects",         limit: 4
+    t.integer  "number_of_sae_subjects",          limit: 4
+    t.string   "sponsor_type",                    limit: 255
     t.string   "source",                          limit: 255
+    t.integer  "registered_in_fiscal_year",       limit: 4
+    t.integer  "results_reported",                limit: 4
+    t.integer  "months_to_report_results",        limit: 4
     t.string   "biospec_retention",               limit: 255
     t.text     "biospec_description",             limit: 65535
     t.string   "study_rank",                      limit: 255
@@ -489,8 +600,9 @@ ActiveRecord::Schema.define(version: 20150629193710) do
     t.boolean  "is_fda_regulated"
     t.boolean  "has_expanded_access"
     t.boolean  "has_dmc"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at",                                                            null: false
+    t.datetime "updated_at",                                                            null: false
+    t.string   "link_to_data",                    limit: 255
   end
 
   add_index "studies", ["nct_id"], name: "index_studies_on_nct_id", using: :btree
@@ -504,5 +616,23 @@ ActiveRecord::Schema.define(version: 20150629193710) do
   end
 
   add_index "study_references", ["nct_id"], name: "index_study_references_on_nct_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.string   "first_name",             limit: 255
+    t.string   "last_name",              limit: 255
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

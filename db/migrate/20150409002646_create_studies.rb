@@ -21,21 +21,30 @@ class CreateStudies < ActiveRecord::Migration
       t.string :first_received_results_date_str
       t.string :download_date_str
 
-      t.string :completion_date_type
-      t.string :primary_completion_date_type
-      t.string :org_study_id
-      t.string :secondary_id
-      t.text   :brief_title
-      t.text   :official_title
-      t.string :overall_status
-      t.string :phase
-      t.string :target_duration
-      t.integer :enrollment
-      t.string :enrollment_type
-      t.string :study_type
+      t.string  :completion_date_type
+      t.string  :primary_completion_date_type
+      t.string  :org_study_id
+      t.string  :secondary_id
+      t.text    :brief_title
+      t.text    :official_title
+      t.string  :overall_status
+      t.string  :phase
+      t.string  :target_duration
+			t.decimal :actual_duration, :precision => 5, :scale => 2
+      t.integer :reported_enrollment
+      t.integer :derived_enrollment
+      t.string  :enrollment_type
+      t.string  :study_type
       t.integer :number_of_arms
       t.integer :number_of_groups
-      t.string :source
+      t.integer :number_of_facilities
+      t.integer :number_of_nsae_subjects
+      t.integer :number_of_sae_subjects
+      t.string  :sponsor_type
+      t.string  :source
+      t.integer :registered_in_fiscal_year
+      t.integer :results_reported
+      t.integer :months_to_report_results
 
       t.string :biospec_retention
       t.text   :biospec_description
@@ -62,14 +71,16 @@ class CreateStudies < ActiveRecord::Migration
       t.string :state
       t.string :zip
       t.string :country
+      t.string :latitude
+      t.string :longitude
       t.string :contact_name
       t.string :contact_phone
       t.string :contact_email
       t.string :contact_backup_name
       t.string :contact_backup_phone
       t.string :contact_backup_email
-      t.string :investigator_name
-      t.string :investigator_role
+      t.text   :investigator_name
+      t.text   :investigator_role
       t.timestamps null: false
     end
     add_column :facilities, :nct_id, :string, references: :studies
@@ -147,9 +158,9 @@ class CreateStudies < ActiveRecord::Migration
 
     create_table :expected_outcomes do |t|
       t.string :outcome_type
-      t.string :title
-      t.string :measure
-      t.string :time_frame
+      t.text   :title
+      t.text   :measure
+      t.text   :time_frame
       t.string :safety_issue
       t.string :population
       t.text   :description
@@ -167,15 +178,31 @@ class CreateStudies < ActiveRecord::Migration
 
     create_table :responsible_parties do |t|
       t.string :responsible_party_type
-      t.string :affiliation
+      t.text   :affiliation
       t.string :name
       t.string :title
     end
     add_column :responsible_parties, :nct_id, :string, references: :studies
 		add_index :responsible_parties, :nct_id
 
+    create_table :design_validations do |t|
+			t.string  :design_name
+			t.string  :design_value
+			t.string  :masked_role
+		end
+    add_column :design_validations, :nct_id, :string, references: :studies
+		add_index :design_validations, :nct_id
+
     create_table :designs do |t|
       t.text   :description
+      t.string :masking
+      t.string :masked_roles
+      t.string :primary_purpose
+      t.string :intervention_model
+			t.string :endpoint_classification
+			t.string :allocation
+			t.string :time_perspective
+			t.string :observational_model
     end
     add_column :designs, :nct_id, :string, references: :studies
 		add_index :designs, :nct_id
@@ -211,8 +238,8 @@ class CreateStudies < ActiveRecord::Migration
 		add_index  :oversight_authorities, :nct_id
 
     create_table :links do |t|
-      t.string :url
-      t.string :description
+      t.text   :url
+      t.text   :description
     end
     add_column :links, :nct_id, :string, references: :studies
 		add_index  :links, :nct_id
