@@ -1,7 +1,6 @@
 require 'csv'
 	class Study < ActiveRecord::Base
-		attr_accessor :xml, :new_groups
-#		establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
+		attr_accessor :xml
 		searchkick
 
 		scope :interventional,  -> {where(study_type: 'Interventional')}
@@ -226,9 +225,12 @@ require 'csv'
 		end
 
 		def calc_enrollment
+			# TODO = this is just a stub - find better way to calculate
+			groups.each{|g|g.set_participant_count}
 			cnt=0
-			groups.each{|g|cnt=cnt+g.participant_count}
-			cnt if cnt > 0
+			groups.each{|g|cnt=cnt+g.derived_participant_count}
+			self.derived_enrollment=cnt if cnt > 0
+			self.save!
 		end
 
 		def status
@@ -295,9 +297,9 @@ require 'csv'
 
 				:expected_groups =>       ExpectedGroup.create_all_from(opts),
 				:groups =>                get_groups(opts.merge(:study_xml=>xml)),
-				:outcomes =>              Outcome.create_all_from(opts.merge(:groups=>new_groups)),
-				:milestones =>						Milestone.create_all_from(opts.merge(:groups=>new_groups)),
-				:drop_withdrawals =>			DropWithdrawal.create_all_from(opts.merge(:groups=>new_groups)),
+				:outcomes =>              Outcome.create_all_from(opts.merge(:groups=>self.groups)),
+				:milestones =>						Milestone.create_all_from(opts.merge(:groups=>self.groups)),
+				:drop_withdrawals =>			DropWithdrawal.create_all_from(opts.merge(:groups=>self.groups)),
 				:detailed_description =>  DetailedDescription.new.create_from(opts),
 				:design =>                Design.new.create_from(opts),
 				:brief_summary        =>  BriefSummary.new.create_from(opts),
@@ -327,8 +329,7 @@ require 'csv'
 		end
 
 		def get_groups(opts)
-			@new_groups=Group.create_all_from(opts)
-			@new_groups
+			self.groups=Group.create_all_from(opts)
 		end
 
 		def get(label)

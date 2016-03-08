@@ -23,17 +23,17 @@ class OutcomeMeasure < StudyRelationship
 	      else
 	        while category
             opts[:category]=category.xpath('sub_title').inner_html
-            groups=category.xpath("measurement_list").xpath('measurement')
-	          group=groups.pop
-	          if group.blank?
+            grps=category.xpath("measurement_list").xpath('measurement')
+	          gr=grps.pop
+	          if gr.blank?
               col << new.conditionally_create_from(opts)
 	          else
-	            while group
-                opts[:group_id]=group.attribute('group_id').try(:value)
-                opts[:value]=group.attribute('value').try(:value)
-                opts[:spread]=group.attribute('spread').try(:value)
+	            while gr
+                opts[:group_id]=gr.attribute('group_id').try(:value)
+                opts[:value]=gr.attribute('value').try(:value)
+                opts[:spread]=gr.attribute('spread').try(:value)
                 col << new.conditionally_create_from(opts)
-                group=groups.pop
+                gr=grps.pop
               end
             end
             category=categories.pop
@@ -60,7 +60,7 @@ class OutcomeMeasure < StudyRelationship
      :dispersion => get_opt(:dispersion),
      :description => get_opt(:description),
      :outcome => get_opt(:outcome),
-		 :group => get_opt(:outcome).group
+		 :group => get_group
     }
   end
 
@@ -68,5 +68,13 @@ class OutcomeMeasure < StudyRelationship
     return nil if opts[:group_id] != opts[:group_id_of_interest]
 		create_from(opts)
   end
+
+	def gid
+		integer_in(opts[:group_id_of_interest])
+	end
+
+	def get_group
+		opts[:groups].each {|g|return g if g.ctgov_group_enumerator==gid}
+	end
 
 end

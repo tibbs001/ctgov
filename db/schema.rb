@@ -385,16 +385,6 @@ ActiveRecord::Schema.define(version: 20160301202629) do
     t.string   "nct_id",            limit: 255
   end
 
-  create_table "pma_nct_mappings", force: :cascade do |t|
-    t.string   "unique_id",         limit: 255
-    t.integer  "ct_pma_id",         limit: 4
-    t.string   "nct_id",            limit: 255
-    t.string   "pma_number",        limit: 255
-    t.string   "supplement_number", limit: 255
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-  end
-
   create_table "pma_records", force: :cascade do |t|
     t.string   "unique_id",                      limit: 255
     t.string   "pma_number",                     limit: 255
