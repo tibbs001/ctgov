@@ -12,57 +12,62 @@ class CreateStudies < ActiveRecord::Migration
       t.date :first_received_results_date
       t.date :download_date
 
-      t.string :start_date_str
-      t.string :first_received_date_str
-      t.string :verification_date_str
-      t.string :last_changed_date_str
-      t.string :primary_completion_date_str
-      t.string :completion_date_str
-      t.string :first_received_results_date_str
-      t.string :download_date_str
-
+      t.string  :start_date_str
+      t.string  :first_received_date_str
+      t.string  :verification_date_str
+      t.string  :last_changed_date_str
+      t.string  :primary_completion_date_str
+      t.string  :completion_date_str
+      t.string  :first_received_results_date_str
+      t.string  :download_date_str
       t.string  :completion_date_type
       t.string  :primary_completion_date_type
       t.string  :org_study_id
       t.string  :secondary_id
-      t.text    :brief_title
-      t.text    :official_title
+      t.string  :study_type
       t.string  :overall_status
       t.string  :phase
       t.string  :target_duration
-			t.decimal :actual_duration, :precision => 5, :scale => 2
-      t.integer :reported_enrollment
-      t.integer :derived_enrollment
+      t.integer :enrollment
       t.string  :enrollment_type
-      t.string  :study_type
+      t.string  :source
+      t.string  :biospec_retention
+      t.string  :limitations_and_caveats
+      t.string  :delivery_mechanism
+      t.string  :description
+      t.string  :acronym
       t.integer :number_of_arms
       t.integer :number_of_groups
+      t.string  :why_stopped
+      t.boolean :has_expanded_access
+      t.boolean :has_dmc
+      t.boolean :is_section_801
+      t.boolean :is_fda_regulated
+      t.text    :brief_title
+      t.text    :official_title
+      t.text    :biospec_description
+      t.timestamps null: false
+		end
+		add_index :studies, :nct_id
+		add_index :studies, :study_type
+
+    create_table :derived_values do |t|
+      t.string  :sponsor_type
+			t.decimal :actual_duration, :precision => 5, :scale => 2
+      t.integer :enrollment
+      t.boolean :results_reported
+      t.integer :months_to_report_results
+      t.integer :registered_in_fiscal_year
       t.integer :number_of_facilities
       t.integer :number_of_nsae_subjects
       t.integer :number_of_sae_subjects
-      t.string  :sponsor_type
-      t.string  :source
-      t.integer :registered_in_fiscal_year
-      t.integer :results_reported
-      t.integer :months_to_report_results
-
-      t.string :biospec_retention
-      t.text   :biospec_description
-      t.string :study_rank
-      t.string :limitations_and_caveats
-      t.string :delivery_mechanism
-      t.string :description
-      t.string :acronym
-      t.string :why_stopped
-
-      t.boolean :is_section_801
-      t.boolean :is_fda_regulated
-      t.boolean :has_expanded_access
-      t.boolean :has_dmc
+      t.string  :study_rank
+			t.string  :link_to_study_data
       t.timestamps null: false
     end
-		add_index :studies, :nct_id
-		add_index :studies, :study_type
+    add_column :derived_values, :nct_id, :string, references: :studies
+		add_index :derived_values, :nct_id
+		add_index :derived_values, :sponsor_type
 
     create_table :facilities do |t|
       t.string :name

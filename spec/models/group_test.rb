@@ -29,7 +29,7 @@
 			expect(g3.derived_participant_count).to eq(1540)
 			expect(g5.derived_participant_count).to eq(1664)
 			expect(g6.derived_participant_count).to eq(1714)
-			expect(study.derived_enrollment).to eq(6463)
+			expect(study.derived_value.enrollment).to eq(6463)
 		end
 
 		it "should save groups that are missing in the participant_flow section" do

@@ -20,6 +20,7 @@ require 'csv'
 		has_one  :eligibility,           :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :participant_flow,      :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :result_detail,         :foreign_key => 'nct_id', dependent: :destroy
+		has_one  :derived_value,         :foreign_key => 'nct_id', dependent: :destroy
 
 		has_many :pma_mappings,          :foreign_key => 'nct_id'
 		has_many :pma_records,           :foreign_key => 'nct_id', dependent: :destroy
@@ -73,16 +74,8 @@ require 'csv'
 
 		def create
 			update(attribs)
-			self.sponsor_type              = calc_sponsor_type
-			self.actual_duration           = calc_actual_duration
-			self.derived_enrollment        = calc_enrollment
-			self.results_reported          = calc_results_reported
-			self.months_to_report_results  = calc_months_to_report_results
-			self.registered_in_fiscal_year = calc_registered_in_fiscal_year
-			self.number_of_facilities      = calc_number_of_facilities
-			self.number_of_sae_subjects    = calc_number_of_sae_subjects
-			self.number_of_nsae_subjects   = calc_number_of_nsae_subjects
-			#  takes too long - maybe run as a separate process  self.link_to_data              = calc_link_to_data
+			self.save!
+			self.derived_value = DerivedValue.new.create_from(self)
 			self.save!
 			self
 		end
@@ -145,94 +138,6 @@ require 'csv'
 			val
 		end
 
-		def link_to_study_data
-			self.link_to_data=calc_link_to_data
-			self.save!
-		end
-
-		def pma_mapping_ids
-			pma_mappings.collect{|p| {:pma_number=>p.pma_number,:supplement_number=>p.supplement_number} }
-		end
-
-		def create_pma_records
-			return if pma_mappings.empty?
-			pma_mapping_ids.each{|id|
-				data=Asker.new.get_pma_data(id)
-				rec = PmaRecord.new.create_from(data) if !data.nil?
-				self.pma_records << rec if !rec.nil?
-			}
-			self.save!
-		end
-
-		def calc_link_to_data
-			if org_study_id.upcase[/^NIDA/]
-				url="https://datashare.nida.nih.gov/protocol/#{org_study_id.gsub(' ','')}"
-				results=Faraday.get(url).body
-				self.link_to_data=url if !results.downcase.include?('page not found')
-			else
-				#protocol link.....
-				#url="http://clinicalstudies.info.nih.gov/cgi/cs/processqry3.pl?sort=1&search=#{nct_id}&searchtype=0&patient_type=All&protocoltype=All&institute=%25&conditions=All"
-				#results=Faraday.get(url).body
-				#self.link_to_data=url if !results.downcase.include?('page not found')
-				#end
-			end
-		end
-
-		def calc_sponsor_type
-			val=lead_sponsor.try(:agency_class)
-			return val if val=='Industry' or val=='NIH'
-			collaborators.each{|c|return 'NIH' if c.agency_class=='NIH'}
-			collaborators.each{|c|return 'Industry' if c.agency_class=='Industry'}
-			return 'Other'
-		end
-
-		def calc_number_of_sae_subjects
-			cnt=0
-			reported_events.each{|re|cnt=cnt+re.subjects_affected if re.event_type.downcase == 'serious'}
-			cnt
-		end
-
-		def calc_number_of_nsae_subjects
-			cnt=0
-			reported_events.each{|re|cnt=cnt+re.subjects_affected if re.event_type.downcase != 'serious'}
-			cnt
-		end
-
-		def calc_registered_in_fiscal_year
-			if first_received_date.month < 10
-				first_received_date.year
-			else
-				(first_received_date + 1.years).year
-			end
-		end
-
-		def calc_number_of_facilities
-			facilities.size
-		end
-
-		def calc_actual_duration
-			return if !primary_completion_date or !start_date
-			(primary_completion_date - start_date).to_f/365
-		end
-
-		def calc_results_reported
-			results_reported=1 if outcomes.size > 0
-		end
-
-		def calc_months_to_report_results
-			return nil if first_received_results_date.nil? or primary_completion_date.nil?
-			((first_received_results_date.to_time -  primary_completion_date.to_time)/1.month.second).to_i
-		end
-
-		def calc_enrollment
-			# TODO = this is just a stub - find better way to calculate
-			groups.each{|g|g.set_participant_count}
-			cnt=0
-			groups.each{|g|cnt=cnt+g.derived_participant_count}
-			self.derived_enrollment=cnt if cnt > 0
-			self.save!
-		end
-
 		def status
 			overall_status
 		end
@@ -278,7 +183,7 @@ require 'csv'
 				:overall_status => get('overall_status'),
 				:phase => get('phase'),
 				:target_duration => get('target_duration'),
-				:reported_enrollment => get('enrollment'),
+				:enrollment => get('enrollment'),
 				:biospec_description =>get_text('biospec_descr').strip,
 
 				:primary_completion_date_type => get_type('primary_completion_date'),
@@ -300,6 +205,7 @@ require 'csv'
 				:outcomes =>              Outcome.create_all_from(opts.merge(:groups=>self.groups)),
 				:milestones =>						Milestone.create_all_from(opts.merge(:groups=>self.groups)),
 				:drop_withdrawals =>			DropWithdrawal.create_all_from(opts.merge(:groups=>self.groups)),
+				:groups =>                self.groups,  #TODO  refactor this silliness. outcomes can add additional groups, so repopulate this attrib
 				:detailed_description =>  DetailedDescription.new.create_from(opts),
 				:design =>                Design.new.create_from(opts),
 				:brief_summary        =>  BriefSummary.new.create_from(opts),

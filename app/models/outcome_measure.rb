@@ -8,7 +8,7 @@ class OutcomeMeasure < StudyRelationship
     col=[]
     xml=all.pop
     if xml.blank?
-      col << new.conditionally_create_from(opts)
+			return []
     else
       while xml
         opts[:title]=xml.xpath('title').inner_html
@@ -74,7 +74,13 @@ class OutcomeMeasure < StudyRelationship
 	end
 
 	def get_group
-		opts[:groups].each {|g|return g if g.ctgov_group_enumerator==gid}
+		# TODO duplicate code in outcome.rb
+		opts[:groups].each {|g| return g if g.ctgov_group_enumerator==gid }
+		#puts "OutcomeMeasure - get_group. Didn't find the group....creating....  "
+		# if group doesn't yet exist, create it...
+		new_group=Group.create_from(opts)
+		opts[:groups] << new_group
+		return new_group
 	end
 
 end
