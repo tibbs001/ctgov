@@ -24,11 +24,15 @@
       expect(p4_completed.participant_count).to eq(44)
       expect(p4_not_completed.participant_count).to eq(2)
       expect(study.drop_withdrawals.size).to eq(8)
+
+			# an outcome without any measures.  It should exist and have no measures.
+			outcome=study.outcomes.select{|s|s.title=='Complete Response Rate at 3 Months After Therapy'}.first
+			expect(outcome.outcome_measures).to be_empty
       dw=DropWithdrawal.where('nct_id = ?',nct_id)
       expect(dw.size).to eq(8)
-			expect(study.number_of_sae_subjects).to eq(164)
-			expect(study.number_of_nsae_subjects).to eq(813)
-			expect(study.registered_in_fiscal_year).to eq(2001)
+			expect(study.derived_value.number_of_sae_subjects).to eq(164)
+			expect(study.derived_value.number_of_nsae_subjects).to eq(813)
+			expect(study.derived_value.registered_in_fiscal_year).to eq(2001)
     end
   end
 
@@ -46,7 +50,7 @@
     it 'should not create duplicate relationships' do
       nct_id='NCT02028676'
       study=Asker.new.create_study(nct_id)
-			expect(study.registered_in_fiscal_year).to eq(2014)
+			expect(study.derived_value.registered_in_fiscal_year).to eq(2014)
       expect(study.nct_id).to eq(nct_id)
       expect(study.expected_groups.size).to eq(9)
       expect(study.facilities.size).to eq(4)
@@ -395,18 +399,6 @@
       expect(g2.select{|x|x.title=='Nausea'}.first.event_count).to eq(18)
       expect(g2.select{|x|x.title=='Total, other adverse events'}.first.subjects_affected).to eq(46)
       expect(g2.select{|x|x.title=='Total, other adverse events'}.first.subjects_at_risk).to eq(47)
-    end
-
-    it "should save correct derived values" do
-		  nct_id='NCT00000137'
-      study=Asker.new.create_study(nct_id)
-			expect(study.registered_in_fiscal_year).to eq(1999)
-			expect(study.sponsor_type).to eq('NIH')
-			expect(study.derived_enrollment).to eq(nil)
-			expect(study.results_reported).to eq(nil)
-			expect(study.number_of_facilities).to eq(0)
-			expect(study.number_of_sae_subjects).to eq(0)
-			expect(study.number_of_nsae_subjects).to eq(0)
     end
 
   end

@@ -63,7 +63,6 @@ class StudyRelationship < ActiveRecord::Base
 			@xml=opts[:xml]
 			@wrapper1_xml=opts[:wrapper1_xml]   # I think we can get rid of this
 			self.nct_id=opts[:nct_id]
-			#update_attributes(attribs) if !attribs.blank?
 			assign_attributes(attribs) if !attribs.blank?
 			self
 		end
