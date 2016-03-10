@@ -9,7 +9,6 @@
       <th>status</th>
       <th>title</th>
       <th>started</th>
-      <th>lead sponsor</th>
       <th></th>
     </tr>
   </thead>
@@ -18,7 +17,6 @@
     <col class="col-md-2">
     <col class="col-md-5">
     <col class="col-md-4">
-    <col class="col-md-2">
     <col class="col-md-2">
   </colgroup>
 
@@ -31,10 +29,9 @@
         <td><%= study.overall_status %></td>
         <td><%= study.brief_title %></td>
         <td><%= study.start_date %></td>
-        <td><%= study.lead_sponsor.try(:agency) %></td>
 				<td class='duke-btn'>
-        	<% if study.link_to_data %>
-						<%= link_to 'get study data',study.link_to_data, :target => "_blank", :class => "btn btn-default btn-mini" %>
+        	<% if study.derived_value.link_to_study_data %>
+						<%= link_to 'get study data',study.derived_value.link_to_study_data, :target => "_blank", :class => "btn btn-default btn-mini" %>
 					<% end %>
 				</td>
       </tr>

@@ -4,13 +4,10 @@
 <link href="/assets/bootstrap-transfer.css" media="screen" rel="stylesheet" />
 
 <div class="row">
-  <div class="col-md-3">
-
+  <div class="col-md-3 span3 bs-docs-sidebar">
     <h4>
-      <%= @study.acronym %>
-      <%= @study.brief_title %>
+      <%= @study.acronym %> <%= @study.brief_title %>
     </h4>
-
     <p>
 			<li><i class="fa-li fa fa-check-square"></i> <%= @study.overall_status %></li>
 			<li><i class="fa-li fa fa-check-square"></i> <%= @study.study_type %></li>
@@ -21,9 +18,7 @@
       <%= @study.prime_address %>
     </p>
 
-    <p>
-
-
+		<%= link_to "Review this Trial", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
 		<%= link_to 'Return to List', studies_path, class: "btn btn-primary" %>
 
     <br>
@@ -36,14 +31,16 @@
       src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBJg0HiO2KtvExTuiWB6rKhmUUsHXFk6dY
         &q=<%= @study.prime_address.parameterize %>&zoom=14">
     </iframe>
-  </div>
+</div>
 
   <div class="col-md-9">
 			<div class='well'>
 				<div class='badge'>Brief Summary</div>
+				<br>
       	<%= @study.brief_summary.description %>
 				<br>
 				<div class='badge'>Eligibility Criteria</div>
+				<br>
       	<%= @study.eligibility.criteria %>
 				<br>
 			</div>
