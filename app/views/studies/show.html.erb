@@ -1,6 +1,6 @@
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.js"></script>
-<script src="/assets/jquery.raty.js" type="text/javascript"></script>
 <script src="/assets/bootstrap-transfer.js" type="text/javascript"></script>
+<script src="/assets/jquery.raty.js" type="text/javascript"></script>
 <script>
     $(document).ready(function() {
         $(".star-rating").raty({
@@ -67,10 +67,7 @@
       <%= @study.prime_address %>
     </p>
 
-
     <br>
-    <br>
-
     <iframe
       width="230"
       height="230"
@@ -100,7 +97,7 @@
 					&nbsp;Notes/Justification:
 					&nbsp;<input type="text" class="form-control span7" id="annotation">
 				</div>
-				&nbsp<%= link_to "Submit Specialty Domain", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-default btn-mini" %>
+				&nbsp<%= link_to "Submit Specialty Domain", edit_study_path(:nct_id=>@study.nct_id), class: "btn btn-default btn-mini" %>
 			</div>
   </div>
 </div>
