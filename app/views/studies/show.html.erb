@@ -8,6 +8,8 @@
     <h4>
       <%= @study.acronym %> <%= @study.brief_title %>
     </h4>
+    <div class="star-rating" data-score= <%= @study.average_rating %> ></div>
+    <p><%= "#{@study.reviews.length} reviews" %></p>
     <p>
 			<li><i class="fa-li fa fa-check-square"></i> <%= @study.overall_status %></li>
 			<li><i class="fa-li fa fa-check-square"></i> <%= @study.study_type %></li>
@@ -18,7 +20,7 @@
       <%= @study.prime_address %>
     </p>
 
-		<%= link_to "Review this Trial", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
+		<%= link_to "Reviews", reviews_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
 		<%= link_to 'Return to List', studies_path, class: "btn btn-primary" %>
 
     <br>

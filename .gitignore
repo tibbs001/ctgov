@@ -8,6 +8,7 @@ vendor/*
 tmp/*
 config/secrets.yml
 config/database.yml
+config/database_local.yml
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

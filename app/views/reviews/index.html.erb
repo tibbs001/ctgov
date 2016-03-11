@@ -22,7 +22,6 @@
     <p>
 
 		<%= link_to "Write a Review", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
-
 		<%= link_to 'Return to List', studies_path, class: "btn btn-primary" %>
 
     <br>
@@ -74,9 +73,6 @@
     <% end %>
   </div>
 </div>
-
-<%= link_to 'Edit', edit_study_path(@study), class: "btn btn-link" %> |
-<%= link_to 'Back', studies_path, class: "btn btn-link" %>
 
 <script>
   $('.star-rating').raty({
