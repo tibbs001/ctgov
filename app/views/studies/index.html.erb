@@ -1,11 +1,15 @@
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.js"></script>
 <script>
-  $('.star-rating').raty({
-    path: 'https://s3.amazonaws.com/yelpdemo/stars',
-    readOnly: true,
-    score: function() {
-      return $(this).attr('data-score');
-    }
-  });
+    $(document).ready(function() {
+        $(".star-rating").raty({
+					path: '/assets/',
+    			readOnly: true,
+    			score: function() {
+      			return $(this).attr('data-score');
+					}
+        });
+    })
 </script>
 
 <div class="container-fluid">
@@ -33,6 +37,7 @@
     <col class="col-md-2">
   </colgroup>
 
+	<script src="/assets/jquery.raty.js" type="text/javascript"></script>
   <tbody>
     <% @studies.each do |study| %>
       <tr>

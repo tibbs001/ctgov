@@ -19,8 +19,6 @@
       <%= @study.prime_address %>
     </p>
 
-    <p>
-
 		<%= link_to "Write a Review", new_review_path(:nct_id=>@study.nct_id), class: "btn btn-primary" %>
 		<%= link_to 'Return to List', studies_path, class: "btn btn-primary" %>
 
@@ -77,6 +75,7 @@
 <script>
   $('.star-rating').raty({
     path: 'https://s3.amazonaws.com/yelpdemo/stars',
+    path: '/assets/',
     readOnly: true,
     score: function() {
       return $(this).attr('data-score');
