@@ -146,7 +146,7 @@
                 <tr>\
                     <td width="50%">\
                         <div class="selector-available">\
-                            <h2>Available</h2>\
+                            <h2>Available Specialties</h2>\
                             <div class="selector-filter">\
                                 <table width="100%" border="0">\
                                     <tr>\

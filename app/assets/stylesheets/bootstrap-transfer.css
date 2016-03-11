@@ -116,16 +116,11 @@
 }
 
 .bootstrap-transfer-container .illustration {
-	position: absolute;
 	top: 5px;
 	left: 85px;
-	display: inline-block;
 	width: 16px;
 	height: 16px;
 	background: url("/assets/bootstrap-transfer-selector-add.gif") top center no-repeat;
 }
-
-
-
 
 
