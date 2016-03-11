@@ -1,3 +1,13 @@
+<script>
+  $('.star-rating').raty({
+    path: 'https://s3.amazonaws.com/yelpdemo/stars',
+    readOnly: true,
+    score: function() {
+      return $(this).attr('data-score');
+    }
+  });
+</script>
+
 <div class="container-fluid">
 <div class='table-responsive'>
 <div class='container'>
@@ -5,26 +15,30 @@
 <table id="sortTable" class='table dataTable data-table table-striped table-condensed table-hover' width='90%'>
   <thead>
     <tr>
-      <th>actions</th>
+      <th>rating</th>
+      <th></th>
       <th>status</th>
       <th>title</th>
       <th>started</th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <colgroup>
-    <col class="col-md-1">
     <col class="col-md-2">
-    <col class="col-md-5">
-    <col class="col-md-4">
+    <col class="col-md-1">
+    <col class="col-md-1">
+    <col class="col-md-6">
+    <col class="col-md-2">
     <col class="col-md-2">
   </colgroup>
 
   <tbody>
     <% @studies.each do |study| %>
       <tr>
+				<td><div class="star-rating" data-score= <%= study.average_rating %> ></div></td>
 				<td class='duke-btn'>
-					<%= link_to 'select',study_path(study), :class => "btn btn-default btn-mini" %>
+					<%= link_to 'details',study_path(study), :class => "btn btn-default btn-mini" %>
 				</td>
         <td><%= study.overall_status %></td>
         <td><%= study.brief_title %></td>
@@ -147,4 +161,5 @@
     "aLengthMenu": [[10, 50, 100, -1], [10, 50, 100, 'All']],
     "sPaginationType": "bootstrap"
   });
+
 </script>
