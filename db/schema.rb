@@ -80,6 +80,26 @@ ActiveRecord::Schema.define(version: 20160301202629) do
     t.string "data_field",     limit: 255
   end
 
+  create_table "derived_values", force: :cascade do |t|
+    t.string   "sponsor_type",              limit: 255
+    t.decimal  "actual_duration",                       precision: 5, scale: 2
+    t.integer  "enrollment",                limit: 4
+    t.boolean  "results_reported"
+    t.integer  "months_to_report_results",  limit: 4
+    t.integer  "registered_in_fiscal_year", limit: 4
+    t.integer  "number_of_facilities",      limit: 4
+    t.integer  "number_of_nsae_subjects",   limit: 4
+    t.integer  "number_of_sae_subjects",    limit: 4
+    t.string   "study_rank",                limit: 255
+    t.string   "link_to_study_data",        limit: 255
+    t.datetime "created_at",                                                    null: false
+    t.datetime "updated_at",                                                    null: false
+    t.string   "nct_id",                    limit: 255
+  end
+
+  add_index "derived_values", ["nct_id"], name: "index_derived_values_on_nct_id", using: :btree
+  add_index "derived_values", ["sponsor_type"], name: "index_derived_values_on_sponsor_type", using: :btree
+
   create_table "design_validations", force: :cascade do |t|
     t.string "design_name",  limit: 255
     t.string "design_value", limit: 255
@@ -385,16 +405,6 @@ ActiveRecord::Schema.define(version: 20160301202629) do
     t.string   "nct_id",            limit: 255
   end
 
-  create_table "pma_nct_mappings", force: :cascade do |t|
-    t.string   "unique_id",         limit: 255
-    t.integer  "ct_pma_id",         limit: 4
-    t.string   "nct_id",            limit: 255
-    t.string   "pma_number",        limit: 255
-    t.string   "supplement_number", limit: 255
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-  end
-
   create_table "pma_records", force: :cascade do |t|
     t.string   "unique_id",                      limit: 255
     t.string   "pma_number",                     limit: 255
@@ -568,41 +578,30 @@ ActiveRecord::Schema.define(version: 20160301202629) do
     t.string   "primary_completion_date_type",    limit: 255
     t.string   "org_study_id",                    limit: 255
     t.string   "secondary_id",                    limit: 255
-    t.text     "brief_title",                     limit: 65535
-    t.text     "official_title",                  limit: 65535
+    t.string   "study_type",                      limit: 255
     t.string   "overall_status",                  limit: 255
     t.string   "phase",                           limit: 255
     t.string   "target_duration",                 limit: 255
-    t.decimal  "actual_duration",                               precision: 5, scale: 2
-    t.integer  "reported_enrollment",             limit: 4
-    t.integer  "derived_enrollment",              limit: 4
+    t.integer  "enrollment",                      limit: 4
     t.string   "enrollment_type",                 limit: 255
-    t.string   "study_type",                      limit: 255
-    t.integer  "number_of_arms",                  limit: 4
-    t.integer  "number_of_groups",                limit: 4
-    t.integer  "number_of_facilities",            limit: 4
-    t.integer  "number_of_nsae_subjects",         limit: 4
-    t.integer  "number_of_sae_subjects",          limit: 4
-    t.string   "sponsor_type",                    limit: 255
     t.string   "source",                          limit: 255
-    t.integer  "registered_in_fiscal_year",       limit: 4
-    t.integer  "results_reported",                limit: 4
-    t.integer  "months_to_report_results",        limit: 4
     t.string   "biospec_retention",               limit: 255
-    t.text     "biospec_description",             limit: 65535
-    t.string   "study_rank",                      limit: 255
     t.string   "limitations_and_caveats",         limit: 255
     t.string   "delivery_mechanism",              limit: 255
     t.string   "description",                     limit: 255
     t.string   "acronym",                         limit: 255
+    t.integer  "number_of_arms",                  limit: 4
+    t.integer  "number_of_groups",                limit: 4
     t.string   "why_stopped",                     limit: 255
-    t.boolean  "is_section_801"
-    t.boolean  "is_fda_regulated"
     t.boolean  "has_expanded_access"
     t.boolean  "has_dmc"
-    t.datetime "created_at",                                                            null: false
-    t.datetime "updated_at",                                                            null: false
-    t.string   "link_to_data",                    limit: 255
+    t.boolean  "is_section_801"
+    t.boolean  "is_fda_regulated"
+    t.text     "brief_title",                     limit: 65535
+    t.text     "official_title",                  limit: 65535
+    t.text     "biospec_description",             limit: 65535
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
   end
 
   add_index "studies", ["nct_id"], name: "index_studies_on_nct_id", using: :btree

@@ -42,7 +42,9 @@ require 'zip'
 
 		def url_to_get_all
 			#  small example:  'https://clinicaltrials.gov/search?term=pancreatic+cancer+vaccine&resultsxml=true'
-			'http://clinicaltrials.gov/search?term=&resultsxml=true'
+			'https://clinicaltrials.gov/search?term=pancreatic+cancer+vaccine&resultsxml=true'
+			#  real example: 'http://clinicaltrials.gov/search?term=&resultsxml=true'
+			#'http://clinicaltrials.gov/search?term=&resultsxml=true'
 		end
 
 		def monthly_loader(nctid='')
@@ -65,6 +67,7 @@ require 'zip'
 			system("curl -vs '#{url_to_get_all}' > #{preprocess_dir}/#{all_studies_file_name};
 							cd #{preprocess_dir};
 							unzip #{all_studies_file_name}")
+			self
 		end
 
 		def organize_by_new_or_changed

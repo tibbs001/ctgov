@@ -7,6 +7,31 @@
 			expect(groups.size).to eq(9)
 		end
 
+		it "should attach outcomes to the appropriate group & calculate participant count based on outcome measures" do
+      nct_id='NCT00006409'
+      study=Asker.new.create_study(nct_id)
+			g4_array=study.groups.select{|g|g.ctgov_group_enumerator==4}
+			expect(g4_array.size).to eq(1)
+			g4=g4_array.first
+			outcome=g4.outcomes.first
+			expect(g4.outcomes.size).to eq(2)
+			expect(outcome.outcome_measures.size).to eq(2)
+			expect(outcome.outcome_measures.first.group).to eq(g4)
+			expect(outcome.outcome_measures.last.group).to eq(g4)
+			expect(g4.derived_participant_count).to eq(1545)
+			g1=study.groups.select{|g|g.ctgov_group_enumerator==1}.first
+			g2=study.groups.select{|g|g.ctgov_group_enumerator==2}.first
+			g3=study.groups.select{|g|g.ctgov_group_enumerator==3}.first
+			g5=study.groups.select{|g|g.ctgov_group_enumerator==5}.first
+			g6=study.groups.select{|g|g.ctgov_group_enumerator==6}.first
+			expect(g1.derived_participant_count).to eq(0)
+			expect(g2.derived_participant_count).to eq(0)
+			expect(g3.derived_participant_count).to eq(1540)
+			expect(g5.derived_participant_count).to eq(1664)
+			expect(g6.derived_participant_count).to eq(1714)
+			expect(study.derived_value.enrollment).to eq(6463)
+		end
+
 		it "should save groups that are missing in the participant_flow section" do
       nct_id='NCT02320695'
       study=Asker.new.create_study(nct_id)

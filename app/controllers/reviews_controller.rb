@@ -12,6 +12,7 @@ class ReviewsController < ApplicationController
 
   # GET /reviews/index
   def index
+		@study=Study.find_by_nct_id(params['nct_id'])
   end
 
   # GET /reviews/1/edit
@@ -28,7 +29,7 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       if @review.save
-        format.html { redirect_to @study, notice: 'Review was successfully created.' }
+        format.html { redirect_to :action => 'index', notice: 'Review was successfully created.', nct_id: @review.nct_id }
         format.json { render :show, status: :created, location: @review }
       else
         format.html { render :new }
@@ -42,7 +43,7 @@ class ReviewsController < ApplicationController
   def update
     respond_to do |format|
       if @review.update(review_params)
-        format.html { redirect_to study_path(@study), notice: 'Review was successfully updated.' }
+        format.html { redirect_to :action => 'index', notice: 'Review was successfully updated.', nct_id: @review.nct_id }
         format.json { render :show, status: :ok, location: @review }
       else
         format.html { render :edit }
@@ -56,7 +57,7 @@ class ReviewsController < ApplicationController
   def destroy
     @review.destroy
     respond_to do |format|
-      format.html { redirect_to study_path(@study), notice: 'Review was successfully destroyed.' }
+      format.html { redirect_to :action => 'index', notice: 'Review was successfully removed.', nct_id: @review.nct_id }
       format.json { head :no_content }
     end
   end

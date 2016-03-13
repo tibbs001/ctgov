@@ -12,8 +12,8 @@ mysql_settings: &mysql_settings
   pool: 5
   username: ctgov
   password: ctgov_rocks
-  host: 173.194.241.193
-  database: ctgov
+  host: 104.196.35.166
+  database: ctgov-201603
 
 ctgov_development:
   <<: *mysql_settings

@@ -61,9 +61,7 @@ class OutcomeAnalysis < StudyRelationship
 	end
 
 	def get_group
-		opts[:groups].each {|g|
-			return g if g.ctgov_group_enumerator==gid
-		}
+		opts[:groups].each {|g| return g if g.ctgov_group_enumerator==gid }
 	end
 
   def conditionally_create_from(opts)

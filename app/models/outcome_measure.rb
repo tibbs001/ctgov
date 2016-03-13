@@ -8,7 +8,7 @@ class OutcomeMeasure < StudyRelationship
     col=[]
     xml=all.pop
     if xml.blank?
-      col << new.conditionally_create_from(opts)
+			return []
     else
       while xml
         opts[:title]=xml.xpath('title').inner_html
@@ -23,17 +23,17 @@ class OutcomeMeasure < StudyRelationship
 	      else
 	        while category
             opts[:category]=category.xpath('sub_title').inner_html
-            groups=category.xpath("measurement_list").xpath('measurement')
-	          group=groups.pop
-	          if group.blank?
+            grps=category.xpath("measurement_list").xpath('measurement')
+	          gr=grps.pop
+	          if gr.blank?
               col << new.conditionally_create_from(opts)
 	          else
-	            while group
-                opts[:group_id]=group.attribute('group_id').try(:value)
-                opts[:value]=group.attribute('value').try(:value)
-                opts[:spread]=group.attribute('spread').try(:value)
+	            while gr
+                opts[:group_id]=gr.attribute('group_id').try(:value)
+                opts[:value]=gr.attribute('value').try(:value)
+                opts[:spread]=gr.attribute('spread').try(:value)
                 col << new.conditionally_create_from(opts)
-                group=groups.pop
+                gr=grps.pop
               end
             end
             category=categories.pop
@@ -60,7 +60,7 @@ class OutcomeMeasure < StudyRelationship
      :dispersion => get_opt(:dispersion),
      :description => get_opt(:description),
      :outcome => get_opt(:outcome),
-		 :group => get_opt(:outcome).group
+		 :group => get_group
     }
   end
 
@@ -68,5 +68,19 @@ class OutcomeMeasure < StudyRelationship
     return nil if opts[:group_id] != opts[:group_id_of_interest]
 		create_from(opts)
   end
+
+	def gid
+		integer_in(opts[:group_id_of_interest])
+	end
+
+	def get_group
+		# TODO duplicate code in outcome.rb
+		opts[:groups].each {|g| return g if g.ctgov_group_enumerator==gid }
+		#puts "OutcomeMeasure - get_group. Didn't find the group....creating....  "
+		# if group doesn't yet exist, create it...
+		new_group=Group.create_from(opts)
+		opts[:groups] << new_group
+		return new_group
+	end
 
 end

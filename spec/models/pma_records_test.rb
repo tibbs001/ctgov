@@ -22,10 +22,9 @@ RSpec.describe PmaRecord do
 		expect(study.pma_mappings.size).to eq(4)
 
 		# verify that it won't create duplicate pma records
-		study.create_pma_records
+		study.derived_value.create_pma_records
 		expect(study.pma_records.size).to eq(4)
-		study.create_pma_records
-		expect(study.pma_records.size).to eq(4)
+		study.derived_value.create_pma_records
 		expect(study.pma_records.size).to eq(4)
 
 		rec=study.pma_records.select{|p|p.pma_number=='P050023'}.first
