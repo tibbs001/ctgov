@@ -32,6 +32,13 @@
 			expect(study.derived_value.enrollment).to eq(6463)
 		end
 
+  	pending "should handle a study where the arm_group_label is null"
+		it "should handle a study where the arm_group_label is null" do
+			#TODO
+      nct_id='NCT01135368' #this was a problem study in 3/16 load cuz arm_group_labels are null
+      study=Asker.new.create_study(nct_id)
+		end
+
 		it "should save groups that are missing in the participant_flow section" do
       nct_id='NCT02320695'
       study=Asker.new.create_study(nct_id)
