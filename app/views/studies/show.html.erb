@@ -1,5 +1,4 @@
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.js"></script>
-<script src="/assets/bootstrap-transfer.js" type="text/javascript"></script>
 <script src="/assets/jquery.raty.js" type="text/javascript"></script>
 <script>
     $(document).ready(function() {
@@ -11,38 +10,8 @@
       			return $(this).attr('data-score');
 					}
         });
-
-    		var t = $('#speciality-domains').bootstrapTransfer(
-				{'target_id': 'multi-select-input',
-				 'height': '18em',
-				 'hilite_selection': true});
-
-				t.populate([
-
-					{value:"1", content:"Cardiology"},
-					{value:"2", content:"Dermatology"},
-					{value:"3", content:"Endocrinology"},
-					{value:"4", content:"Genomics"},
-					{value:"5", content:"GI/Hepatology"},
-					{value:"6", content:"Immunology/Rheumatology"},
-					{value:"7", content:"Infectious Diseases"},
-					{value:"8", content:"Medicine"},
-					{value:"9", content:"Nephrology"},
-					{value:"10", content:"Neurosciences Medicine (Neurology)"},
-					{value:"11", content:"Neurosciences Medicine (Psych)"},
-					{value:"12", content:"Oncology"},
-					{value:"13", content:"Otolaryngology"},
-					{value:"14", content:"Pediatrics Cardiology"},
-					{value:"15", content:"Pulmonary/Critical Care"},
-					{value:"16", content:"Reporductive Medicine/OB-GYN"}
-			]);
-
 	});
 </script>
-
-<script src="/assets/bootstrap-transfer.js" type="text/javascript"></script>
-<link href="/assets/bootstrap.css" media="screen" rel="stylesheet" />
-<link href="/assets/bootstrap-transfer.css" media="screen" rel="stylesheet" />
 
 <div class="row">
   <div class="col-md-3 span3 bs-docs-sidebar">
@@ -89,16 +58,7 @@
 				<br>
 			</div>
 
-			<div class='well'>
-				<h4>&nbsp &nbsp Identify Specialty Domain</h4>
-				<div id="speciality-domains" style="width:400px">
-				</div>
-				<div>
-					&nbsp;Notes/Justification:
-					&nbsp;<input type="text" class="form-control span7" id="annotation">
-				</div>
-				&nbsp<%= link_to "Submit Specialty Domain", edit_study_path(:nct_id=>@study.nct_id), class: "btn btn-default btn-mini" %>
-			</div>
+			<%= render partial: 'clinical_domain_form', locals: {study: @study, new_domain: ClinicalDomain.new({:study=>@study})} %>
   </div>
 </div>
 

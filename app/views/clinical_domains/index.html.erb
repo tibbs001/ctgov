@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-3 span3 bs-docs-sidebar">
+
+    <h4>
+      <%= @study.acronym %>
+      <%= @study.brief_title %>
+    </h4>
+
+  <div class="col-md-9">
+    <% if @study.reviews.blank? %>
+      <h3>No clinical domains yet. Be the first to select one!</h3>
+    <% else %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="col-md-3"></th>
+            <th class="col-md-9"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @study.clinical_domains.each do |domain| %>
+            <tr>
+              <td>
+                <h4>
+                  <%= "#{domain.clinical_category.domain_name} #{review.user.last_name.capitalize[0]}." %>
+                </h4>
+                <p><%= domain.created_at.strftime("%-m/%-d/%y") %></p>
+              </td>
+
+           </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>
+

@@ -1,0 +1,50 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('dropdown-toggle').dropdown()
+});
+</script>
+
+
+<link href="/assets/bootstrap.css" media="screen" rel="stylesheet" />
+<%= form_for(@study) do |f| %>
+  <% if @study.errors.any? %>
+    <div id="error-explanation" class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      <h4><%= pluralize(@domain.errors.count, "error") %> prohibited this study from being saved:</h4>
+
+      <ul>
+      <% @domain.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+	<div class='well'>
+		<% if @study.clinical_domains.empty? %>
+			<h4>
+				<span class=''>Clinical Area Not Yet Identified</span>
+				<select>
+					<option value="category">Select Domain</option>
+					<%= options_from_collection_for_select(ClinicalCategory.all, :id, :domain_name) %>
+				</select>
+				<span class=''>Comment: </span>
+				<span class=''><input type="text" size="30" name="new_domain_comment" value="<%= new_domain.comment %>" </span>
+				<span class=''>
+					<%= link_to "Add", new_clinical_domain_path(:id=>new_domain.id), class: "btn btn-default btn-mini" %>
+				</span>
+			</h4>
+		<% else %>
+			<h4>Clinical Domain(s) Identified
+			<select>
+				<option value="category">Add Domain</option>
+				<%= options_from_collection_for_select(ClinicalCategory.all, :id, :domain_name) %>
+			</select></h4>
+		<% end %>
+
+	</div>
+<% end %>

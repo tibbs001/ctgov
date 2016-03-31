@@ -22,8 +22,13 @@ require 'csv'
 		has_one  :result_detail,         :foreign_key => 'nct_id', dependent: :destroy
 		has_one  :derived_value,         :foreign_key => 'nct_id', dependent: :destroy
 
+		#  Non-clinicaltrials.gov relationships
+		has_many :clinical_domains,      :foreign_key => 'nct_id'
 		has_many :pma_mappings,          :foreign_key => 'nct_id'
 		has_many :pma_records,           :foreign_key => 'nct_id', dependent: :destroy
+
+
+		#  clinicaltrials.gov relationships
 		has_many :expected_groups,       :foreign_key => 'nct_id', dependent: :destroy
 		has_many :expected_outcomes,     :foreign_key => 'nct_id', dependent: :destroy
 		has_many :groups,                :foreign_key => 'nct_id', dependent: :destroy

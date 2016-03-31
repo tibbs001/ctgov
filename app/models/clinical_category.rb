@@ -1,10 +1,10 @@
 require 'csv'
 #module OpenTrials
-	class PmaMapping < ActiveRecord::Base
+	class ClinicalCategory < ActiveRecord::Base
 		#establish_connection "open_#{Rails.env}".to_sym
-		belongs_to :study, :foreign_key=> 'nct_id'
+		has_many :clinical_domains
 
-		def self.load(file_name='public/other_data/pma_mappings.csv')
+		def self.load(file_name='public/other_data/clinical_categories.csv')
 			CSV.foreach(file_name,
 					:headers 		 => true,
 					:col_sep 		 => ',',

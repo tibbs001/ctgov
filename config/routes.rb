@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :charts
 	resources :reviews
+	resources :clinical_domains
   root 'studies#index'
   get 'pages/about'
   get 'pages/contact'

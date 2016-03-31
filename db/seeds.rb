@@ -3,5 +3,8 @@
 #
 	User.create! :first_name => 'Sheri', :last_name=> 'Tibbs', :email => 'sheri.tibbs@gmail.com', :password => 'clinwiki', :password_confirmation => 'clinwiki'
 	User.create! :first_name => 'William', :last_name=> 'Hoos', :email => 'william.hoos@gmail.com', :password => 'clinwiki', :password_confirmation => 'clinwiki'
+	PmaMapping.load
+	DataDefinition.load
+	ClinicalCategory.load
 	Asker.new.pull_down_studies.monthly_loader
 
