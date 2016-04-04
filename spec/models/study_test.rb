@@ -233,13 +233,6 @@
       expect(study.last_changed_date == nil)
       expect(study.kind_of? Study)
       expect(study.nct_id).to eq nct_id
-      expect(study.start_date_str).to eq "May 2000"
-      expect(study.completion_date_str).to eq "May 2011"
-      expect(study.primary_completion_date_str).to eq "August 2009"
-      expect(study.start_date).to eq Date.parse(study.start_date_str)
-      expect(study.completion_date).to eq Date.parse(study.completion_date_str)
-      expect(study.primary_completion_date).to eq Date.parse(study.primary_completion_date_str)
-      expect(study.verification_date).to eq Date.parse(study.verification_date_str)
       expect(study.detailed_description.description.length).to eq(1907)
       expect(study.completion_date_type).to eq('Actual')
       expect(study.primary_completion_date_type).to eq('Actual')

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   resources :charts
+  resources :tableau_graphs
+  resources :open_data_soft_graphs
 	resources :reviews
 	resources :clinical_domains
   root 'studies#index'
