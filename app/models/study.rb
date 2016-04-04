@@ -169,15 +169,6 @@ require 'csv'
 				:completion_date => get_date(get('completion_date')),
 				:first_received_results_date => get_date(get('firstreceived_results_date')),
 
-				:start_date_str => get('start_date'),
-				:first_received_date_str => get('firstreceived_date'),
-				:verification_date_str => get('verification_date'),
-				:last_changed_date_str => get('lastchanged_date'),
-				:primary_completion_date_str => get('primary_completion_date'),
-				:completion_date_str => get('completion_date'),
-				:first_received_results_date_str => get('firstreceived_results_date'),
-				:download_date_str => xml.xpath('//download_date'),
-
 				:org_study_id => xml.xpath('//org_study_id').inner_html,
 				:acronym =>get('acronym'),
 				:number_of_arms => get('number_of_arms'),

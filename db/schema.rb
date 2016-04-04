@@ -573,7 +573,7 @@ ActiveRecord::Schema.define(version: 20160313001931) do
   end
 
   create_table "studies", id: false, force: :cascade do |t|
-    t.string   "nct_id",                          limit: 255
+    t.string   "nct_id",                       limit: 255
     t.date     "start_date"
     t.date     "first_received_date"
     t.date     "verification_date"
@@ -582,42 +582,34 @@ ActiveRecord::Schema.define(version: 20160313001931) do
     t.date     "completion_date"
     t.date     "first_received_results_date"
     t.date     "download_date"
-    t.string   "start_date_str",                  limit: 255
-    t.string   "first_received_date_str",         limit: 255
-    t.string   "verification_date_str",           limit: 255
-    t.string   "last_changed_date_str",           limit: 255
-    t.string   "primary_completion_date_str",     limit: 255
-    t.string   "completion_date_str",             limit: 255
-    t.string   "first_received_results_date_str", limit: 255
-    t.string   "download_date_str",               limit: 255
-    t.string   "completion_date_type",            limit: 255
-    t.string   "primary_completion_date_type",    limit: 255
-    t.string   "org_study_id",                    limit: 255
-    t.string   "secondary_id",                    limit: 255
-    t.string   "study_type",                      limit: 255
-    t.string   "overall_status",                  limit: 255
-    t.string   "phase",                           limit: 255
-    t.string   "target_duration",                 limit: 255
-    t.integer  "enrollment",                      limit: 4
-    t.string   "enrollment_type",                 limit: 255
-    t.string   "source",                          limit: 255
-    t.string   "biospec_retention",               limit: 255
-    t.string   "limitations_and_caveats",         limit: 255
-    t.string   "delivery_mechanism",              limit: 255
-    t.string   "description",                     limit: 255
-    t.string   "acronym",                         limit: 255
-    t.integer  "number_of_arms",                  limit: 4
-    t.integer  "number_of_groups",                limit: 4
-    t.string   "why_stopped",                     limit: 255
+    t.string   "completion_date_type",         limit: 255
+    t.string   "primary_completion_date_type", limit: 255
+    t.string   "org_study_id",                 limit: 255
+    t.string   "secondary_id",                 limit: 255
+    t.string   "study_type",                   limit: 255
+    t.string   "overall_status",               limit: 255
+    t.string   "phase",                        limit: 255
+    t.string   "target_duration",              limit: 255
+    t.integer  "enrollment",                   limit: 4
+    t.string   "enrollment_type",              limit: 255
+    t.string   "source",                       limit: 255
+    t.string   "biospec_retention",            limit: 255
+    t.string   "limitations_and_caveats",      limit: 255
+    t.string   "delivery_mechanism",           limit: 255
+    t.string   "description",                  limit: 255
+    t.string   "acronym",                      limit: 255
+    t.integer  "number_of_arms",               limit: 4
+    t.integer  "number_of_groups",             limit: 4
+    t.string   "why_stopped",                  limit: 255
     t.boolean  "has_expanded_access"
     t.boolean  "has_dmc"
     t.boolean  "is_section_801"
     t.boolean  "is_fda_regulated"
-    t.text     "brief_title",                     limit: 65535
-    t.text     "official_title",                  limit: 65535
-    t.text     "biospec_description",             limit: 65535
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.text     "brief_title",                  limit: 65535
+    t.text     "official_title",               limit: 65535
+    t.text     "biospec_description",          limit: 65535
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
   end
 
   add_index "studies", ["nct_id"], name: "index_studies_on_nct_id", using: :btree

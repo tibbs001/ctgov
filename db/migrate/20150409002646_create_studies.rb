@@ -12,14 +12,6 @@ class CreateStudies < ActiveRecord::Migration
       t.date :first_received_results_date
       t.date :download_date
 
-      t.string  :start_date_str
-      t.string  :first_received_date_str
-      t.string  :verification_date_str
-      t.string  :last_changed_date_str
-      t.string  :primary_completion_date_str
-      t.string  :completion_date_str
-      t.string  :first_received_results_date_str
-      t.string  :download_date_str
       t.string  :completion_date_type
       t.string  :primary_completion_date_type
       t.string  :org_study_id
@@ -203,11 +195,11 @@ class CreateStudies < ActiveRecord::Migration
       t.string :masking
       t.string :masked_roles
       t.string :primary_purpose
-      t.string :intervention_model
+      t.string :interventional_model
+			t.string :observational_model
 			t.string :endpoint_classification
 			t.string :allocation
 			t.string :time_perspective
-			t.string :observational_model
     end
     add_column :designs, :nct_id, :string, references: :studies
 		add_index :designs, :nct_id
