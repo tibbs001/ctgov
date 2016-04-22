@@ -3,7 +3,7 @@ require 'active_support/all'
 class StudyRelationship < ActiveRecord::Base
 
 		self.abstract_class = true;
-	  establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
+	  #establish_connection "ctgov_#{Rails.env}".to_sym if Rails.env != 'test'
 		attr_accessor :xml, :wrapper1_xml
 		belongs_to :study, :foreign_key=> 'nct_id'
 
