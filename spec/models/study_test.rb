@@ -341,8 +341,8 @@
       g1=study.reported_events.select{|x|x.ctgov_group_enumerator==1}
       g2=study.reported_events.select{|x|x.ctgov_group_enumerator==2}
       g3=study.reported_events.select{|x|x.ctgov_group_enumerator==3}
-      expect(g1.size).to eq(8)
-      expect(g2.size).to eq(8)
+      expect(g1.size).to eq(9)
+      expect(g2.size).to eq(9)
       expect(g3.size).to eq(0)
 
       expect(g1.select{|x|x.title=='Decreased Happiness'}.first.subjects_affected).to eq(14)
