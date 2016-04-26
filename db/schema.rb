@@ -114,11 +114,11 @@ ActiveRecord::Schema.define(version: 20160301202629) do
     t.string "masking",                 limit: 255
     t.string "masked_roles",            limit: 255
     t.string "primary_purpose",         limit: 255
-    t.string "intervention_model",      limit: 255
+    t.string "interventional_model",    limit: 255
+    t.string "observational_model",     limit: 255
     t.string "endpoint_classification", limit: 255
     t.string "allocation",              limit: 255
     t.string "time_perspective",        limit: 255
-    t.string "observational_model",     limit: 255
     t.string "nct_id",                  limit: 255
   end
 

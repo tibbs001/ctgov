@@ -16,7 +16,7 @@
       expect(design.primary_purpose).to eq('Treatment')
 			expect(design.time_perspective).to eq(nil)
 			expect(design.observational_model).to eq(nil)
-			expect(design.intervention_model).to eq('Parallel Assignment')
+			expect(design.interventional_model).to eq('Parallel Assignment')
 			expect(design.endpoint_classification).to eq('Efficacy Study')
       expect(design.allocation).to eq('Randomized')
       expect(design.masking).to eq('Double Blind')
