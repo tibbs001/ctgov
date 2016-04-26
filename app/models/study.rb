@@ -86,7 +86,7 @@ require 'csv'
 		end
 
 		def description
-			detailed_description.description
+			#detailed_description.description
 		end
 
 		def summary
