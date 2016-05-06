@@ -10,7 +10,6 @@ production:
   adapter: postgresql
   encoding: unicode
   database: aact_production
-  username: aact
   username: <%= ENV["DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %>
   template: template0
