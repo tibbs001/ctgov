@@ -1,1 +1,1 @@
-MyApp::Application.config.secret_token = ENV['SECRET_TOKEN']
+Ctgov::Application.config.secret_token = ENV['SECRET_TOKEN']
