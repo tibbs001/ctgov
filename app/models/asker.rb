@@ -361,14 +361,14 @@ require 'zip'
 		end
 
 		def fda_api_key
-  		<%= ENV["FDA_API_KEY"] %>
+			Figaro.env.fda_api_key
 		end
 
 		def self.google_api_key
-  		<%= ENV["GOOGLE_API_KEY"] %>
+			Figaro.env.google_api_key
 		end
 
 		def google_api_key
-  		<%= ENV["GOOGLE_API_KEY"] %>
+			Figaro.env.google_api_key
 		end
   end
