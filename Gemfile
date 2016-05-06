@@ -58,7 +58,7 @@ gem 'figaro'
 gem 'puma'
 gem 'net-ssh'
   gem 'capistrano'
-	gem 'capistrano-passenger'
+#	gem 'capistrano-passenger'
   gem 'capistrano3-puma'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
