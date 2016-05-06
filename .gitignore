@@ -4,7 +4,6 @@ search_results/*
 public/studies
 public/imported/*
 public/downloaded/*
-config/database.yml
 db/*.sqlite3
 vendor/*
 tmp/*
