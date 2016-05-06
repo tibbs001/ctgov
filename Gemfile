@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'passenger'
+#gem 'passenger'
 gem 'zip'
 gem 'rails', '4.2.4'
 # MySQL database gem
 gem 'mysql2', '~> 0.3.18'
-gem 'sqlite3'
+#gem 'sqlite3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
