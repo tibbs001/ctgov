@@ -1,6 +1,7 @@
 .bundle/
 log/*.log
 search_results/*
+public/studies
 public/imported/*
 public/downloaded/*
 db/*.sqlite3

@@ -4,8 +4,10 @@ source 'https://rubygems.org'
 gem 'zip'
 gem 'rails', '4.2.4'
 # MySQL database gem
-gem 'mysql2', '~> 0.3.18'
-#gem 'sqlite3'
+#gem 'mysql2', '~> 0.3.18'
+gem 'sqlite3'
+# postgres gem
+gem 'pg'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
