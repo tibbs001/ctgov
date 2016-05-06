@@ -1,11 +1,9 @@
 source 'https://rubygems.org'
 
-#gem 'passenger'
 gem 'zip'
 gem 'rails', '4.2.4'
 # MySQL database gem
 #gem 'mysql2', '~> 0.3.18'
-gem 'sqlite3'
 # postgres gem
 gem 'pg'
 # Use SCSS for stylesheets
@@ -26,7 +24,7 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'rake', '~> 10.4.2'  # for reasons I don't understand, seems passenger expects this version
+gem 'rake'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
@@ -65,6 +63,7 @@ gem 'net-ssh'
   gem 'capistrano-rvm'
 
 group :development, :test do
+	gem 'sqlite3'
   gem 'byebug'
   # tool to use ActiveRecord to generate an ER Diagram
   gem 'rails-erd'

@@ -273,7 +273,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.4)
   rails-erd
-  rake (~> 10.4.2)
+  rake
   rspec-rails
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
