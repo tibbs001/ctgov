@@ -361,16 +361,14 @@ require 'zip'
 		end
 
 		def fda_api_key
-			#TODO when official, move out to an environment variable
-			'1d5o6WslMKSeCqVV8sTlNcVaCgAXyr0QHtSH4REO'
+  		<%= ENV["FDA_API_KEY"] %>
 		end
 
 		def self.google_api_key
-			#TODO when official, move out to an environment variable
-			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'
+  		<%= ENV["GOOGLE_API_KEY"] %>
 		end
 
 		def google_api_key
-			'AIzaSyCocTrzXt-OPhhk0dBQW3JLetZUDMme9gk'
+  		<%= ENV["GOOGLE_API_KEY"] %>
 		end
   end
