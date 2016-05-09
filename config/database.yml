@@ -6,7 +6,7 @@
 #  host: ctgov.cm871qfhg8vn.us-east-1.rds.amazonaws.com
 #  port: 3306
 
-production:
+productionxx:
   adapter: postgresql
   encoding: unicode
   database: aact_production
@@ -17,6 +17,18 @@ production:
   pool: 5
   port: 5432
 
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: dbcgh450g07q2j
+  username: vwhojdpkvfmcdl
+  password: 04UAcPjpia8YhaS8MPvCjawllB
+  template: template0
+  host: ec2-107-20-174-127.compute-1.amazonaws.com
+  url: postgres://vwhojdpkvfmcdl:04UAcPjpia8YhaS8MPvCjawllB@ec2-107-20-174-127.compute-1.amazonaws.com:5432/dbcgh450g07q2j
+  pool: 5
+  port: 5432
+
 test:
   adapter: sqlite3
   pool: 5
@@ -24,7 +36,7 @@ test:
   database: db/test.sqlite3
 
 
-development:
+developmentxx:
   adapter: postgresql
   encoding: unicode
   database: aact_development
