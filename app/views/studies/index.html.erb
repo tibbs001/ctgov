@@ -49,9 +49,6 @@
         <td><%= study.brief_title %></td>
         <td><%= study.start_date %></td>
 				<td class='duke-btn'>
-        	<% if study.derived_value.link_to_study_data %>
-						<%= link_to 'get study data',study.derived_value.link_to_study_data, :target => "_blank", :class => "btn btn-default btn-mini" %>
-					<% end %>
 				</td>
       </tr>
     <% end %>

@@ -217,13 +217,17 @@ $(document).ready(function(){
     cancel(e);
 		var nctId = document.getElementById('nctId').value;
 		if (nctId == '') {
-				var url = 'https://clinicaltrials.gov/search?term=' + document.getElementById('searchTerm').value + '&displayxml=true';
+				//var url = 'http://ec2-52-87-233-209.compute-1.amazonaws.com/api/studies.xml?search=' + document.getElementById('searchTerm').value   + '&include=outcomes';
+				//var url = 'https://clinicaltrials.gov/search?term=' + document.getElementById('searchTerm').value + '&displayxml=true';
+				var url = 'http://localhost:3000/api/studies.xml?search=' + document.getElementById('searchTerm').value + '&include=outcomes';
 		} else {
 			console.log('NCT ID found:');
 			console.log(nctId);
-			var url = 'https://clinicaltrials.gov/show/' + document.getElementById('nctId').value + '?resultsxml=true';
+			//var url = 'http://ec2-52-87-233-209.compute-1.amazonaws.com/api/studies.xml?nct_id=' +  document.getElementById('nctId').value + '&include=outcomes';
+			//var url = 'https://clinicaltrials.gov/show/' + document.getElementById('nctId').value + '?resultsxml=true';
+			var url = 'http://localhost:3000/api/studies.xml?nct_id=' + document.getElementById('nctId').value + '&include=outcomes';
 		}
-	var xmlUrl = url.trim();
+		var xmlUrl = url.trim();
     _submitXMLToTableau(xmlUrl);
   });
 
