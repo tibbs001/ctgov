@@ -55,6 +55,14 @@ require 'csv'
 		scope :completed_since, lambda {|cdate| where("completion_date >= ?", cdate )}
 		scope :sponsored_by,    lambda {|agency| joins(:sponsors).where("sponsors.agency LIKE ?", "#{agency}%")}
 
+		def outcome_summary
+			outcomes.each{|o|
+				o.outcome_measures.each{|m|
+					{:type=>o.outcome_type,:group=>o.group_title,:time_frame=>o.time_frame,:title=>m.title,:value=>m.measure_value,:units=>m.units}
+				}
+			}
+		end
+
 		def initialize(hash)
 			super
 			@xml=hash[:xml]
