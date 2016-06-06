@@ -3,7 +3,8 @@ source 'https://rubygems.org'
 gem 'passenger'
 gem 'zip'
 gem 'rails', '4.2.4'
-# MySQL database gem
+# database gems
+gem 'pg'
 gem 'mysql2', '~> 0.3.18'
 gem 'sqlite3'
 # Use SCSS for stylesheets

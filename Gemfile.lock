@@ -144,6 +144,7 @@ GEM
     passenger (5.0.24)
       rack
       rake (>= 0.8.1)
+    pg (0.18.2)
     puma (2.16.0)
     rack (1.6.4)
     rack-test (0.6.3)
@@ -277,6 +278,7 @@ DEPENDENCIES
   net-ssh
   nokogiri
   passenger
+  pg
   puma
   rails (= 4.2.4)
   rails-erd
