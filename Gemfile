@@ -4,6 +4,7 @@ gem 'passenger'
 gem 'zip'
 gem 'rails', '4.2.4'
 # MySQL database gem
+gem 'pg'
 gem 'mysql2', '~> 0.3.18'
 gem 'sqlite3'
 # Use SCSS for stylesheets
