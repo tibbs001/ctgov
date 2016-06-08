@@ -4,52 +4,59 @@ class CreateStudies < ActiveRecord::Migration
       t.string :nct_id, primary: true
 
       t.date :start_date
-      t.date :first_received_date
-      t.date :verification_date
-      t.date :last_changed_date
+      t.string  :start_month_year
       t.date :primary_completion_date
-      t.date :completion_date
-      t.date :first_received_results_date
-      t.date :download_date
-
-      t.string  :start_date_str
-      t.string  :first_received_date_str
-      t.string  :verification_date_str
-      t.string  :last_changed_date_str
-      t.string  :primary_completion_date_str
-      t.string  :completion_date_str
-      t.string  :first_received_results_date_str
-      t.string  :download_date_str
-      t.string  :completion_date_type
+      t.string  :primary_completion_month_year
       t.string  :primary_completion_date_type
+      t.date :first_received_results_date
+
+      t.string  :acronym
+      t.string  :brief_title
+      t.string  :official_title
+      t.string  :overall_status
+      t.string  :study_type
+      t.string  :phase
+
       t.string  :org_study_id
       t.string  :secondary_id
-      t.string  :study_type
-      t.string  :overall_status
-      t.string  :phase
       t.string  :target_duration
       t.integer :enrollment
       t.string  :enrollment_type
-      t.string  :source
-      t.string  :biospec_retention
       t.string  :limitations_and_caveats
-      t.string  :delivery_mechanism
       t.string  :description
-      t.string  :acronym
       t.integer :number_of_arms
       t.integer :number_of_groups
+
       t.string  :why_stopped
       t.boolean :has_expanded_access
       t.boolean :has_dmc
       t.boolean :is_section_801
       t.boolean :is_fda_regulated
-      t.text    :brief_title
-      t.text    :official_title
-      t.text    :biospec_description
+      t.string  :information_source
       t.timestamps null: false
 		end
 		add_index :studies, :nct_id
 		add_index :studies, :study_type
+
+    create_table :other_dates do |t|
+      t.date :verification_date
+      t.date :last_changed_date
+      t.date :first_received_date
+      t.date :completion_date
+      t.string  :completion_month_year
+      t.string  :completion_date_type
+      t.string :download_date_info
+		end
+    add_column :other_dates, :nct_id, :string, references: :studies
+
+    create_table :biospecimens do |t|
+      t.string  :retention_type
+      t.text    :description
+      t.timestamps null: false
+		end
+    add_column :biospecimens, :nct_id, :string, references: :studies
+		add_index :biospecimens, :nct_id
+		add_index :biospecimens, :retention_type
 
     create_table :derived_values do |t|
       t.string  :sponsor_type
