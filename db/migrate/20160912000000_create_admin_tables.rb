@@ -1,4 +1,5 @@
 class CreateAdminTables < ActiveRecord::Migration
+
   def change
 
     create_table :data_definitions do |t|
@@ -14,15 +15,6 @@ class CreateAdminTables < ActiveRecord::Migration
       t.string :data_field
     end
 
-    create_table :load_events do |t|
-      t.string :nct_id
-      t.string :event_type
-      t.string :status
-      t.text   :description
-      t.float  :load_time
-      t.timestamps null: false
-    end
-
     create_table :search_results do |t|
       t.date    :search_datestamp
       t.string  :search_term
@@ -32,5 +24,6 @@ class CreateAdminTables < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-	end
+  end
+
 end

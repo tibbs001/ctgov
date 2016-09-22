@@ -3,11 +3,11 @@
 <script>
     $(document).ready(function() {
         $(".star-rating").raty({
-    			path: 'https://s3.amazonaws.com/yelpdemo/stars',
+          path: 'https://s3.amazonaws.com/yelpdemo/stars',
 					path: '/assets/',
-    			readOnly: true,
-    			score: function() {
-      			return $(this).attr('data-score');
+          readOnly: true,
+          score: function() {
+            return $(this).attr('data-score');
 					}
         });
 	});
@@ -47,18 +47,18 @@
 </div>
 
   <div class="col-md-9">
-			<div class='well'>
-				<div class='badge'>Brief Summary</div>
-				<br>
-      	<%= @study.brief_summary.description %>
-				<br>
-				<div class='badge'>Eligibility Criteria</div>
-				<br>
-      	<%= @study.eligibility.criteria %>
-				<br>
-			</div>
+     <div class='well'>
+        <div class='badge'>Brief Summary</div>
+          <br>
+          <%= @study.summary %>
+          <br>
+        <div class='badge'>Eligibility Criteria</div>
+        <br>
+        <%= @study.elig_criteria %>
+        <br>
+     </div>
 
-			<%= render partial: 'clinical_domain_form', locals: {study: @study, new_domain: ClinicalDomain.new({:study=>@study})} %>
+   <%= render partial: 'clinical_domain_form', locals: {study: @study, new_domain: ClinicalDomain.new({:study=>@study})} %>
   </div>
 </div>
 

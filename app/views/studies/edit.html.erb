@@ -34,7 +34,7 @@ $(document).ready(function(){
 	    class="btn btn-link has-popover"
 	    data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('sponsor_type') %>">Lead Sponsor: </button>
-    <%= @study.lead_sponsor.agency %>
+    <%= @study.lead_sponsor %>
     <% if !@study.org_study_id.blank? %>
       <button type="button"
 	    class="btn btn-link has-popover"

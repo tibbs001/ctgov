@@ -6,13 +6,13 @@ class ReviewsController < ApplicationController
   # GET /reviews/new
   def new
     @review = Review.new
-		@study=Study.find_by_nct_id(params['nct_id'])
+    set_study
 		@review.study=@study
   end
 
   # GET /reviews/index
   def index
-		@study=Study.find_by_nct_id(params['nct_id'])
+    set_study
   end
 
   # GET /reviews/1/edit
@@ -25,7 +25,7 @@ class ReviewsController < ApplicationController
     @review = Review.new(review_params)
     @review.user_id = current_user.id
     @review.nct_id = params['nct_id']
-		@study=Study.find_by_nct_id(params['nct_id'])
+    set_study
 
     respond_to do |format|
       if @review.save
@@ -64,6 +64,13 @@ class ReviewsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+
+    def set_study
+      id=params['nct_id']
+      response = HTTParty.get("http://aact.ctti-clinicaltrials.org/api/v1/studies/#{id}")
+      @study = Study.new(response.first.last)
+    end
+
     def set_review
       @review = Review.find(params[:id])
       @study = Study.find(@review.nct_id)

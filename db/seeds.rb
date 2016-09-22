@@ -6,5 +6,5 @@
 	PmaMapping.load
 	DataDefinition.load
 	ClinicalCategory.load
-	Asker.new.pull_down_studies.monthly_loader
+#	Asker.new.pull_down_studies.monthly_loader
 

@@ -3,11 +3,11 @@
 <script>
     $(document).ready(function() {
         $(".star-rating").raty({
-					path: '/assets/',
-    			readOnly: true,
-    			score: function() {
-      			return $(this).attr('data-score');
-					}
+           path: '/assets/',
+           readOnly: true,
+           score: function() {
+             return $(this).attr('data-score');
+           }
         });
     })
 </script>
@@ -37,22 +37,18 @@
     <col class="col-md-2">
   </colgroup>
 
-	<script src="/assets/jquery.raty.js" type="text/javascript"></script>
+  <script src="/assets/jquery.raty.js" type="text/javascript"></script>
   <tbody>
     <% @studies.each do |study| %>
       <tr>
-				<td><div class="star-rating" data-score= <%= study.average_rating %> ></div></td>
-				<td class='duke-btn'>
-					<%= link_to 'details',study_path(study), :class => "btn btn-default btn-mini" %>
-				</td>
+       <td><div class="star-rating" data-score= <%= study.average_rating %> ></div></td>
+       <td class='duke-btn'>
+          <%= link_to 'details',study_path(study), :class => "btn btn-default btn-mini" %>
+       </td>
         <td><%= study.overall_status %></td>
         <td><%= study.brief_title %></td>
         <td><%= study.start_date %></td>
-				<td class='duke-btn'>
-        	<% if study.derived_value.link_to_study_data %>
-						<%= link_to 'get study data',study.derived_value.link_to_study_data, :target => "_blank", :class => "btn btn-default btn-mini" %>
-					<% end %>
-				</td>
+      </td>
       </tr>
     <% end %>
   </tbody>
