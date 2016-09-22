@@ -37,6 +37,12 @@ class DerivedValue < ActiveRecord::Base
 			end
 	end
 
+		val=study.lead_sponsor.try(:agency_class)
+		if lead sponsor's agency_type is 'Industry' or 'NIH', use that
+		else if any collaborating sponsor's agency_type is 'NIH', use that
+		else if any collaborating sponsor's agency_type is 'Industry', use that
+		else use 'Other'
+
 	def calc_sponsor_type
 		val=study.lead_sponsor.try(:agency_class)
 		return val if val=='Industry' or val=='NIH'

@@ -2,7 +2,7 @@ class CreateResults < ActiveRecord::Migration
   def change
 
     create_table :result_contacts do |t|
-      t.string :name_or_title
+      t.string :name
       t.string :organization
       t.string :phone
       t.string :email
@@ -12,14 +12,14 @@ class CreateResults < ActiveRecord::Migration
 
     create_table :result_agreements do |t|
       t.string :pi_employee
-      t.text   :agreement
+      t.text   :description
       t.string :agreement_type
       t.timestamps null: false
     end
     add_column :result_agreements, :nct_id, :string, references: :studies
 
     create_table :baseline_measures do |t|
-      t.string  :ctgov_group_id
+      t.string  :ctgov_group_id  #group_code
       t.integer :ctgov_group_enumerator
       t.string  :category
       t.string  :title
@@ -132,7 +132,6 @@ class CreateResults < ActiveRecord::Migration
 
     create_table :reported_events do |t|
       t.string   :ctgov_group_id
-      t.integer  :ctgov_group_enumerator
       t.string   :group_title
       t.text     :group_description
       t.text     :description
@@ -149,6 +148,7 @@ class CreateResults < ActiveRecord::Migration
       t.timestamps null: false
     end
     add_column :reported_events, :nct_id, :string, references: :studies
+    add_column :reported_events, :ctgov_group_enumerator, :integer, references: :groups
 
     create_table :reported_event_overviews do |t|
       t.string :time_frame

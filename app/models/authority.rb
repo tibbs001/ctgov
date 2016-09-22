@@ -1,4 +1,4 @@
-class OversightAuthority < StudyRelationship
+class Authority < StudyRelationship
 
   def self.top_level_label
     '//oversight_info'

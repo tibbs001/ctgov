@@ -3,27 +3,20 @@ class CreateStudies < ActiveRecord::Migration
     create_table :studies, {:id => false} do |t|
       t.string :nct_id, primary: true
 
-      t.date :start_date
-      t.string  :start_month_year
-      t.date :primary_completion_date
-      t.string  :primary_completion_month_year
+      t.date    :d_start_date
+      t.date    :primary_completion_date
       t.string  :primary_completion_date_type
-      t.date :first_received_results_date
+      t.date    :first_received_results_date
 
       t.string  :acronym
       t.string  :brief_title
-      t.string  :official_title
       t.string  :overall_status
       t.string  :study_type
       t.string  :phase
 
-      t.string  :org_study_id
-      t.string  :secondary_id
-      t.string  :target_duration
       t.integer :enrollment
       t.string  :enrollment_type
-      t.string  :limitations_and_caveats
-      t.string  :description
+      t.string  :target_duration
       t.integer :number_of_arms
       t.integer :number_of_groups
 
@@ -33,16 +26,24 @@ class CreateStudies < ActiveRecord::Migration
       t.boolean :is_section_801
       t.boolean :is_fda_regulated
       t.string  :information_source
+
+      t.boolean :derived_results_reported  # make this a Yes/No value
+
       t.timestamps null: false
 		end
 		add_index :studies, :nct_id
 		add_index :studies, :study_type
+		add_index :studies, :overall_status
+		add_index :studies, :phase
 
     create_table :other_dates do |t|
       t.date :verification_date
       t.date :last_changed_date
       t.date :first_received_date
       t.date :completion_date
+      t.date :download_date
+      t.string  :primary_completion_month_year
+      t.string  :start_month_year
       t.string  :completion_month_year
       t.string  :completion_date_type
       t.string :download_date_info
@@ -62,7 +63,6 @@ class CreateStudies < ActiveRecord::Migration
       t.string  :sponsor_type
 			t.decimal :actual_duration, :precision => 5, :scale => 2
       t.integer :enrollment
-      t.boolean :results_reported
       t.integer :months_to_report_results
       t.integer :registered_in_fiscal_year
       t.integer :number_of_facilities
@@ -85,29 +85,38 @@ class CreateStudies < ActiveRecord::Migration
       t.string :country
       t.string :latitude
       t.string :longitude
-      t.string :contact_name
-      t.string :contact_phone
-      t.string :contact_email
-      t.string :contact_backup_name
-      t.string :contact_backup_phone
-      t.string :contact_backup_email
-      t.text   :investigator_name
-      t.text   :investigator_role
       t.timestamps null: false
     end
     add_column :facilities, :nct_id, :string, references: :studies
 		add_index :facilities, :nct_id
 
-    create_table :expected_groups do |t|
+    create_table :investigators do |t|
+      t.string :name
+      t.string :role
+		end
+    add_column :investigators, :nct_id, :string, references: :studies
+    add_column :investigators, :facility_id, :string, references: :facilities
+		add_index :investigators, :role
+
+    create_table :facility_contacts do |t|
+      t.string :contact_type
+      t.string :name
+      t.string :phone
+      t.string :email
+		end
+    add_column :facility_contacts, :nct_id, :string, references: :studies
+		add_index :facility_contacts, :nct_id
+
+    create_table :design_groups do |t|
       t.string  :ctgov_group_id
       t.integer :ctgov_group_enumerator
-      t.string  :title
+      t.string  :label
       t.string  :group_type
       t.text    :description
       t.timestamps null: false
     end
-    add_column :expected_groups, :nct_id, :string, references: :studies
-		add_index :expected_groups, :nct_id
+    add_column :design_groups, :nct_id, :string, references: :studies
+		add_index :design_groups, :nct_id
 
     create_table :conditions do |t|
       t.string  :name
@@ -168,7 +177,7 @@ class CreateStudies < ActiveRecord::Migration
     add_column :browse_interventions, :nct_id, :string, references: :studies
 		add_index :browse_interventions, :nct_id
 
-    create_table :expected_outcomes do |t|
+    create_table :design_outcomes do |t|
       t.string :outcome_type
       t.text   :title
       t.text   :measure
@@ -177,8 +186,8 @@ class CreateStudies < ActiveRecord::Migration
       t.string :population
       t.text   :description
     end
-    add_column :expected_outcomes, :nct_id, :string, references: :studies
-		add_index :expected_outcomes, :nct_id
+    add_column :design_outcomes, :nct_id, :string, references: :studies
+		add_index :design_outcomes, :nct_id
 
     create_table :study_references do |t|
       t.text   :citation
@@ -219,17 +228,17 @@ class CreateStudies < ActiveRecord::Migration
     add_column :designs, :nct_id, :string, references: :studies
 		add_index :designs, :nct_id
 
-    create_table :location_countries do |t|
+    create_table :countries do |t|
       t.string :name
       t.string :removed
     end
-    add_column :location_countries, :nct_id, :string, references: :studies
-		add_index :location_countries, :nct_id
-		add_index :location_countries, :name
+    add_column :countries, :nct_id, :string, references: :studies
+		add_index :countries, :nct_id
+		add_index :countries, :name
 
     create_table :sponsors do |t|
       t.string :sponsor_type
-      t.string :agency
+      t.string :name
       t.string :agency_class
     end
     add_column :sponsors, :nct_id, :string, references: :studies
@@ -243,11 +252,11 @@ class CreateStudies < ActiveRecord::Migration
     add_column :overall_officials, :nct_id, :string, references: :studies
 		add_index :overall_officials, :nct_id
 
-    create_table :oversight_authorities do |t|
+    create_table :authorities do |t|
       t.string :name
     end
-    add_column :oversight_authorities, :nct_id, :string, references: :studies
-		add_index  :oversight_authorities, :nct_id
+    add_column :authorities, :nct_id, :string, references: :studies
+		add_index  :authorities, :nct_id
 
     create_table :links do |t|
       t.text   :url
@@ -258,6 +267,7 @@ class CreateStudies < ActiveRecord::Migration
 
     create_table :secondary_ids do |t|
       t.string :secondary_id
+      t.string  :org_study_id
     end
     add_column :secondary_ids, :nct_id, :string, references: :studies
 		add_index  :secondary_ids, :nct_id
@@ -275,16 +285,14 @@ class CreateStudies < ActiveRecord::Migration
 		add_index  :eligibilities, :nct_id
 
     create_table :detailed_descriptions do |t|
-      t.text :description
+      t.string  :official_title
+      t.text    :detailed_description
+      t.text    :brief_summary
+      t.string  :limitations_and_caveats
+      t.string  :description
     end
     add_column :detailed_descriptions, :nct_id, :string, references: :studies
 		add_index  :detailed_descriptions, :nct_id
-
-    create_table :brief_summaries do |t|
-      t.text :description
-    end
-    add_column :brief_summaries, :nct_id, :string, references: :studies
-		add_index  :brief_summaries, :nct_id
 
   end
 

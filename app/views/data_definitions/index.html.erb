@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <title>AACT2 Data Dictionary</title>
+    <!-- Mobile viewport optimized -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Mobile Internet Explorer allows us to activate ClearType technology for smoothing fonts for easy reading -->
+    <meta http-equiv="cleartype" content="on">
+
+    <!-- Le styles -->
+    <link href="css/bootswatch/Cosmo/bootstrap.min.css" rel="stylesheet">
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/black-tie/jquery-ui.css" rel="stylesheet">
+    <link href="css/jquery.tocify.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet" type="text/css">
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <link href="css/rainbow/themes/tomorrow-night.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/rainbowlines/theme.css" media="screen" />
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link href="../assets/ico/favicon.ico" rel="shortcut icon">
+    <link href="../assets/ico/apple-touch-icon-144-precomposed.png" rel="apple-touch-icon-precomposed" sizes="144x144">
+    <link href="../assets/ico/apple-touch-icon-114-precomposed.png" rel="apple-touch-icon-precomposed" sizes="114x114">
+    <link href="../assets/ico/apple-touch-icon-72-precomposed.png" rel="apple-touch-icon-precomposed" sizes="72x72">
+    <link href="../assets/ico/apple-touch-icon-57-precomposed.png" rel="apple-touch-icon-precomposed">
+  </head>
+
+  <body>
+   <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom:120px;">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Thank you, ClinicalTrials.gov</a>
+  </div>
+	<div> </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Related Sites <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="http://clinicaltrials.gov">ClinicalTrials.gov</a></li>
+					<li><a href="https://www.dcri.org/">Duke Clinical Research Institute</a></li>
+					<li><a href="http://www.ctti-clinicaltrials.org/what-we-do/analysis-dissemination/state-clinical-trials/aact-database">Clinical Trials Transformation Initiative (CTTI)</a></li>
+          <li class="divider"></li>
+          <li><a href="http://www.ctti-clinicaltrials.org/what-we-do/analysis-dissemination/state-clinical-trials/aact-database">AACT 1.0</a></li>
+          <li><a href="https://github.com/SturdyCo/aact2/wiki">AACT 2.0 (in development)</a></li>
+          <li class="divider"></li>
+        </ul>
+      </li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container-fluid" style="margin-top:50px;">
+      <div class="row">
+        <div class="tocify col-sm-3 col-md-3">
+          <div id="toc">
+          </div><!--/.well -->
+        </div><!--/span-->
+
+
+        <div class="col-sm-9 col-md-9">
+          <div>
+            <h2>AACT2 Data Dictionary</h2>
+            <br>
+						<p>This page contains data definitions for all elements of the AACT2 database.  AACT2 is a publicly accessible, open-source, relational database that aggregates the content of ClinicalTrial.gov.
+						</p>
+						<p>
+						The AACT database, sponsored by the <a href="http://www.ctti-clinicaltrials.org/what-we-do/analysis-dissemination/state-clinical-trials/aact-database">Clinical Trials Transformation Initiative (CTTI)</a>, is freely available in the cloud to anyone interested in studying ClinicalTrials.gov information and developing their own visualizations. To learn more about AACT, please take a look at the <a href="https://github.com/SturdyCo/aact2/wiki">AACT 2.0 Wiki</a>
+						</p>
+						<p>Click <a href=''>here</a> to download a csv version of the data dictionary.</p>
+          </div>
+          <br>
+          <h2>Studies</h2>
+          <br>
+          <p class="well">
+          The Studies table is central to the system; all other tables relate back to it via the NCT_ID.
+          </p>
+					   <table class="table table-striped table-bordered table-condensed">
+              <tbody><tr>
+                  <th>Column</th>
+                  <th>Data Type</th>
+                  <th>NLM Definition</th>
+                  <th>CTTI Notes</th>
+              </tr>
+              <tr>
+                  <td title="AACT1: start_date" class="databaseColumn" data-content="NCT_ID">
+                      <a href="#">start_date</a>
+                  </td>
+                  <td>date</td>
+                  <td>Study Start Date FDAAA  Date that enrollment to the protocol begins.</td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td title="AACT1: brief_title" class="optionName" data-content="ctgov tag: brief_title">
+                      <a href="#">brief_title</a>
+                  </td>
+                  <td>string</td>
+                  <td></td>
+                  <td>Convert start date to a date type value.  Since the date provided includes only month and year (no day), we set the day to 1.</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="first_received_date">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>date</td>
+                  <td>firstreceived_date</td>
+                  <td>firstreceived_date</td>
+              </tr>
+              <tr>
+                  <td title="primary_completion_date" class="optionName" data-content="primary_completion_date">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+          </tbody></table>
+          <br>
+
+          <br>
+          <h2>Browse_Conditions</h2>
+	          <table class="table table-striped table-bordered table-condensed">
+              <tbody><tr>
+                  <th>AACT2 Column</th>
+                  <th>AACT1 Column</th>
+                  <th>ClinicalTrials.gov XML Tag</th>
+                  <th>Description</th>
+              </tr>
+              <tr>
+                  <td title="string" class="databaseColumn" data-content="MeSH Term">
+                      <a href="#">MeSH Term</a>
+                  </td>
+                  <td>mesh_term</td>
+                  <td>mesh_term</td>
+                  <td>Condition MeSH terms generated by NLM algorithm</td>
+              </tr>
+              <tr>
+                  <td title="string" class="databaseColumn" data-content="NCT ID">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>nct_id</td>
+                  <td>nct_id</td>
+                  <td>nct_id</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+          </tbody></table>
+
+          <br>
+          <h2>Browse_Interventions</h2>
+           <table class="table table-striped table-bordered table-condensed">
+              <tbody><tr>
+                  <th>AACT2 Column</th>
+                  <th>AACT1 Column</th>
+                  <th>ClinicalTrials.gov XML Tag</th>
+                  <th>Description</th>
+              </tr>
+              <tr>
+                  <td title="EEG-related Studies" class="eegRelatedStudies" data-content="Clinical Trials related to EEG">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+          </tbody></table>
+         <br>
+          <h2>Designs</h2>
+          <table class="table table-striped table-bordered table-condensed">
+              <tbody><tr>
+                  <th>AACT2 Column</th>
+                  <th>AACT1 Column</th>
+                  <th>ClinicalTrials.gov XML Tag</th>
+                  <th>Description</th>
+              </tr>
+              <tr>
+                  <td title="EEG-related Studies" class="eegRelatedStudies" data-content="Clinical Trials related to EEG">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+              <tr>
+                  <td title="Option Name" class="optionName" data-content="Enter Option Description Here">
+                      <a href="#">Option Name</a>
+                  </td>
+                  <td>Enter Option Type Here</td>
+                  <td>Enter Option Default Here</td>
+                  <td>Enter Option Parameters Here</td>
+              </tr>
+          </tbody></table>
+          <p class="well">
+				The following is a list of agencies that have sponsored at least one EEG clinical trial since 2000.
+					</p>
+
+          <h2>Facilities</h2>
+          <p class="well note">
+             The links below provide access to data used to create these visualizations.
+          </p>
+	      <h2>Facility_Contacts</h2>
+        <p class="well">
+            Copyright © 2016 Clinial Trials Transformation Initiative
+        </p>
+      </div>
+      </div><!--/row-->
+
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/rainbow/rainbow.min.js"></script>
+    <script src="js/rainbow/language/generic.js"></script>
+    <script src="js/rainbow/language/html.js"></script>
+    <script src="js/rainbow/language/css.js"></script>
+    <script src="js/rainbow/language/javascript.js"></script>
+    <script src="js/rainbowlines/rainbow.linenumbers.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.tocify.min.js"></script>
+    <script src="js/prettify.js"></script>
+
+    <script>
+        $(function() {
+
+          $("#toc").tocify({ selectors: "h2, h3, h4", scrollTo: 60, highlightOffset: 60, extendPage: true });
+
+          prettyPrint();
+
+          $(".optionName").popover({ trigger: "hover", container: "body" });
+
+          $("a[href='#']").click(function(event) {
+
+              event.preventDefault();
+
+          });
+
+          Rainbow.color();
+        });
+    </script>
+
+</div></body></html>

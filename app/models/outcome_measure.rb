@@ -1,3 +1,9 @@
+clinical_results/reported_events/serious_events/category_list/category/event_list/event/counts/subjects_affected
+clinical_results/reported_events/serious_events/category_list/category/event_list/event/counts/subjects_at_risk
+clinical_results/outcomes/measure_list/measure/category_list/category/measurement_list/measurement/group_id
+
+
+
 class OutcomeMeasure < StudyRelationship
   belongs_to :outcome
   belongs_to :group
