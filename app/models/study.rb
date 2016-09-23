@@ -57,119 +57,116 @@ class Study < ActiveRecord::Base
   scope :completed_since, lambda {|cdate| where("completion_date >= ?", cdate )}
   scope :sponsored_by,    lambda {|agency| joins(:sponsors).where("sponsors.agency LIKE ?", "#{agency}%")}
 
-		def self.all_nctids
-		  all.collect{|s|s.nct_id}
-		end
+    def self.all_nctids
+      all.collect{|s|s.nct_id}
+    end
 
     def start_date
       start_month_year
     end
 
     def summary
-      #TODO brief_summary.description
-      'not available'
+      brief_summary ? brief_summary.description : ''
     end
 
     def elig_criteria
-      ''
+      eligibility ? eligibility.criteria : ''
     end
 
     def sampling_method
-      eligibility.sampling_method
+      eligibility ? eligibility.sampling_method : ''
     end
 
-		def study_population
-			eligibility.study_population
-		end
+    def study_population
+      eligibility ? eligibility.study_population : ''
+    end
 
-		def study_references
-			references.select{|r|r.type!='results_reference'}
-		end
+    def study_references
+      references.select{|r|r.type!='results_reference'}
+    end
 
     def result_references
       references.select{|r|r.type=='results_reference'}
     end
 
-		def healthy_volunteers?
-			eligibility.healthy_volunteers
-		end
+    def healthy_volunteers?
+      eligibility.healthy_volunteers
+    end
 
-		def minimum_age
-			eligibility.minimum_age
-		end
+    def minimum_age
+      eligibility.minimum_age
+    end
 
-		def maximum_age
-			eligibility.maximum_age
-		end
+    def maximum_age
+      eligibility.maximum_age
+    end
 
-		def age_range
-			"#{minimum_age} - #{maximum_age}"
-		end
+    def age_range
+      "#{minimum_age} - #{maximum_age}"
+    end
 
-		def lead_sponsor
-			sponsors.select{|s|s.sponsor_type=='lead'}.first
-		end
+    def lead_sponsors
+      sponsors.where(lead_or_collaborator: 'lead')
+    end
 
-		def collaborators
-			sponsors.select{|s|s.sponsor_type=='collaborator'}
-		end
+    def lead_sponsor
+      lead_sponsors.first
+    end
 
-		def lead_sponsor_name
-			lead_sponsor.try(:agency)
-		end
+    def collaborators
+      sponsors.select{|s|s.sponsor_type=='collaborator'}
+    end
 
-		def number_of_sites
-			facilities.size
-		end
+    def lead_sponsor_name
+      lead_sponsor.try(:agency)
+    end
 
-		def pi
-			val=''
-			responsible_parties.each{|r|val=r.investigator_full_name if r.responsible_party_type=='Principal Investigator'}
-			val
-		end
+    def number_of_sites
+      facilities.size
+    end
 
-		def status
-			overall_status
-		end
+    def pi
+      val=''
+      responsible_parties.each{|r|val=r.investigator_full_name if r.responsible_party_type=='Principal Investigator'}
+      val
+    end
 
-		def name
-			brief_title
-		end
+    def status
+      overall_status
+    end
 
-		def recruitment_details
-			result_detail.try(:recruitment_details)
-		end
+    def name
+      brief_title
+    end
 
-		def pre_assignment_details
-			result_detail.try(:pre_assignment_details)
-		end
+    def recruitment_details
+      result_detail.try(:recruitment_details)
+    end
 
-		def lead_sponsor
-			#TODO  May be multiple
-			sponsors.each{|s|return s if s.sponsor_type=='lead'}
-		end
+    def pre_assignment_details
+      result_detail.try(:pre_assignment_details)
+    end
 
-		def average_rating
-			if reviews.size==0
-				0
-			else
-				reviews.average(:rating).round(2)
-			end
-		end
+    def average_rating
+      if reviews.size==0
+      	0
+      else
+      	reviews.average(:rating).round(2)
+      end
+    end
 
-		def intervention_names
-			interventions.collect{|x|x.name}.join(', ')
-		end
+    def intervention_names
+      interventions.collect{|x|x.name}.join(', ')
+    end
 
-		def condition_names
-			conditions.collect{|x|x.name}.join(', ')
-		end
+    def condition_names
+      conditions.collect{|x|x.name}.join(', ')
+    end
 
-		def prime_address
-			#  This isn't real.  Just proof of concept.
-			return facilities.first.address if facilities.size > 0
-			#return lead_sponsor.agency
-      "300 West Morgan St, Durham, NC  27701"
-		end
+    def prime_address
+      #  This isn't real.  Just proof of concept.
+      return facilities.first.address if facilities.size > 0
+      lead_sponsor ? lead_sponsor.agency : ''
+    end
 
 	end

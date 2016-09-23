@@ -4,32 +4,32 @@
     $(document).ready(function() {
         $(".star-rating").raty({
           path: 'https://s3.amazonaws.com/yelpdemo/stars',
-					path: '/assets/',
+          path: '/assets/',
           readOnly: true,
           score: function() {
             return $(this).attr('data-score');
-					}
+          }
         });
-	});
+    });
 </script>
 
 <div class="row">
   <div class="col-md-3 span3 bs-docs-sidebar">
     <h4>
-      <%= @study.acronym %> <%= @study.brief_title %>
+      <%= @study.acronym %> <%= @study.brief_summary.try(:description) %>
     </h4>
     <div class="star-rating" data-score= <%= @study.average_rating %> ></div>
     <p><%= "#{@study.reviews.length} reviews" %></p>
-		<% if @study.reviews.length == 0 %>
-			<%= link_to "Add a Review", reviews_path(:nct_id=>@study.nct_id), class: "btn btn-default btn-mini" %>
-		<% else %>
-			<%= link_to "See/Add Reviews", reviews_path(:nct_id=>@study.nct_id), class: "btn btn-default btn-mini" %>
-		<% end %>
-		<%= link_to 'Return to List', studies_path, class: "btn btn-default btn-mini" %>
+    <% if @study.reviews.length == 0 %>
+      <%= link_to "Add a Review", reviews_path(:nct_id=>@study.nct_id), class: "btn btn-default btn-mini" %>
+    <% else %>
+      <%= link_to "See/Add Reviews", reviews_path(:nct_id=>@study.nct_id), class: "btn btn-default btn-mini" %>
+    <% end %>
+    <%= link_to 'Return to List', studies_path, class: "btn btn-default btn-mini" %>
     <p>
-			<li><i class="fa-li fa fa-check-square"></i> <%= @study.overall_status %></li>
-			<li><i class="fa-li fa fa-check-square"></i> <%= @study.study_type %></li>
-			<li><i class="fa-li fa fa-check-square"></i> <%= @study.phase %></li>
+      <li><i class="fa-li fa fa-check-square"></i> <%= @study.overall_status %></li>
+      <li><i class="fa-li fa fa-check-square"></i> <%= @study.study_type %></li>
+      <li><i class="fa-li fa fa-check-square"></i> <%= @study.phase %></li>
     </p>
 
     <p>

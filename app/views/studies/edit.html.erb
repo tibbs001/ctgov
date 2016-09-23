@@ -31,80 +31,81 @@ $(document).ready(function(){
   </h2>
   <div class='well'>
     <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
+      class="btn btn-link has-popover"
+      data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('sponsor_type') %>">Lead Sponsor: </button>
     <%= @study.lead_sponsor %>
     <% if !@study.org_study_id.blank? %>
       <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
+      class="btn btn-link has-popover"
+      data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('org_study_id') %>">
-	    (<%= @study.org_study_id %>)</button>
+      (<%= @study.org_study_id %>)</button>
      <% end %>
     <div>
       <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
+      class="btn btn-link has-popover"
+      data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('study_design') %>">
-	    <%= @study.study_type %></button>
+      <%= @study.study_type %></button>
 
       <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
+      class="btn btn-link has-popover"
+      data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('phase') %>">
             <%= @study.phase %></button>
 
       <button type="button"
-	    class="btn btn-link has-popover"
-	    data-toggle="popover"
+      class="btn btn-link has-popover"
+      data-toggle="popover"
             data-content="<%= DataDefinition.nlm_info_for('overall_status') %>">
             <%= @study.overall_status %></button>
 
     </div>
-		<div class='well'>
+    <div class='well'>
     <% if !@study.start_date.blank? %>
       <div>
       <button type="button"
-	    				class="btn btn-link has-popover"
-	    				data-toggle="popover"
-      				data-content="<%= DataDefinition.nlm_info_for('start_date') %>">
-	    		Started:
+              class="btn btn-link has-popover"
+              data-toggle="popover"
+              data-content="<%= DataDefinition.nlm_info_for('start_date') %>">
+          Started:
       </button>
-				<span class=''>
-        	<%= @study.start_date %>
-				</span>
+        <span class=''>
+          <%= @study.start_date %>
+        </span>
       </div>
     <% end %>
     <% if !@study.first_received_date.blank? %>
       <div>
         <button type="button" class="btn btn-link has-popover"
-	    					data-toggle="popover"
-      					data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
-						First Received:
-				</button>
-				<span class=''>
-        	<%= @study.first_received_date %>
-				</span>
+                data-toggle="popover"
+                data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
+            First Received:
+        </button>
+        <span class=''>
+          <%= @study.first_received_date %>
+        </span>
       </div>
     <% end %>
     <% if !@study.completion_date.blank? %>
       <div>
         <button type="button" class="btn btn-link has-popover "
-	    					data-toggle="popover"
-      					data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
-					Completed:
-				</button>
-				<span class=''>
-        	<%= @study.completion_date %>
-				</span>
+                data-toggle="popover"
+                data-content="<%= DataDefinition.ctti_info_for('firstreceived_date') %>">
+          Completed:
+        </button>
+        <span class=''>
+          <%= @study.completion_date %>
+        </span>
       </div>
     <% end %>
-  	</div>
+    </div>
   </div>
 
   <div class='well'>
     <div>
+      xxxxxxxxxxxxxxxxxxxxxxxxx
       <%= @study.brief_summary.description %>
     </div>
   </div>
@@ -124,17 +125,17 @@ $(document).ready(function(){
       <table id="facilitiesTable" class='table table-striped table-condensed table-hover' width='100%'>
       <thead>
       <tr>
-	<th>name</th>
-	<th>city</th>
-	<th>state</th>
+  <th>name</th>
+  <th>city</th>
+  <th>state</th>
       </tr>
       <thead>
       <% @study.facilities.each do |fac| %>
-	<tr>
+  <tr>
           <td class="facility_element"><%= fac.name %></td>
           <td class="facility_element"><%= fac.city %></td>
           <td class="facility_element"><%= fac.state %></td>
-	</tr>
+  </tr>
       <% end %>
       </table>
     </div>
@@ -146,9 +147,9 @@ $(document).ready(function(){
       <table id="expectedOutcomesTable" class='table table-striped table-condensed table-hover' width='100%'>
       <thead>
       <tr>
-	<th>type</th>
-	<th>measure</th>
-	<th>time frame</th>
+  <th>type</th>
+  <th>measure</th>
+  <th>time frame</th>
       </tr>
       </thead>
       <% @study.expected_outcomes.each do |o| %>
@@ -168,27 +169,27 @@ $(document).ready(function(){
       <table id="eventsTable" class='table table-striped table-condensed table-hover' width='100%'>
       <thead>
       <tr>
-	<th class='span3'>type</th>
-	<th>id</th>
-	<th>group desc</th>
-	<th>assessment</th>
-	<th># at risk</th>
-	<th># affected</th>
-	<th>events</th>
+  <th class='span3'>type</th>
+  <th>id</th>
+  <th>group desc</th>
+  <th>assessment</th>
+  <th># at risk</th>
+  <th># affected</th>
+  <th>events</th>
       </tr>
       </thead>
       <% @study.reported_events.sort_by{|re|re.ctgov_group_enumerator}.each do |o| %>
-				  <% if o.subjects_affected != 0 and o.event_count != 0 %>
-          	<tr>
-            	<td><%= o.type %></td>
-            	<td><%= o.ctgov_group_id %></td>
-            	<td><%= o.group_title %></td>
-            	<td><%= o.title %></td>
-            	<td><%= o.subjects_at_risk %></td>
-            	<td><%= o.subjects_affected %></td>
-            	<td><%= o.event_count %></td>
-          	</tr>
-   				<% end %>
+          <% if o.subjects_affected != 0 and o.event_count != 0 %>
+            <tr>
+              <td><%= o.type %></td>
+              <td><%= o.ctgov_group_code %></td>
+              <td><%= o.group_title %></td>
+              <td><%= o.title %></td>
+              <td><%= o.subjects_at_risk %></td>
+              <td><%= o.subjects_affected %></td>
+              <td><%= o.event_count %></td>
+            </tr>
+           <% end %>
       <% end %>
       </table>
     </div>

@@ -67,7 +67,7 @@ class ReviewsController < ApplicationController
 
     def set_study
       id=params['nct_id']
-      response = HTTParty.get("http://aact.ctti-clinicaltrials.org/api/v1/studies/#{id}")
+      response = HTTParty.get("http://aact-dev.herokuapp.com/api/v1/studies/#{id}?with_related_records")
       @study = Study.new(response.first.last)
     end
 
